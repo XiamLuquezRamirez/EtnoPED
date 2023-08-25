@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\AdministracionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,11 @@ Route::get('/', function () {
 
 ///INICIO DE SESIÓN
 Route::post('/Login', [UsuariosController::class,'Login']);
+Route::get('/Logout', [UsuariosController::class,'Logout']);
 Route::get('/Administracion', [UsuariosController::class,'Administracion']);
+
+//ADMINITRACCION GRAMATICA Y LENGUAJE
+Route::get('/AdminGramaticaLenguaje/GestionarGramatica', [AdministracionController::class,'GestionarGramatica']);
+Route::post('/AdminGramaticaLenguaje/GuardarUnidad', [AdministracionController::class,'GuardarUnidad']);
+Route::post('/AdminGramaticaLenguaje/CargarUnidades', [AdministracionController::class,'CargarUnidades']);
+

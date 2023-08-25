@@ -12,31 +12,36 @@ use Illuminate\Support\Facades\Session;
 
 class UsuariosController extends Controller
 {
-    public function Login(){
+    public function Login()
+    {
         $respuesta = Usuarios::login(request()->all());
-
-        $rutaUrl = 'http://localhost/PEDIGITAL/public/';
-  
+        $rutaUrl = 'http://localhost/PEDIGITAL/public/app-assets/images/';
 
         if ($respuesta->tipo_usuario == "Profesor") {
             $FotoUsu = Profesores::Buscar($respuesta->id);
-            Session::put('ImgUsu', $rutaUrl.'Img_Docentes/' . $FotoUsu->foto);
+            Session::put('ImgUsu', $rutaUrl . 'Img_Docentes/' . $FotoUsu->foto);
         } else if ($respuesta->tipo_usuario == "Estudiante") {
             $FotoUsu = Alumnos::Buscar($respuesta->id);
-            Session::put('ImgUsu', $rutaUrl.'Img_Estudiantes/' . $FotoUsu->foto_alumno);
+            Session::put('ImgUsu', $rutaUrl . 'Img_Estudiantes/' . $FotoUsu->foto_alumno);
             Session::put('GrupoEst', $FotoUsu->grupo);
         } else if ($respuesta->tipo_usuario == "root") {
-            Session::put('ImgUsu', $rutaUrl.'avatar-s-1.png');
+            Session::put('ImgUsu', $rutaUrl . 'avatar-s-1.png');
         } else {
-            Session::put('ImgUsu', $rutaUrl.'avatar-s-1.png');
+            Session::put('ImgUsu', $rutaUrl . 'avatar-s-1.png');
         }
 
         return redirect('Administracion');
     }
 
-    public function Administracion(){
+    public function Logout()
+    {
+        Auth::logout();
+        return redirect('/')->with('success', 'Sesión Finalizada');
+    }
 
-         return view('Administracion');
 
+    public function Administracion()
+    {
+        return view('Administracion');
     }
 }
