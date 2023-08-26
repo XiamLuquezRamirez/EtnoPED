@@ -16,7 +16,7 @@
                     </ol>
                 </div>
             </div>
-            <h3 class="content-header-title mb-0">Unidades Tematicas</h3>
+            <h3 class="content-header-title mb-0">Tematicas</h3>
         </div>
 
     </div>
@@ -97,7 +97,7 @@
         {{--  Modal nueva unidad  --}}
         <div class="modal fade text-left" id="modalUnidad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
             aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="tituloUnidad"></h4>
@@ -109,22 +109,38 @@
                         <div class="card-body">
 
                             <form class="form" method="post" id="formGuardar"
-                                action="{{ url('/') }}/AdminGramaticaLenguaje/GuardarUnidad">
+                                action="{{ url('/') }}/AdminGramaticaLenguaje/GuardarTema">
                                 <input type="hidden" name="id" id="id" value="" />
                                 <div class="form-body">
-                                    <h4 class="form-section"><i class="feather icon-info"></i> Información Basica de la
-                                        Unidad</h4>
+                                    <h4 class="form-section"><i class="feather icon-info"></i> Información Basica del Tema
+                                    </h4>
 
                                     <div class="form-group">
-                                        <label for="userinput5">Nombre:</label>
-                                        <input class="form-control border-primary" type="text" name="nombre"
-                                            placeholder="Nombre" id="nombre">
+                                        <label for="userinput5">Título:</label>
+                                        <input class="form-control border-primary" type="text" name="titulo"
+                                            placeholder="Título" id="titulo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="userinput5">Unidad Tematica:</label>
+                                        <label for="userinput8">Descripción:</label>
+                                        <select class="select2 form-control">
+                                                <option value="AK">Alaska</option>
+                                                <option value="HI">Hawaii</option>
+                                        </select>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="userinput8">Descripción:</label>
-                                        <textarea id="descripcion" rows="5" class="form-control border-primary" name="descripcion"
-                                            placeholder="Descripcion"></textarea>
+                                        <label for="userinput8">Contenido:</label>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="full-wrapper">
+                                                    <div id="full-container">
+                                                        <div class="editor">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -172,6 +188,13 @@
             $("#MenuGramatica").addClass("has-sub open");
             $("#MenuGramaticaTematica").addClass("active");
 
+            $(".select2").select2({
+                // the following code is used to disable x-scrollbar when click in select input and
+                // take 100% width in responsive also
+                dropdownAutoWidth: true,
+                width: '100%'
+              });
+
 
             $.extend({
                 cargar: function() {
@@ -195,16 +218,16 @@
                                     100 ? item.descripcion.substring(0, 100) +
                                     '...' : item.descripcion;
                                 tdTable += '<tr>' +
-                                    '<td><div class="btn-group" role="group" aria-label="First Group">' +
-                                    '    <button type="button" onclick="$.editar(' +
-                                    item.id +
-                                    ');" class="btn btn-icon btn-primary"><i' +
-                                    '     class="fa fa-edit"></i></button>' +
-                                    '    <button type="button" onclick="$.eliminar(' +
-                                    item.id +
-                                    ');" class="btn btn-icon btn-warning"><i' +
-                                    '     class="fa fa-trash-o"></i></button>' +
-                                    '    </div>' +
+                                    '<td>' +
+                                    '<div class="form-group">' +
+                                    '<div class="btn-group btn-group" role="group" aria-label="Basic example">' +
+                                    '<button title="Editar" type="button" class="btn btn-outline-success"><i class="fa fa-edit"></i> </button>' +
+                                    '<button title="Eliminar" type="button" class="btn btn-outline-danger"><i class="fa fa-trash-o"></i> </button>' +
+                                    '<button title="Evaluaciones" type="button" class="btn btn-outline-primary"><i class="fa fa-check-square-o"></i> </button>' +
+                                    '<button title="Ejemplos" type="button" class="btn btn-outline-warning"><i class="fa fa-etsy"></i> </button>' +
+                                    '<button title="Practicas" type="button" class="btn btn-outline-info"><i class="fa fa-users"></i> </button>' +
+                                    '</div>' +
+                                    '</div>' +
                                     '</td>' +
                                     '<th scope="row">' + x + '</th>' +
                                     '<td>' + item.nombre + '</td>' +

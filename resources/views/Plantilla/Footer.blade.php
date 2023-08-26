@@ -24,6 +24,10 @@
 <script src="{{ asset('app-assets/vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/icheck/icheck.min.js') }}"></script>
 <script src="{{ asset('app-assets/js/scripts/forms/validation/form-validation.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/quill/quill.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/quill/katex.min.js') }}"></script>
+<script src="{{ asset('app-assets/js/scripts/forms/quill/form-text-editor.js') }}"></script>
 <!-- END: Theme JS-->
 
 <!-- BEGIN: Page JS-->

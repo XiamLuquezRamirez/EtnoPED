@@ -178,11 +178,11 @@
                                     '<td><div class="btn-group" role="group" aria-label="First Group">' +
                                     '    <button type="button" onclick="$.editar(' +
                                     item.id +
-                                    ');" class="btn btn-icon btn-primary"><i' +
+                                    ');" class="btn btn-icon btn-outline-primary"><i' +
                                     '     class="fa fa-edit"></i></button>' +
                                     '    <button type="button" onclick="$.eliminar(' +
                                     item.id +
-                                    ');" class="btn btn-icon btn-warning"><i' +
+                                    ');" class="btn btn-icon btn-outline-warning"><i' +
                                     '     class="fa fa-trash-o"></i></button>' +
                                     '    </div>' +
                                     '</td>' +

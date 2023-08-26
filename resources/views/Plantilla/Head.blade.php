@@ -16,8 +16,14 @@
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/vendors.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/selects/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/icheck/icheck.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/icheck/custom.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/quill/katex.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/quill/monokai-sublime.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/quill/quill.snow.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/quill/quill.bubble.css') }}">
+
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -25,7 +31,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/bootstrap-extended.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/colors.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/components.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/custom.css') }}">
     <!-- END: Theme CSS-->
 
     <!-- BEGIN: Page CSS-->
