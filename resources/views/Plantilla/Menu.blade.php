@@ -36,9 +36,9 @@
                 <li id="MenuGramatica" class="nav-item"><a href="#"><i class="fa fa-cogs"></i><span class="menu-title"
                             data-i18n="Templates">Gramatica y Lenguaje</span></a>
                     <ul class="menu-content">
-                        <li id="MenuGramaticaUnidad"><a class="menu-item" href="{{ url('/AdminGramaticaLenguaje/GestionarGramatica') }}" data-i18n="Vertical">Gestionar Unidades Tematicas</a>
+                        <li id="MenuGramaticaUnidad"><a class="menu-item" href="{{ url('/AdminGramaticaLenguaje/GestionarGramatica/unidades') }}" data-i18n="Vertical">Gestionar Unidades Tematicas</a>
                         </li>
-                        <li id="MenuGramaticaTematica"><a class="menu-item" href="#" data-i18n="Vertical">Gestionar Tematicas</a></li>
+                        <li id="MenuGramaticaTematica"><a class="menu-item" href="{{ url('/AdminGramaticaLenguaje/GestionarGramatica/temas') }}" data-i18n="Vertical">Gestionar Tematicas</a></li>
                     </ul>
 
                 </li>

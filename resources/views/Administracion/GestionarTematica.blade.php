@@ -1,5 +1,5 @@
 @extends('Plantilla.Principal')
-@section('title', 'Gestionar Unidades Tematicas')
+@section('title', 'Gestionar Tematicas')
 @section('Contenido')
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <input type="hidden" name="accion" id="accion" value="">
@@ -10,7 +10,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Inicio</a>
                         </li>
-                        <li class="breadcrumb-item"><a href="#">Lista de Unidades Tematicas</a>
+                        <li class="breadcrumb-item"><a href="#">Lista de Tematicas</a>
                         </li>
 
                     </ol>
@@ -25,7 +25,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Lista de Unidades Tematicas</h4>
+                        <h4 class="card-title">Lista de Tematicas</h4>
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
@@ -36,8 +36,32 @@
                         </div>
                     </div>
                     <div class="card-content collapse show">
-                        <button onclick="$.nueva();" id="addRow" class="btn btn-primary mb-2 ml-1"><i
-                                class="feather icon-plus"></i>&nbsp; Agregar Unidad</button>
+                        <div class="row">
+                            <div class="col-5">
+                                <button onclick="$.nueva();" id="addRow" class="btn btn-primary mb-2 ml-1"><i
+                                        class="feather icon-plus"></i>&nbsp; Agregar Tema</button>
+                            </div>
+                            <div class="col-7">
+
+                                <div class="bug-list-search">
+                                    <div class="bug-list-search-content">
+                                        <div class="sidebar-toggle d-block d-lg-none"><i
+                                                class="feather icon-menu font-large-1"></i></div>
+
+                                        <form action="#">
+                                            <div class="position-relative">
+                                                <input type="search" id="search-contacts" class="form-control"
+                                                    placeholder="Busqueda...">
+                                                <div class="form-control-position">
+                                                    <i class="fa fa-search text-size-base text-muted la-rotate-270"></i>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-xl mb-0">
                                 <thead>
@@ -45,7 +69,7 @@
                                         <th>Opciones</th>
                                         <th>#</th>
                                         <th>Nombre</th>
-                                        <th>Descripción</th>
+                                        <th>Unidad</th>
 
                                     </tr>
                                 </thead>
@@ -84,7 +108,7 @@
                     <div class="modal-body">
                         <div class="card-body">
 
-                            <form class="form" onsubmit="$.guardar(event)" method="post" id="formGuardar"
+                            <form class="form" method="post" id="formGuardar"
                                 action="{{ url('/') }}/AdminGramaticaLenguaje/GuardarUnidad">
                                 <input type="hidden" name="id" id="id" value="" />
                                 <div class="form-body">
@@ -93,11 +117,8 @@
 
                                     <div class="form-group">
                                         <label for="userinput5">Nombre:</label>
-                                        <div class="controls">
-                                            <input class="form-control border-primary" type="text" required
-                                                data-validation-required-message="This field is required" name="nombre"
-                                                placeholder="Nombre" id="nombre">
-                                        </div>
+                                        <input class="form-control border-primary" type="text" name="nombre"
+                                            placeholder="Nombre" id="nombre">
                                     </div>
 
                                     <div class="form-group">
@@ -112,7 +133,8 @@
                                     <button type="reset" class="btn btn-warning mr-1">
                                         <i class="feather icon-x"></i> Cancelar
                                     </button>
-                                    <button type="submit" id="btnGuardar" class="btn btn-primary">
+                                    <button type="button" id="btnGuardar" onclick="$.guardar()"
+                                        class="btn btn-primary">
                                         <i class="fa fa-check-square-o"></i> Guardar
                                     </button>
                                 </div>
@@ -148,7 +170,7 @@
         $(document).ready(function() {
             $("#Princioal").removeClass("active");
             $("#MenuGramatica").addClass("has-sub open");
-            $("#MenuGramaticaUnidad").addClass("active");
+            $("#MenuGramaticaTematica").addClass("active");
 
 
             $.extend({
@@ -169,11 +191,9 @@
                         dataType: "json",
                         success: function(respuesta) {
                             $.each(respuesta.unidades, function(i, item) {
-                                if (item.descripcion)
-                                    var descripcionCortada = item.descripcion
-                                        .length >
-                                        100 ? item.descripcion.substring(0, 100) +
-                                        '...' : item.descripcion;
+                                var descripcionCortada = item.descripcion.length >
+                                    100 ? item.descripcion.substring(0, 100) +
+                                    '...' : item.descripcion;
                                 tdTable += '<tr>' +
                                     '<td><div class="btn-group" role="group" aria-label="First Group">' +
                                     '    <button type="button" onclick="$.editar(' +
@@ -209,12 +229,24 @@
                     $("#btnGuardar").prop('disabled', false);
 
                 },
-                guardar: function(e) {
-                    e.preventDefault();
+                guardar: function() {
+
+                    if ($("#nombre").val() === "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de Ingresar el Nombre de la Unidad",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
 
 
                     var form = $("#formGuardar");
                     var url = form.attr("action");
+
 
                     var token = $("#token").val();
                     var accion = $("#accion").val();

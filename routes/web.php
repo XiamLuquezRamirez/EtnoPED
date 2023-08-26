@@ -26,7 +26,9 @@ Route::get('/Logout', [UsuariosController::class,'Logout']);
 Route::get('/Administracion', [UsuariosController::class,'Administracion']);
 
 //ADMINITRACCION GRAMATICA Y LENGUAJE
-Route::get('/AdminGramaticaLenguaje/GestionarGramatica', [AdministracionController::class,'GestionarGramatica']);
+Route::get('/AdminGramaticaLenguaje/GestionarGramatica/{ori}', [AdministracionController::class,'GestionarGramatica']);
 Route::post('/AdminGramaticaLenguaje/GuardarUnidad', [AdministracionController::class,'GuardarUnidad']);
 Route::post('/AdminGramaticaLenguaje/CargarUnidades', [AdministracionController::class,'CargarUnidades']);
+Route::post('/AdminGramaticaLenguaje/BuscarUnidad', [AdministracionController::class,'BuscarUnidad']);
+Route::post('/AdminGramaticaLenguaje/EliminarUnidad', [AdministracionController::class,'EliminarUnidad']);
 

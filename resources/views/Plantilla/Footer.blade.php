@@ -20,6 +20,10 @@
 <script src="{{ asset('app-assets/js/core/app.js') }}"></script>
 <script src="{{ asset('app-assets/js/scripts/pages/app-invoice.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/spinner/jquery.bootstrap-touchspin.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/icheck/icheck.min.js') }}"></script>
+<script src="{{ asset('app-assets/js/scripts/forms/validation/form-validation.js') }}"></script>
 <!-- END: Theme JS-->
 
 <!-- BEGIN: Page JS-->
