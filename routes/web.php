@@ -32,3 +32,4 @@ Route::post('/AdminGramaticaLenguaje/CargarUnidades', [AdministracionController:
 Route::post('/AdminGramaticaLenguaje/BuscarUnidad', [AdministracionController::class,'BuscarUnidad']);
 Route::post('/AdminGramaticaLenguaje/EliminarUnidad', [AdministracionController::class,'EliminarUnidad']);
 
+

@@ -14,7 +14,7 @@ class UnidadesTematicas extends Model
     {
        $respuesta = DB::connection('mysql')->table('etno_ped.unidades_tematicas')->insert([
             'nombre' => $request['nombre'],
-            'descripcion' => $request['descripcion'],
+            'descripcion' => isset($request['descripcion']) ? $request['descripcion'] : '',
             'estado' => 'ACTIVO',
         ]);
 
@@ -30,8 +30,10 @@ class UnidadesTematicas extends Model
 
     public static function CargarTodos()
     {
+        $perPage = 10;
         return DB::connection('mysql')->table('etno_ped.unidades_tematicas')
         ->where('estado', 'ACTIVO')
+        ->paginate($perPage)
         ->get();
     }
 

@@ -36,8 +36,25 @@
                         </div>
                     </div>
                     <div class="card-content collapse show">
-                        <button onclick="$.nueva();" id="addRow" class="btn btn-primary mb-2 ml-1"><i
-                                class="feather icon-plus"></i>&nbsp; Agregar Unidad</button>
+                        <div class="row">
+                            <div class="col-4">
+                                <button onclick="$.nueva();" id="addRow" class="btn btn-primary mb-2 ml-1"><i
+                                        class="feather icon-plus"></i>&nbsp; Agregar Unidad</button>
+                            </div>
+                            <div class="col-8">
+                                <div class="position-relative">
+                                    <input type="text" id="searchInput" class="form-control"
+                                        placeholder="Busqueda...">
+                                    <div class="form-control-position">
+                                        <i class="fa fa-search text-size-base text-muted"></i>
+                                    </div>
+                                </div>sss
+
+                            </div>
+                        </div>
+
+
+
                         <div class="table-responsive">
                             <table class="table table-xl mb-0">
                                 <thead>
@@ -55,15 +72,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="text-center ml-1 mt-2">
-                            <ul class="pagination page1-links">
-                                <li class="page-item prev disabled"><a href="#" class="page-link">Aterior</a></li>
-                                <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                <li class="page-item"><a href="#" class="page-link">3</a></li>
-                                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                <li class="page-item next"><a href="#" class="page-link">Siguiente</a></li>
-                            </ul>
+                        <div id="pagination-links" class="text-center ml-1 mt-2">
+
                         </div>
                     </div>
                 </div>
@@ -84,7 +94,7 @@
                     <div class="modal-body">
                         <div class="card-body">
 
-                            <form class="form" onsubmit="$.guardar(event)" method="post" id="formGuardar"
+                            <form class="form" method="post" id="formGuardar"
                                 action="{{ url('/') }}/AdminGramaticaLenguaje/GuardarUnidad">
                                 <input type="hidden" name="id" id="id" value="" />
                                 <div class="form-body">
@@ -112,7 +122,8 @@
                                     <button type="reset" class="btn btn-warning mr-1">
                                         <i class="feather icon-x"></i> Cancelar
                                     </button>
-                                    <button type="submit" id="btnGuardar" class="btn btn-primary">
+                                    <button type="button" id="btnGuardar" onclick="$.guardar(event)"
+                                        class="btn btn-primary">
                                         <i class="fa fa-check-square-o"></i> Guardar
                                     </button>
                                 </div>
@@ -152,9 +163,15 @@
 
 
             $.extend({
-                cargar: function() {
+                cargar: function(page,searchTerm = '') {
                     var form = $("#formCargarUnidad");
                     var url = form.attr("action");
+                    $('#page').remove();
+                    $('#searchTerm').remove();
+                    form.append("<input type='hidden' id='page' name='page'  value='" + page +
+                        "'>");
+                    form.append("<input type='hidden' id='searchTerm' name='search'  value='" + searchTerm +
+                        "'>");
                     var datos = form.serialize();
 
                     $('#tdTable').empty();
@@ -167,35 +184,16 @@
                         data: datos,
                         async: false,
                         dataType: "json",
-                        success: function(respuesta) {
-                            $.each(respuesta.unidades, function(i, item) {
-                                if (item.descripcion)
-                                    var descripcionCortada = item.descripcion
-                                        .length >
-                                        100 ? item.descripcion.substring(0, 100) +
-                                        '...' : item.descripcion;
-                                tdTable += '<tr>' +
-                                    '<td><div class="btn-group" role="group" aria-label="First Group">' +
-                                    '    <button type="button" onclick="$.editar(' +
-                                    item.id +
-                                    ');" class="btn btn-icon btn-outline-primary"><i' +
-                                    '     class="fa fa-edit"></i></button>' +
-                                    '    <button type="button" onclick="$.eliminar(' +
-                                    item.id +
-                                    ');" class="btn btn-icon btn-outline-warning"><i' +
-                                    '     class="fa fa-trash-o"></i></button>' +
-                                    '    </div>' +
-                                    '</td>' +
-                                    '<th scope="row">' + x + '</th>' +
-                                    '<td>' + item.nombre + '</td>' +
-                                    '<td>' + descripcionCortada + '</td>' +
-                                    '</tr>';
-                                x++;
-                            });
+                        success: function(response) {
+                            $('#tdTable').html(response
+                                .unidades); // Rellenamos la tabla con las filas generadas
+                            $('#pagination-links').html(response
+                                .links); // Colocamos los enlaces de paginación
                         }
                     });
 
-                    $("#tdTable").html(tdTable);
+
+
 
                 },
                 nueva: function() {
@@ -211,8 +209,6 @@
                 },
                 guardar: function(e) {
                     e.preventDefault();
-
-
                     var form = $("#formGuardar");
                     var url = form.attr("action");
 
@@ -351,7 +347,23 @@
 
                 }
             });
-            $.cargar();
+            $.cargar(1);
+
+            $(document).on('click', '.pagination a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+
+                // Asegurarse de que 'page' sea un número antes de hacer la solicitud
+                if (!isNaN(page)) {
+                    $.cargar(page);
+                }
+            });
+
+            $('#searchInput').on('input', function() {
+                var searchTerm = $(this).val();
+                $.cargar(1, searchTerm); // Cargar la primera página con el término de búsqueda
+            });
+            
         });
     </script>
 @endsection
