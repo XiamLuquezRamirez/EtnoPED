@@ -62,6 +62,38 @@
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-12">
+                                                @if (Session::has('error'))
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="alert bg-danger alert-icon-left alert-dismissible mb-2" role="alert">
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">×</span>
+                                                                </button>
+                                                                <strong>Alerta!</strong> {!! session('error') !!}
+                                                            </div>
+
+                                                      
+
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                                @if (Session::has('success'))
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="alert bg-success alert-icon-left alert-dismissible mb-2" role="alert">
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">×</span>
+                                                                </button>
+                                                                <strong>{!! session('success') !!}</strong> 
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
                                         <form class="form-horizontal" action="{{ url('/Login') }}" method="POST" novalidate>
                                             {{ csrf_field() }}
                                             <fieldset class="form-group position-relative has-icon-left">

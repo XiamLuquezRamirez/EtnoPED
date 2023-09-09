@@ -48,7 +48,7 @@
                                     <div class="form-control-position">
                                         <i class="fa fa-search text-size-base text-muted"></i>
                                     </div>
-                                </div>sss
+                                </div>
 
                             </div>
                         </div>
@@ -56,7 +56,7 @@
 
 
                         <div class="table-responsive">
-                            <table class="table table-xl mb-0">
+                            <table class="table table-xs mb-0">
                                 <thead>
                                     <tr>
                                         <th>Opciones</th>
@@ -122,9 +122,13 @@
                                     <button type="reset" class="btn btn-warning mr-1">
                                         <i class="feather icon-x"></i> Cancelar
                                     </button>
-                                    <button type="button" id="btnGuardar" onclick="$.guardar(event)"
-                                        class="btn btn-primary">
+                                    <button type="button" id="btnGuardar" onclick="$.guardar()"
+                                        class="btn btn-success">
                                         <i class="fa fa-check-square-o"></i> Guardar
+                                    </button>
+                                    <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
+                                        class="btn btn-primary">
+                                        <i class="feather icon-plus"></i> Nuevo
                                     </button>
                                 </div>
                             </form>
@@ -204,11 +208,26 @@
                     $("#tituloUnidad").html("Gestionar Unidades Tematicas");
                     $("#accion").val("agregar");
                     document.getElementById("formGuardar").reset();
-                    $("#btnGuardar").prop('disabled', false);
+                    $("#btnGuardar").show();
+                    $("#btnNuevo").hide();
+                  
 
                 },
-                guardar: function(e) {
-                    e.preventDefault();
+                guardar: function() {
+                    
+                    if($("#nombre").val().trim()==""){
+                            Swal.fire({
+                              title: " Alerta!",
+                              text: " Debe de ingresar el nombre!",
+                              type: "warning",
+                              confirmButtonClass: "btn btn-warning",
+                              buttonsStyling: false
+                            });
+                            
+                         
+                          return;
+                    }
+
                     var form = $("#formGuardar");
                     var url = form.attr("action");
 
@@ -237,7 +256,9 @@
                                     timer: 1500,
                                     buttonsStyling: false
                                 });
-                                $("#btnGuardar").prop('disabled', true);
+                                $("#btnGuardar").hide();
+                                $("#btnNuevo").show();
+                                
                             }
 
                             $.cargar();
@@ -255,6 +276,9 @@
                         }
                     });
 
+                },
+                nuevo: function(){
+                    document.getElementById("formGuardar").reset();
                 },
                 editar: function(id) {
 

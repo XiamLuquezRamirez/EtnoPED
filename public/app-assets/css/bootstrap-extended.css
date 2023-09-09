@@ -1650,7 +1650,7 @@ html [type="button"],
           -webkit-transform: translate3d(0, 150%, 0);
           transform: translate3d(0, 150%, 0); }
   .nav.nav-tabs.nav-linetriangle {
-    border-bottom-color: #ffa87d; }
+    border-bottom-color: #00CED2; }
     .nav.nav-tabs.nav-linetriangle .nav-item {
       position: relative;
       z-index: 1;
@@ -1670,9 +1670,9 @@ html [type="button"],
         border: none;
         color: #55595c; }
         .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active {
-          border-bottom: 1px solid #ffa87d;
-          border-bottom-color: #ffa87d !important;
-          color: #ffa87d; }
+          border-bottom: 1px solid #00CED2;
+          border-bottom-color: #00CED2 !important;
+          color: #00CED2; }
           .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:after, .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:before {
             position: absolute;
             top: 100%;
@@ -1685,20 +1685,20 @@ html [type="button"],
           .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:before {
             margin-left: -11px;
             border-width: 12px;
-            border-top-color: #ffa87d; }
+            border-top-color: #00CED2; }
           .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:after {
             margin-left: -10px;
             border-width: 10px;
             border-top-color: #fff; }
           .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:focus {
-            color: #ffa87d; }
+            color: #00CED2; }
         .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.dropdown-toggle:after {
           margin-top: -1rem; }
         .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.dropdown-toggle.active:after {
           margin-top: 0; }
     .nav.nav-tabs.nav-linetriangle.nav-justified {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      border-bottom-color: #ffa87d; }
+      border-bottom-color: #00CED2; }
       .nav.nav-tabs.nav-linetriangle.nav-justified .nav-item a.nav-link.active {
         top: 0px; }
   .nav.nav-tabs.nav-iconfall {

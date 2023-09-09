@@ -15,6 +15,7 @@ class UsuariosController extends Controller
     public function Login()
     {
         $respuesta = Usuarios::login(request()->all());
+        if($respuesta){
         $rutaUrl = 'http://localhost/PEDIGITAL/public/app-assets/images/';
 
         if ($respuesta->tipo_usuario == "Profesor") {
@@ -31,6 +32,10 @@ class UsuariosController extends Controller
         }
 
         return redirect('Administracion');
+    }else {
+            $error = "Usuario ó Contraseña Inconrrecta";
+            return redirect('/')->with('error', $error);
+        }
     }
 
     public function Logout()

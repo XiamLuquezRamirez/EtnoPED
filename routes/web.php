@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\AdministracionController;
+use App\Http\Controllers\ConvertirImagen;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,5 +32,9 @@ Route::post('/AdminGramaticaLenguaje/GuardarUnidad', [AdministracionController::
 Route::post('/AdminGramaticaLenguaje/CargarUnidades', [AdministracionController::class,'CargarUnidades']);
 Route::post('/AdminGramaticaLenguaje/BuscarUnidad', [AdministracionController::class,'BuscarUnidad']);
 Route::post('/AdminGramaticaLenguaje/EliminarUnidad', [AdministracionController::class,'EliminarUnidad']);
+Route::post('/AdminGramaticaLenguaje/CargarUnidadesSelect', [AdministracionController::class,'CargarUnidadesSelect']);
+Route::post('/AdminGramaticaLenguaje/GuardarTema', [AdministracionController::class,'GuardarTema']);
+Route::post('/AdminGramaticaLenguaje/CargarTemas', [AdministracionController::class,'CargarTemas']);
 
 
+Route::get('/ConvertirImagen', [ConvertirImagen::class,'ConvertirImagen']);
