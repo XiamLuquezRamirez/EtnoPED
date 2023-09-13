@@ -15,24 +15,24 @@ class UsuariosController extends Controller
     public function Login()
     {
         $respuesta = Usuarios::login(request()->all());
-        if($respuesta){
-        $rutaUrl = 'http://localhost/PEDIGITAL/public/app-assets/images/';
+        if ($respuesta) {
+            $rutaUrl = 'http://localhost/PEDIGITAL/public/app-assets/images/';
 
-        if ($respuesta->tipo_usuario == "Profesor") {
-            $FotoUsu = Profesores::Buscar($respuesta->id);
-            Session::put('ImgUsu', $rutaUrl . 'Img_Docentes/' . $FotoUsu->foto);
-        } else if ($respuesta->tipo_usuario == "Estudiante") {
-            $FotoUsu = Alumnos::Buscar($respuesta->id);
-            Session::put('ImgUsu', $rutaUrl . 'Img_Estudiantes/' . $FotoUsu->foto_alumno);
-            Session::put('GrupoEst', $FotoUsu->grupo);
-        } else if ($respuesta->tipo_usuario == "root") {
-            Session::put('ImgUsu', $rutaUrl . 'avatar-s-1.png');
+            if ($respuesta->tipo_usuario == "Profesor") {
+                $FotoUsu = Profesores::Buscar($respuesta->id);
+                Session::put('ImgUsu', $rutaUrl . 'Img_Docentes/' . $FotoUsu->foto);
+            } else if ($respuesta->tipo_usuario == "Estudiante") {
+                $FotoUsu = Alumnos::Buscar($respuesta->id);
+                Session::put('ImgUsu', $rutaUrl . 'Img_Estudiantes/' . $FotoUsu->foto_alumno);
+                Session::put('GrupoEst', $FotoUsu->grupo);
+            } else if ($respuesta->tipo_usuario == "root") {
+                Session::put('ImgUsu', $rutaUrl . 'avatar-s-1.png');
+            } else {
+                Session::put('ImgUsu', $rutaUrl . 'avatar-s-1.png');
+            }
+
+            return redirect('Administracion');
         } else {
-            Session::put('ImgUsu', $rutaUrl . 'avatar-s-1.png');
-        }
-
-        return redirect('Administracion');
-    }else {
             $error = "Usuario ó Contraseña Inconrrecta";
             return redirect('/')->with('error', $error);
         }
@@ -47,6 +47,10 @@ class UsuariosController extends Controller
 
     public function Administracion()
     {
-        return view('Administracion');
+        if (Auth::check()) {
+            return view('Administracion');
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
     }
 }

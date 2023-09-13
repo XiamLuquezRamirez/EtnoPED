@@ -43,6 +43,7 @@ class UnidadesTematicas extends Model
             ->where('id', $id)
             ->first();
     }
+    
     public static function AllUnidades()
     {
         return DB::connection('mysql')->table('etno_ped.unidades_tematicas')

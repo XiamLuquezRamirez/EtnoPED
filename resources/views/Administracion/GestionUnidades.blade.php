@@ -59,7 +59,7 @@
                             <table class="table table-xs mb-0">
                                 <thead>
                                     <tr>
-                                        <th>Opciones</th>
+                                        <th width="20%">Opciones</th>
                                         <th>#</th>
                                         <th>Nombre</th>
                                         <th>Descripción</th>
@@ -286,6 +286,7 @@
                         backdrop: 'static',
                         keyboard: false
                     });
+                    $("#accion").val("editar");
                     $("#btnGuardar").prop('disabled', false);
                     $("#tituloUnidad").html("Editar Unidad Tematica");
 

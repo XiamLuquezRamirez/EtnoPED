@@ -12,26 +12,73 @@ class Tematicas extends Model
 
     public static function guardar($request)
     {
-       $respuesta = DB::connection('mysql')->table('etno_ped.tematicas')->insertGetId([
+        $respuesta = DB::connection('mysql')->table('etno_ped.tematicas')->insertGetId([
             'titulo' => $request['titulo'],
             'unidad' => $request['unidad'],
-            'contenido' => $request['contenido'],
+            'contenido' => $request['contenidoEdit'],
             'estado' => 'ACTIVO'
         ]);
 
         return  $respuesta;
     }
 
-    public static function guardarMultimediaTema($data){
+    public static function guardarMultimediaTema($data)
+    {
 
         foreach ($data["img"] as $key => $val) {
-            $respuesta = DB::connection('mysql')->table('etno_ped.multimedia_gramatica')->insert([
-                        'tematica' => $data["id"],
-                        'url_contenido' => $data["img"][$key],
-                        'tipo_multimedia' => $data["tipo"][$key]
+            $respuesta = DB::connection('mysql')->table('etno_ped.multimedia_tematica')->insert([
+                'tematica' => $data["id"],
+                'url_contenido' => $data["img"][$key],
+                'tipo_multimedia' => $data["tipo"][$key]
             ]);
         }
-       return $respuesta;
+        return $respuesta;
+    }
 
+    public static function BuscarTema($id)
+    {
+        return DB::connection('mysql')->table('etno_ped.tematicas')
+            ->where('id', $id)
+            ->first();
+    }
+
+    public static function BuscarDetTema($id)
+    {
+        return DB::connection('mysql')->table('etno_ped.tematicas')
+            ->leftJoin("etno_ped.unidades_tematicas", "etno_ped.unidades_tematicas.id","etno_ped.tematicas.unidad")
+            ->where('etno_ped.tematicas.id', $id)
+            ->select("etno_ped.tematicas.titulo", "etno_ped.unidades_tematicas.nombre")
+            ->first();
+    }
+
+    public static function BuscarMultimedia($id)
+    {
+        return DB::connection('mysql')->table('etno_ped.multimedia_tematica')
+            ->where('tematica', $id)
+            ->get();
+    }
+    public static function EliminarRegistomultimedia($id)
+    {
+        return DB::connection('mysql')->table('etno_ped.multimedia_tematica')
+            ->where('tematica', $id)
+            ->delete();
+    }
+
+
+    public static function EliminarTematica($id)
+    {
+        return DB::connection('mysql')->table('etno_ped.tematicas')->where('id', $id)->update([
+            'estado' => 'ELIMINADO',
+        ]);
+    }
+
+    public static function editar($request)
+    {
+        $respuesta = DB::connection('mysql')->table('etno_ped.tematicas')->where('id', $request['id'])->update([
+            'titulo' => $request['titulo'],
+            'unidad' => $request['unidad'],
+            'contenido' => $request['contenidoEdit'],
+        ]);
+        return  "ok";
     }
 }

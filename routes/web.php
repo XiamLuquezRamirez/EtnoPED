@@ -26,8 +26,8 @@ Route::post('/Login', [UsuariosController::class,'Login']);
 Route::get('/Logout', [UsuariosController::class,'Logout']);
 Route::get('/Administracion', [UsuariosController::class,'Administracion']);
 
-//ADMINITRACCION GRAMATICA Y LENGUAJE
-Route::get('/AdminGramaticaLenguaje/GestionarGramatica/{ori}', [AdministracionController::class,'GestionarGramatica']);
+//ADMINITRACCION GRAMATICA Y LENGUAJE - GESTIONAR TEMAS
+Route::get('/AdminGramaticaLenguaje/GestionarGramatica/{ori}/{id}', [AdministracionController::class,'GestionarGramatica']);
 Route::post('/AdminGramaticaLenguaje/GuardarUnidad', [AdministracionController::class,'GuardarUnidad']);
 Route::post('/AdminGramaticaLenguaje/CargarUnidades', [AdministracionController::class,'CargarUnidades']);
 Route::post('/AdminGramaticaLenguaje/BuscarUnidad', [AdministracionController::class,'BuscarUnidad']);
@@ -35,6 +35,20 @@ Route::post('/AdminGramaticaLenguaje/EliminarUnidad', [AdministracionController:
 Route::post('/AdminGramaticaLenguaje/CargarUnidadesSelect', [AdministracionController::class,'CargarUnidadesSelect']);
 Route::post('/AdminGramaticaLenguaje/GuardarTema', [AdministracionController::class,'GuardarTema']);
 Route::post('/AdminGramaticaLenguaje/CargarTemas', [AdministracionController::class,'CargarTemas']);
+Route::post('/AdminGramaticaLenguaje/BuscarTema', [AdministracionController::class,'BuscarTema']);
+Route::post('/AdminGramaticaLenguaje/eliminarMultimedia', [AdministracionController::class,'eliminarMultimedia']);
+Route::post('/AdminGramaticaLenguaje/EliminarTema', [AdministracionController::class,'EliminarTema']);
+//ADMINITRACCION GRAMATICA Y LENGUAJE - GESTIONAR EVALUACIONES
+Route::post('/AdminGramaticaLenguaje/CargarEvaluaciones', [AdministracionController::class,'CargarEvaluaciones']);
+Route::post('/AdminGramaticaLenguaje/guardarEvaluacion', [AdministracionController::class,'guardarEvaluacion']);
+Route::post('/AdminGramaticaLenguaje/GuardarEvalFin', [AdministracionController::class,'GuardarEvalFin']);
+Route::post('/AdminGramaticaLenguaje/EliminarEvaluacion', [AdministracionController::class,'EliminarEvaluacion']);
+
+///EDITAR PREGUNTAS
+Route::post('/AdminGramaticaLenguaje/consulEvalPreg', [AdministracionController::class,'consulEvalPreg']);
+
+///ELIMINAR PREGUNTAS
+Route::post('/AdminGramaticaLenguaje/ElimnarPreg', [AdministracionController::class,'ElimnarPreg']);
 
 
-Route::get('/ConvertirImagen', [ConvertirImagen::class,'ConvertirImagen']);
+

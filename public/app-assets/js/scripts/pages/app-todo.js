@@ -37,22 +37,6 @@ var badgeColors = {
 $(function () {
   "use strict";
 
-  // Single Date Picker
-  $('.pickadate').daterangepicker({
-    singleDatePicker: true,
-    showDropdowns: true,
-    locale: {
-      format: 'MM/DD'
-    }
-  });
-
-  // dragable list
-  dragula([document.getElementById("todo-task-list-drag")], {
-    moves: function (el, container, handle) {
-      return handle.classList.contains("handle");
-    }
-  });
-
 
   // select assigner
   selectUsersName.select2({
@@ -144,6 +128,7 @@ $(function () {
 
   //On compose btn click of compose mail visible and sidebar left hide
   $('.add-task-btn').on('click', function () {
+    
     //show class add on new task sidebar,overlay
     todoNewTasksidebar.addClass('show');
     appContentOverlay.addClass('show');
