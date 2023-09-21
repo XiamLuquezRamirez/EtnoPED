@@ -11,17 +11,16 @@ class Evaluacion extends Model
 {
     public static function Guardar($datos, $calxdoc)
     {
-       if ($datos["Punt_Max"] == null || $datos["Punt_Max"] == "0") {
+        if ($datos["Punt_Max"] == null || $datos["Punt_Max"] == "0") {
             $datos["Punt_Max"] = "10";
         }
-      
+
         $respuesta = DB::connection('mysql')->table('etno_ped.evaluaciones')->insertGetId([
             'tematica' => $datos['tema_id'],
             'titulo' => $datos['titulo'],
             'intentos_perm' => $datos['cb_intentosPer'],
             'calif_usando' => $datos['cb_CalUsando'],
             'punt_max' => $datos['Punt_Max'],
-            'intentos_real' => '0',
             'estado' => 'INACTIVO',
             'enunciado' => $datos['enunciado'],
             'calxdoc' => $calxdoc
@@ -32,7 +31,7 @@ class Evaluacion extends Model
     public static function ModifEval($datos, $id, $calxdoc)
     {
 
-       $respuesta = DB::connection('mysql')->table('etno_ped.evaluaciones')->where('id', $id)->update([
+        $respuesta = DB::connection('mysql')->table('etno_ped.evaluaciones')->where('id', $id)->update([
             'tematica' => $datos['tema_id'],
             'titulo' => $datos['titulo'],
             'intentos_perm' => $datos['cb_intentosPer'],
@@ -71,13 +70,13 @@ class Evaluacion extends Model
 
     public static function VerfDel($id)
     {
-      
+
         $VerfDel = DB::connection('mysql')->table('etno_ped.evaluaciones')
-        ->where('id', $id)
-        ->where('id', '>=', 1)
-        ->where('id', '<=', 30)
-        ->get();
-       
+            ->where('id', $id)
+            ->where('id', '>=', 1)
+            ->where('id', '<=', 30)
+            ->get();
+
         return $VerfDel;
     }
 
@@ -87,5 +86,12 @@ class Evaluacion extends Model
             'estado' => $estado,
         ]);
         return $respuesta;
+    }
+
+    public static function BusEval($id)
+    {
+        return DB::connection('mysql')->table('etno_ped.evaluaciones')
+            ->where('id', $id)
+            ->first();
     }
 }

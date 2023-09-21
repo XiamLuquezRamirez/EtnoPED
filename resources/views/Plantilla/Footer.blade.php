@@ -29,6 +29,10 @@
 <script src="{{ asset('app-assets/vendors/js/forms/quill/quill.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/quill/katex.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}"></script>
+<script src="{{asset('app-assets/js/scripts/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+<script src="{{asset('app-assets/js/scripts/ckeditor/styles.js')}}" type="text/javascript"></script>
+<script src="{{asset('app-assets/vendors/js/forms/icheck/icheck.min.js')}}" type="text/javascript"></script>
+<script src="{{asset('app-assets/vendors/js/ui/plyr.min.js')}}" type="text/javascript"></script>
 <!-- END: Theme JS-->
 
 <!-- BEGIN: Page JS-->

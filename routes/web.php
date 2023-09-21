@@ -37,12 +37,19 @@ Route::post('/AdminGramaticaLenguaje/GuardarTema', [AdministracionController::cl
 Route::post('/AdminGramaticaLenguaje/CargarTemas', [AdministracionController::class,'CargarTemas']);
 Route::post('/AdminGramaticaLenguaje/BuscarTema', [AdministracionController::class,'BuscarTema']);
 Route::post('/AdminGramaticaLenguaje/eliminarMultimedia', [AdministracionController::class,'eliminarMultimedia']);
+Route::post('/AdminGramaticaLenguaje/eliminarEjemplo', [AdministracionController::class,'eliminarEjemplo']);
 Route::post('/AdminGramaticaLenguaje/EliminarTema', [AdministracionController::class,'EliminarTema']);
 //ADMINITRACCION GRAMATICA Y LENGUAJE - GESTIONAR EVALUACIONES
 Route::post('/AdminGramaticaLenguaje/CargarEvaluaciones', [AdministracionController::class,'CargarEvaluaciones']);
 Route::post('/AdminGramaticaLenguaje/guardarEvaluacion', [AdministracionController::class,'guardarEvaluacion']);
 Route::post('/AdminGramaticaLenguaje/GuardarEvalFin', [AdministracionController::class,'GuardarEvalFin']);
 Route::post('/AdminGramaticaLenguaje/EliminarEvaluacion', [AdministracionController::class,'EliminarEvaluacion']);
+Route::post('/AdminGramaticaLenguaje/CargarEvaluacion', [AdministracionController::class,'CargarEvaluacion']);
+Route::post('/Guardar/VideoEval', [AdministracionController::class,'VideoEval']);
+///ADMINITRACCION GRAMATICA Y LENGUAJE - GESTIONAR PRACTICAS
+Route::post('/AdminGramaticaLenguaje/CargarPracticas', [AdministracionController::class,'CargarPracticas']);
+
+
 
 ///EDITAR PREGUNTAS
 Route::post('/AdminGramaticaLenguaje/consulEvalPreg', [AdministracionController::class,'consulEvalPreg']);

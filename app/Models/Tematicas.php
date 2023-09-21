@@ -35,6 +35,20 @@ class Tematicas extends Model
         return $respuesta;
     }
 
+    public static function guardarEjemplosTema($data)
+    {
+
+        foreach ($data["contEjemplo"] as $key => $val) {
+            $respuesta = DB::connection('mysql')->table('etno_ped.ejemplos_tematicas')->insert([
+                'tematica' => $data["id"],
+                'nombre' => $data["tituloEjemplo"][$key],
+                'contenido' => $data["contEjemplo"][$key],
+                'url_audio' => isset($data["Audio"][$key]) ? $data["Audio"][$key] : ""
+            ]);
+        }
+        return $respuesta;
+    }
+
     public static function BuscarTema($id)
     {
         return DB::connection('mysql')->table('etno_ped.tematicas')
@@ -57,10 +71,23 @@ class Tematicas extends Model
             ->where('tematica', $id)
             ->get();
     }
+    public static function BuscarEjemplos($id)
+    {
+        return DB::connection('mysql')->table('etno_ped.ejemplos_tematicas')
+            ->where('tematica', $id)
+            ->get();
+    }
+
     public static function EliminarRegistomultimedia($id)
     {
         return DB::connection('mysql')->table('etno_ped.multimedia_tematica')
-            ->where('tematica', $id)
+            ->where('id', $id)
+            ->delete();
+    }
+    public static function EliminarEjemplo($id)
+    {
+        return DB::connection('mysql')->table('etno_ped.ejemplos_tematicas')
+            ->where('id', $id)
             ->delete();
     }
 
