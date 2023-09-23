@@ -48,7 +48,12 @@ Route::post('/AdminGramaticaLenguaje/CargarEvaluacion', [AdministracionControlle
 Route::post('/Guardar/VideoEval', [AdministracionController::class,'VideoEval']);
 ///ADMINITRACCION GRAMATICA Y LENGUAJE - GESTIONAR PRACTICAS
 Route::post('/AdminGramaticaLenguaje/CargarPracticas', [AdministracionController::class,'CargarPracticas']);
-
+Route::post('/AdminGramaticaLenguaje/guardarPractica', [AdministracionController::class,'guardarPractica']);
+Route::post('/AdminGramaticaLenguaje/GuardarPractFin', [AdministracionController::class,'GuardarPractFin']);
+Route::post('/AdminGramaticaLenguaje/consulPractPreg', [AdministracionController::class,'consulPractPreg']);
+Route::post('/AdminGramaticaLenguaje/EliminarPregPract', [AdministracionController::class,'EliminarPregPract']);
+Route::post('/AdminGramaticaLenguaje/CargarPractica', [AdministracionController::class,'CargarPractica']);
+Route::post('/AdminGramaticaLenguaje/EliminarPractica', [AdministracionController::class,'EliminarPractica']);
 
 
 ///EDITAR PREGUNTAS

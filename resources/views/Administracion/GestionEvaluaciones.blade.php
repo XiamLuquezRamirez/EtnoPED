@@ -387,6 +387,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminGramaticaLenguaje/CargarEvaluacion') }}" id="formAuxiliarEvalDet" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
     <form action="{{ url('/AdminGramaticaLenguaje/ElimnarPreg') }}" id="formAuxiliar" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
@@ -395,10 +399,7 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
-    <form action="{{ url('/AdminGramaticaLenguaje/CargarEvaluacion') }}" id="formAuxiliarEvalDet" method="POST">
-        @csrf
-        <!-- Tus campos del formulario aquí -->
-    </form>
+
 
 
 @endsection
@@ -2342,7 +2343,7 @@
                         Swal.fire({
                             type: "warning",
                             title: "Oops...",
-                            text: "Debes de seleccuionar la respuesta correcta",
+                            text: "Debes de seleccionar la respuesta correcta",
                             confirmButtonClass: "btn btn-primary",
                             timer: 1500,
                             buttonsStyling: false

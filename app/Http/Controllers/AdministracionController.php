@@ -16,6 +16,9 @@ use App\Models\EvalRelacioneOpc;
 use App\Models\EvalTaller;
 use App\Models\EvalPregDidact;
 use App\Models\CosEval;
+use App\Models\Practicas;
+use App\Models\PregPractica;
+use App\Models\OpcPractica;
 use App\Models\Log;
 use App\Models\LibroCalificaciones;
 use Illuminate\Support\Facades\Auth;
@@ -42,8 +45,54 @@ class AdministracionController extends Controller
                 $tema = $detTemas->titulo;
                 $unidad = $detTemas->nombre;
                 return view('Administracion.GestionarPracticas', compact('id', 'tema', 'unidad'));
-              
             }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function CargarPractica()
+    {
+        if (Auth::check()) {
+            $ideva = request()->get('ideva');
+
+            $Evaluacion = Evaluacion::BusEval($ideva);
+
+            ///////CONSULTAR PREGUNTA OPCION MULTIPLE COMPLE
+            $PregMult = PregPractica::ConsulPregAll($ideva);
+            $OpciMult = OpcPractica::ConsulGrupOpcPregAll($ideva);
+
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'Evaluacion' => $Evaluacion,
+                    'PregMult' => $PregMult,
+                    'OpciMult' => $OpciMult
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+
+    public function GuardarPractFin()
+    {
+        if (Auth::check()) {
+            $datos = request()->all();
+
+            $idEval = "";
+            $idEval = request()->get('Id_Eval');
+            $ContEval = Practicas::ModifPractFin($datos, $idEval);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'idEval' => $idEval,
+                ]);
+            }
+
+
+            $Log = Log::Guardar('Practica Modificada', $idEval);
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
@@ -228,13 +277,13 @@ class AdministracionController extends Controller
         $idEjemplo = request()->get('idejemplo');
         $rutaEjemplo = request()->get('rutaEjemplo');
         $Multmedia = Tematicas::EliminarEjemplo($idEjemplo);
-       
-            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audios/' . $rutaEjemplo; // Ruta completa al archivo que deseas eliminar
-      
-            if (file_exists($fileToDelete)) {
-                unlink($fileToDelete);
-            }
-        
+
+        $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audios/' . $rutaEjemplo; // Ruta completa al archivo que deseas eliminar
+
+        if (file_exists($fileToDelete)) {
+            unlink($fileToDelete);
+        }
+
 
 
 
@@ -700,6 +749,72 @@ class AdministracionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+    ///////////////////GUARDAR PRACTICA
+    public function guardarPractica()
+    {
+        if (Auth::check()) {
+            $datos = request()->all();
+
+            $idEval = "";
+
+            if ($datos['Id_Eval'] === null) {
+                $ContEval = Practicas::Guardar($datos);
+                $idEval = $ContEval;
+            } else {
+                $idEval = request()->get('Id_Eval');
+                $ContEval = Practicas::ModifEval($datos, $idEval);
+            }
+
+            if ($datos['IdpreguntaMul'] === null) {
+                $PregOpcMul = PregPractica::Guardar($datos['PreMulResp'],  $idEval);
+                $PregOpcMul = PregPractica::ConsulPreg($PregOpcMul);
+
+                if ($PregOpcMul) {
+                    $OpciPregMul = OpcPractica::Guardar($datos, $PregOpcMul->id, $idEval);
+                    $OpciPregMul = OpcPractica::ConsulGrupOpc($PregOpcMul->id, $idEval);
+                }
+            } else {
+                $PregOpcMul = PregPractica::ModiPreMul($datos['PreMulResp'],  $datos['IdpreguntaMul'], $idEval);
+                $PregOpcMul = PregPractica::ConsulPreg($datos['IdpreguntaMul']);
+                if ($PregOpcMul) {
+                    $OpciPregMul = OpcPractica::ModOpcPreg($datos, $idEval);
+                    $OpciPregMul = OpcPractica::ConsulGrupOpc($datos['IdpreguntaMul'], $idEval);
+                }
+            }
+
+
+            $Log = Log::Guardar('Practica Modificada', $idEval);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'idEval' => $idEval,
+                    'PregOpcMul' => $PregOpcMul,
+                    'OpciPregMul' => $OpciPregMul,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function consulPractPreg()
+    {
+        $IdPreg = request()->get('Pregunta');
+
+        if (Auth::check()) {
+
+            $PregMult = PregPractica::ConsulPreg($IdPreg);
+            $OpciMult = OpcPractica::ConsulGrupOpcPreg($IdPreg);
+            if (request()->ajax()) {
+                return response()->json([
+                    'PregMult' => $PregMult,
+                    'OpciMult' => $OpciMult,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
     ///CONSULTAR PREGUNTAS EVALUACION
     public function consulEvalPreg()
     {
@@ -822,6 +937,47 @@ class AdministracionController extends Controller
                         $mensaje = 'La Operación no pudo ser Realizada';
                     }
                 }
+            }
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                    'mensaje' => $mensaje,
+                    'id' => $id,
+                    'opc' => $opc,
+                    'icon' => $icon,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function EliminarPractica()
+    {
+        $opc = "NT";
+        $mensaje = "";
+        $icon = "";
+        if (Auth::check()) {
+            $id = request()->get('idEval');
+            $Verf = Practicas::VerfDel($id);
+
+            if ($Verf->count() > 0) {
+                $estado = "SINPERMISO";
+                $mensaje = 'Esta Evaluación es Propia de la Plataforma,  No puede ser Eliminada...';
+                $icon = 'warning';
+                $opc = "VU";
+            } else {
+                    $estado = "ELIMINADO";
+                    $respuesta = Practicas::editarestado($id, $estado);
+                    if ($respuesta) {
+                        if ($estado == "ELIMINADO") {
+                            $Log = Log::Guardar('Practica Eliminada', $id);
+                            $mensaje = 'Operación Realizada de Manera Exitosa';
+                            $icon = 'success';
+                        }
+                    } else {
+                        $mensaje = 'La Operación no pudo ser Realizada';
+                    }
+               
             }
             if (request()->ajax()) {
                 return response()->json([
@@ -999,10 +1155,33 @@ class AdministracionController extends Controller
         }
     }
 
+    public function EliminarPregPract()
+    {
+        $mensaje = "";
+        $id = request()->get('id');
+        if (Auth::check()) {
+            $respuesta = PregPractica::DelPregunta((int) $id);
+            $respuesta = OpcPractica::DelOpciones($id);
+            if ($respuesta) {
+                $Log = Log::Guardar('Pregunta Practica Eliminada', $id);
+                $mensaje = 'Operación Realizada de Manera Exitosa';
+            } else {
+                $mensaje = 'La Operación no pudo ser Realizada';
+            }
+            if (request()->ajax()) {
+                return response()->json([
+                    'mensaje' => $mensaje,
+                    'id' => $id,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
 
     public function sanear_string($string)
     {
-
         $string = trim($string);
 
         $string = str_replace(

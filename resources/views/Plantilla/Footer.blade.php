@@ -22,7 +22,6 @@
 <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/spinner/jquery.bootstrap-touchspin.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
-<script src="{{ asset('app-assets/vendors/js/forms/icheck/icheck.min.js') }}"></script>
 <script src="{{ asset('app-assets/js/scripts/forms/validation/form-validation.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/quill/highlight.min.js') }}"></script>
@@ -33,6 +32,7 @@
 <script src="{{asset('app-assets/js/scripts/ckeditor/styles.js')}}" type="text/javascript"></script>
 <script src="{{asset('app-assets/vendors/js/forms/icheck/icheck.min.js')}}" type="text/javascript"></script>
 <script src="{{asset('app-assets/vendors/js/ui/plyr.min.js')}}" type="text/javascript"></script>
+<script src="{{asset('app-assets/js/scripts/forms/checkbox-radio.js')}}" type="text/javascript"></script>
 <!-- END: Theme JS-->
 
 <!-- BEGIN: Page JS-->
