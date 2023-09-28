@@ -31,7 +31,7 @@ class UsuariosController extends Controller
                 Session::put('ImgUsu', $rutaUrl . 'avatar-s-1.png');
             }
 
-            return redirect('Administracion');
+            return redirect('Principal');
         } else {
             $error = "Usuario ó Contraseña Inconrrecta";
             return redirect('/')->with('error', $error);
@@ -48,7 +48,7 @@ class UsuariosController extends Controller
     public function Administracion()
     {
         if (Auth::check()) {
-            return view('Administracion');
+            return view('Principal');
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }

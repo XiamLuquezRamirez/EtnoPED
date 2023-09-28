@@ -62,4 +62,10 @@ class Practicas extends Model
 
         return $VerfDel;
     }
+
+    public static function allPracticas($idTema){
+        return DB::connection('mysql')->table('etno_ped.practicas_tematica')
+        ->where('tematica', $idTema)
+        ->get();
+    }
 }

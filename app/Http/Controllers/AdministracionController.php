@@ -131,6 +131,7 @@ class AdministracionController extends Controller
                 if (request()->has('repeater-list')) {
                     $img = [];
                     $tipo = [];
+                    $nomb = [];
                     $repeaterList = $data['repeater-list'];
 
 
@@ -147,10 +148,12 @@ class AdministracionController extends Controller
                             $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
                             $archivo->move(public_path() . '/app-assets/contenidoMultimedia/tematicas/', $nombreArchivo);
                             $img[] = $nombreArchivo;
+                            $nomb[] = $nombreOriginal;
                             $tipo[] = $tipoMime;
                             // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
                             $data['img'] = $img;
                             $data['tipo'] = $tipo;
+                            $data['nomb'] = $nomb;
                         }
                     }
                 }
@@ -197,10 +200,12 @@ class AdministracionController extends Controller
                         $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
                         $archivo->move(public_path() . '/app-assets/contenidoMultimedia/tematicas/', $nombreArchivo);
                         $img[] = $nombreArchivo;
+                        $nomb[] = $nombreOriginal;
                         $tipo[] = $tipoMime;
                         // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
                         $data['img'] = $img;
                         $data['tipo'] = $tipo;
+                        $data['nomb'] = $nomb;
                     }
                 }
             }

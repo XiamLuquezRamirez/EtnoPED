@@ -198,10 +198,8 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                       
                                                                         </div>
-                                                                    </li>                                                                  
-                                                                 
+                                                                    </li>
                                                                 </ul>
                                                             </li>
                                                         </ul>
@@ -242,7 +240,6 @@
                                                                             type="text" name="titulo"
                                                                             placeholder="Título" id="titulo">
                                                                     </div>
-
 
                                                                     <div class="form-group">
                                                                         <label for="userinput8">Enunciado:</label>

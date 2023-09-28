@@ -4,10 +4,10 @@
             <li class=" navigation-header"><span>Generar</span><i class=" feather icon-minus" data-toggle="tooltip"
                     data-placement="right" data-original-title="Apps"></i>
             </li>
-            <li id="Princioal" class="active"><a href="index.html"><i class="feather icon-home"></i><span class="menu-title"
+            <li id="Principal"><a href="{{ url('/Principal') }}"><i class="feather icon-home"></i><span class="menu-title"
                         data-i18n="Dashboard">Principal</span></a>
             </li>
-            <li class="nav-item"><a href="#"><i class="fa fa-comments"></i><span class="menu-title"
+            <li id="Gramatica" class="nav-item"><a href="{{ url('/GramaticaLenguaje/GestionarGramatica/GramaticaLenguaje') }}"><i class="fa fa-comments"></i><span class="menu-title"
                         data-i18n="Templates">Gramatica y Lenguaje</span></a>
 
             </li>
@@ -16,7 +16,7 @@
 
             </li>
             <li class=" nav-item"><a href="#"><i class="fa fa-gg"></i><span class="menu-title"
-                        data-i18n="Starter kit">Cultura y Tradiciones</span></a>
+                        data-i18n="Starter kit">Uso y Costumbres</span></a>
 
             </li>
             <li class=" nav-item"><a href="#"><i class="fa fa-list-ul"></i><span class="menu-title"

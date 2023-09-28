@@ -28,6 +28,7 @@ class Tematicas extends Model
         foreach ($data["img"] as $key => $val) {
             $respuesta = DB::connection('mysql')->table('etno_ped.multimedia_tematica')->insert([
                 'tematica' => $data["id"],
+                'nombre' => $data["nomb"][$key],
                 'url_contenido' => $data["img"][$key],
                 'tipo_multimedia' => $data["tipo"][$key]
             ]);
@@ -47,6 +48,13 @@ class Tematicas extends Model
             ]);
         }
         return $respuesta;
+    }
+
+    public static function AllTemas($idUnidad){
+        return DB::connection('mysql')->table('etno_ped.tematicas')
+        ->where('unidad', $idUnidad)
+        ->where('estado', 'ACTIVO')
+        ->get();
     }
 
     public static function BuscarTema($id)

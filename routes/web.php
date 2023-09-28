@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\AdministracionController;
+use App\Http\Controllers\VisualizacionController;
 use App\Http\Controllers\ConvertirImagen;
 
 /*
@@ -24,7 +25,7 @@ Route::get('/', function () {
 ///INICIO DE SESIÓN
 Route::post('/Login', [UsuariosController::class,'Login']);
 Route::get('/Logout', [UsuariosController::class,'Logout']);
-Route::get('/Administracion', [UsuariosController::class,'Administracion']);
+Route::get('/Principal', [UsuariosController::class,'Administracion']);
 
 //ADMINITRACCION GRAMATICA Y LENGUAJE - GESTIONAR TEMAS
 Route::get('/AdminGramaticaLenguaje/GestionarGramatica/{ori}/{id}', [AdministracionController::class,'GestionarGramatica']);
@@ -62,5 +63,13 @@ Route::post('/AdminGramaticaLenguaje/consulEvalPreg', [AdministracionController:
 ///ELIMINAR PREGUNTAS
 Route::post('/AdminGramaticaLenguaje/ElimnarPreg', [AdministracionController::class,'ElimnarPreg']);
 
+
+
+////VISUALIZACION GRAMATICA Y LENGUAJE
+Route::get('/GramaticaLenguaje/GestionarGramatica/{dest}', [VisualizacionController::class,'visualizacionModulo']);
+Route::post('/GramaticaLenguaje/CargarUnidades', [VisualizacionController::class,'CargarUnidades']);
+Route::post('/GramaticaLenguaje/CargarTemas', [VisualizacionController::class,'CargarTemas']);
+Route::post('/GramaticaLenguaje/CargarDetTemas', [VisualizacionController::class,'CargarDetTemas']);
+Route::post('/GramaticaLenguaje/CargarDetPractica', [VisualizacionController::class,'CargarDetPractica']);
 
 

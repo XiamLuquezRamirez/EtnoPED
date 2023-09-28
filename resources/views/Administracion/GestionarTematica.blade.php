@@ -908,7 +908,7 @@
 
                     $("#idmultimedia").remove();
                     $("#rutaMultimedia").remove();
-                    let idmult = $("#tr_" + id).data("tipo");
+                    let idmult = $("#tr_" + id).data("id");
                     let idurl = $("#tr_" + id).data("url");
                     form.append("<input type='hidden' id='idmultimedia' name='idmultimedia'  value='" +
                         idmult +

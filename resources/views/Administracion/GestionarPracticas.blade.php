@@ -229,7 +229,7 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $("#Princioal").removeClass("active");
+            $("#Principal").removeClass("active");
             $("#MenuGramatica").addClass("has-sub open");
             $("#MenuGramaticaTematica").addClass("active");
 
