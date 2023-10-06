@@ -65,6 +65,7 @@ class Practicas extends Model
 
     public static function allPracticas($idTema){
         return DB::connection('mysql')->table('etno_ped.practicas_tematica')
+        ->where('estado','ACTIVO')
         ->where('tematica', $idTema)
         ->get();
     }

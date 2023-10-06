@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-6 col-12">
+        <div class="col-xl-4 col-lg-6 col-12" onclick="$.abrirModulo(2);">
             <div class="card2 work">
                 <div class="img-section">
                     <img class="brand-logo ml-1" alt="stack admin logo" width="90"
@@ -43,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-6 col-12">
+        <div class="col-xl-4 col-lg-6 col-12" onclick="$.abrirModulo(3);">
             <div class="card2 work">
                 <div class="img-section">
                     <img class="brand-logo ml-1" alt="stack admin logo" width="90"
@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-6 col-12">
+        <div class="col-xl-4 col-lg-6 col-12" onclick="$.abrirModulo(4);">
             <div class="card2 work">
                 <div class="img-section">
                     <img class="brand-logo ml-1" alt="stack admin logo" width="90"
@@ -132,7 +132,7 @@
                       }
 
 
-                      window.location.href = 'GramaticaLenguaje/GestionarGramatica/' + dest;
+                      window.location.href = 'Visualizacion/Modulos/' + dest;
 
                 }
 

@@ -19,6 +19,9 @@ use App\Models\CosEval;
 use App\Models\Practicas;
 use App\Models\PregPractica;
 use App\Models\OpcPractica;
+use App\Models\MedicinaTradicional;
+use App\Models\UsosCostumbres;
+use App\Models\Diccionario;
 use App\Models\Log;
 use App\Models\LibroCalificaciones;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +52,23 @@ class AdministracionController extends Controller
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
+    }
+
+    public function GestionarMedicinaTradicional()
+    {
+        $bandera = "";
+        return view('Administracion.GestionMedicinaTradicional', compact('bandera'));
+    }
+
+    public function GestionarUsosCostumbres()
+    {
+        $bandera = "";
+        return view('Administracion.GestionUsoCostumbres', compact('bandera'));
+    }
+    public function GestionarDiccionario()
+    {
+        $bandera = "";
+        return view('Administracion.GestionDiccionario', compact('bandera'));
     }
 
     public function CargarPractica()
@@ -245,6 +265,183 @@ class AdministracionController extends Controller
             ]);
         }
     }
+    public function GuardarMedicina()
+    {
+        $data = request()->all();
+
+        if ($data['accion'] == "agregar") {
+
+
+            if (request()->hasfile('vidPrepa')) {
+                foreach (request()->file('vidPrepa') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/PreparacionMedicinaTradicional/', $name);
+                    $data['VideoOr'] =  $file->getClientOriginalName();
+                    $data['Video'] = $name;
+                }
+            } else {
+                $data['VideoOr'] = "";
+                $data['Video'] = "";
+            }
+
+
+
+            $respuesta = MedicinaTradicional::guardar($data);
+        } else if ($data['accion'] == "editar") {
+
+
+            if (request()->hasfile('vidPrepa')) {
+                foreach (request()->file('vidPrepa') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/PreparacionMedicinaTradicional/', $name);
+                    $data['VideoOr'] =  $file->getClientOriginalName();
+                    $data['Video'] = $name;
+                }
+            } else {
+                $data['VideoOr'] =  $data['nVideoPrepa'];
+                $data['Video'] = $data['VideoPrepa'];
+            }
+
+            $respuesta = MedicinaTradicional::modificar($data);
+        }
+
+
+        if ($respuesta) {
+            $estado = "ok";
+        } else {
+            $estado = "fail";
+        }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => $estado,
+            ]);
+        }
+    }
+    public function GuardarUso()
+    {
+        $data = request()->all();
+
+        if ($data['accion'] == "agregar") {
+
+            if (request()->hasfile('vidUso')) {
+                foreach (request()->file('vidUso') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/UsosCostumbres/', $name);
+                    $data['Video'] = $name;
+                }
+            } else {
+                $data['Video'] = "";
+            }
+
+            $respuesta = UsosCostumbres::guardar($data);
+        } else if ($data['accion'] == "editar") {
+
+            if (request()->hasfile('vidUso')) {
+                foreach (request()->file('vidUso') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/UsosCostumbres/', $name);
+                    $data['Video'] = $name;
+                }
+            } else {
+                $data['Video'] = $data['VideoUso'];
+            }
+
+            $respuesta = UsosCostumbres::modificar($data);
+        }
+
+
+        if ($respuesta) {
+            $estado = "ok";
+        } else {
+            $estado = "fail";
+        }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => $estado,
+            ]);
+        }
+    }
+
+    public function GuardarDiccionario()
+    {
+        $data = request()->all();
+
+        if ($data['accion'] == "agregar") {
+
+
+            if (request()->hasfile('imgDicc')) {
+                foreach (request()->file('imgDicc') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/', $name);
+                    $data['Img'] = $name;
+                }
+            } else {
+
+                $data['Img'] = "";
+            }
+
+            if (request()->hasfile('audDicc')) {
+                foreach (request()->file('audDicc') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/', $name);
+                    $data['Audio'] = $name;
+                }
+            } else {
+
+                $data['Audio'] = "";
+            }
+
+            $respuesta = Diccionario::guardar($data);
+        } else if ($data['accion'] == "editar") {
+
+
+            if (request()->hasfile('imgDicc')) {
+                foreach (request()->file('imgDicc') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/', $name);
+                    $data['Img'] = $name;
+                }
+            } else {
+                $data['Img'] = $data['imgDicc'];
+            }
+
+            if (request()->hasfile('audDicc')) {
+                foreach (request()->file('audDicc') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/', $name);
+                    $data['Audio'] = $name;
+                }
+            } else {
+
+                $data['Audio'] = $data['audDicc'];
+            }
+
+            $respuesta = Diccionario::modificar($data);
+        }
+
+
+        if ($respuesta) {
+            $estado = "ok";
+        } else {
+            $estado = "fail";
+        }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => $estado,
+            ]);
+        }
+    }
 
     public function EliminarUnidad()
     {
@@ -253,8 +450,57 @@ class AdministracionController extends Controller
     }
     public function EliminarTema()
     {
-        $idUndad = request()->get('idTema');
-        $unidades = Tematicas::EliminarTematica($idUndad);
+        $idTema = request()->get('idTema');
+        $unidades = Tematicas::EliminarTematica($idTema);
+    }
+    public function EliminarMedicina()
+    {
+        $idMedicina = request()->get('idMedicina');
+        $unidades = MedicinaTradicional::Eliminar($idMedicina);
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => "ok",
+            ]);
+        }
+    }
+    public function EliminarUsos()
+    {
+        $idUso = request()->get('idUso');
+        $unidades = UsosCostumbres::Eliminar($idUso);
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => "ok",
+            ]);
+        }
+    }
+    public function EliminarDiccionario()
+    {
+        $idDicc = request()->get('idDicc');
+        $diccionario = Diccionario::BuscarDicc($idDicc);
+
+        $audio = $diccionario->audio;
+        $img = $diccionario->imagen;
+
+        if ($audio != "") {
+            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/' . $audio; // Ruta completa al archivo que deseas eliminar
+            if (file_exists($fileToDelete)) {
+                unlink($fileToDelete);
+            }
+        }
+
+        if ($img != "") {
+            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/' . $img; // Ruta completa al archivo que deseas eliminar
+            if (file_exists($fileToDelete)) {
+                unlink($fileToDelete);
+            }
+        }
+
+        $diccionario = Diccionario::Eliminar($idDicc);
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => "ok",
+            ]);
+        }
     }
 
     public function eliminarMultimedia()
@@ -347,6 +593,93 @@ class AdministracionController extends Controller
             'links' => $pagination,
         ]);
     }
+    public function CargarUsosCostumbres()
+    {
+        $perPage = 5; // Número de posts por página
+        $page = request()->get('page', 1);
+        $searchUso = request()->get('search');
+        if (!is_numeric($page)) {
+            $page = 1; // Establecer un valor predeterminado si no es numérico
+        }
+
+        $usos = DB::connection('mysql')
+            ->table('etno_ped.usos_costumbres')
+            ->where('estado', 'ACTIVO');
+        if ($searchUso) {
+            $usos->where('nombre', 'LIKE', '%' . $searchUso . '%');
+        }
+        $Listusos = $usos->paginate($perPage, ['*'], 'page', $page);
+
+        $tdTable = '';
+        $x = ($page - 1) * $perPage + 1;
+
+        foreach ($Listusos as $i => $item) {
+            if (!is_null($item)) {
+                $tdTable .= '<tr>' .
+                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                    '    </div>' .
+                    '</td>' .
+                    '<th scope="row">' . $x . '</th>' .
+                    '<td>' . $item->nombre . '</td>' .
+                    '</tr>';
+
+                $x++;
+            }
+        }
+
+        $pagination = $Listusos->links('Administracion.Paginacion')->render();
+
+        return response()->json([
+            'usoCostumbre' => $tdTable,
+            'links' => $pagination,
+        ]);
+    }
+    public function CargarDiccionario()
+    {
+        $perPage = 5; // Número de posts por página
+        $page = request()->get('page', 1);
+        $searchDicc = request()->get('search');
+        if (!is_numeric($page)) {
+            $page = 1; // Establecer un valor predeterminado si no es numérico
+        }
+
+        $diccionario = DB::connection('mysql')
+            ->table('etno_ped.diccionario')
+            ->where('estado', 'ACTIVO');
+        if ($searchDicc) {
+            $diccionario->where('palabra_espanol', 'LIKE', '%' . $searchDicc . '%');
+        }
+        $ListDiccionario = $diccionario->paginate($perPage, ['*'], 'page', $page);
+
+        $tdTable = '';
+        $x = ($page - 1) * $perPage + 1;
+
+        foreach ($ListDiccionario as $i => $item) {
+            if (!is_null($item)) {
+                $tdTable .= '<tr>' .
+                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                    '    </div>' .
+                    '</td>' .
+                    '<th scope="row">' . $x . '</th>' .
+                    '<td>' . $item->palabra_espanol . '</td>' .
+                    '<td>' . $item->palabra_wuayuunaiki . '</td>' .
+                    '</tr>';
+
+                $x++;
+            }
+        }
+
+        $pagination = $ListDiccionario->links('Administracion.Paginacion')->render();
+
+        return response()->json([
+            'diccionario' => $tdTable,
+            'links' => $pagination,
+        ]);
+    }
 
     public function BuscarUnidad()
     {
@@ -356,6 +689,17 @@ class AdministracionController extends Controller
         if (request()->ajax()) {
             return response()->json([
                 'unidades' => $unidades,
+            ]);
+        }
+    }
+    public function BuscarDiccionario()
+    {
+        $idDicc = request()->get('idDicc');
+        $diccionario = Diccionario::BuscarDicc($idDicc);
+
+        if (request()->ajax()) {
+            return response()->json([
+                'diccionario' => $diccionario,
             ]);
         }
     }
@@ -372,6 +716,29 @@ class AdministracionController extends Controller
                 'tematica' => $tematica,
                 'mulTematica' => $mulTematica,
                 'ejemplos' => $ejemplos,
+            ]);
+        }
+    }
+
+    public function BuscarMedicina()
+    {
+        $idMedicina = request()->get('idMedicina');
+        $medicina = MedicinaTradicional::BuscarMedi($idMedicina);
+
+        if (request()->ajax()) {
+            return response()->json([
+                'medicina' => $medicina
+            ]);
+        }
+    }
+    public function BuscarUso()
+    {
+        $idUso = request()->get('idUso');
+        $usoCostumbre = UsosCostumbres::BuscarUso($idUso);
+
+        if (request()->ajax()) {
+            return response()->json([
+                'usoCostumbre' => $usoCostumbre
             ]);
         }
     }
@@ -437,6 +804,50 @@ class AdministracionController extends Controller
             'links' => $pagination,
         ]);
     }
+    public function CargarMedicinaTradicional()
+    {
+        $perPage = 5; // Número de posts por página
+        $page = request()->get('page', 1);
+        $searchMedicina = request()->get('search');
+        if (!is_numeric($page)) {
+            $page = 1; // Establecer un valor predeterminado si no es numérico
+        }
+
+        $medicina = DB::connection('mysql')
+            ->table('etno_ped.medicina_tradicional')
+            ->where('etno_ped.medicina_tradicional.estado', 'ACTIVO');
+        if ($searchMedicina) {
+            $medicina->where('nombre', 'LIKE', '%' . $searchMedicina . '%');
+        }
+
+        $ListMedicina = $medicina->paginate($perPage, ['*'], 'page', $page);
+
+        $tdTable = '';
+        $x = ($page - 1) * $perPage + 1;
+
+        foreach ($ListMedicina as $i => $item) {
+            if (!is_null($item)) {
+                $tdTable .= '<tr>' .
+                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                    '</div>' .
+                    '</td>' .
+                    '<th style="vertical-align: middle" scope="row">' . $x . '</th>' .
+                    '<td style="vertical-align: middle">' . $item->nombre . '</td>' .
+                    '</tr>';
+
+                $x++;
+            }
+        }
+
+        $pagination = $ListMedicina->links('Administracion.Paginacion')->render();
+
+        return response()->json([
+            'temas' => $tdTable,
+            'links' => $pagination,
+        ]);
+    }
 
     public function CargarEvaluaciones()
     {
@@ -492,9 +903,9 @@ class AdministracionController extends Controller
             'links' => $pagination,
         ]);
     }
+
     public function CargarPracticas()
     {
-
         $idTema = request()->get('idTema');
 
         $perPage = 5; // Número de posts por página
@@ -971,18 +1382,17 @@ class AdministracionController extends Controller
                 $icon = 'warning';
                 $opc = "VU";
             } else {
-                    $estado = "ELIMINADO";
-                    $respuesta = Practicas::editarestado($id, $estado);
-                    if ($respuesta) {
-                        if ($estado == "ELIMINADO") {
-                            $Log = Log::Guardar('Practica Eliminada', $id);
-                            $mensaje = 'Operación Realizada de Manera Exitosa';
-                            $icon = 'success';
-                        }
-                    } else {
-                        $mensaje = 'La Operación no pudo ser Realizada';
+                $estado = "ELIMINADO";
+                $respuesta = Practicas::editarestado($id, $estado);
+                if ($respuesta) {
+                    if ($estado == "ELIMINADO") {
+                        $Log = Log::Guardar('Practica Eliminada', $id);
+                        $mensaje = 'Operación Realizada de Manera Exitosa';
+                        $icon = 'success';
                     }
-               
+                } else {
+                    $mensaje = 'La Operación no pudo ser Realizada';
+                }
             }
             if (request()->ajax()) {
                 return response()->json([

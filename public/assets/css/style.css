@@ -42,9 +42,9 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 
 
 .persona1 {
-    background-image: url(img/docente.png);
-    background-size: 105%;
-    top: 224pt;
+    background-image: url('img/docente.png');
+    background-size: 100%;
+    top: 215pt;
     width: 177pt;
     height: 200pt;
     background-repeat: no-repeat;
@@ -54,22 +54,22 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
     left: -200pt;
     animation-duration: 4s;
     animation-fill-mode: forwards;
-  }
-  
-  @keyframes mover_persona_1 {
-    from {
-      left: -200pt;
-    }
-  
-    to {
-      left: 10%;
-    }
-  }
+}
 
-  .persona2 {
-    background-image: url(img/estudiante.png);
-    background-size: 105%;
-    top: 224pt;
+@keyframes mover_persona_1 {
+    from {
+        left: -200pt;
+    }
+
+    to {
+        left: 10%;
+    }
+}
+
+.persona2 {
+    background-image: url('img/estudianteF.png');
+    background-size: 100%;
+    top: 215pt;
     width: 177pt;
     height: 200pt;
     background-repeat: no-repeat;
@@ -79,64 +79,78 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
     right: -200pt;
     animation-duration: 4s;
     animation-fill-mode: forwards;
-  }
-  
-  @keyframes mover_persona_2 {
-    from {
-      right: -200pt;
-    }
-  
-    to {
-      right: 10%;
-    }
-  }
+}
 
-  .dialogo1 {
+@keyframes mover_persona_2 {
+    from {
+        right: -200pt;
+    }
+
+    to {
+        right: 10%;
+    }
+}
+
+.dialogo1 {
     display: none;
     width: 200pt;
     height: 149pt;
     position: relative;
     top: -106pt;
     left: 93pt;
-    background-image: url(img/nube.png);
+    background-image: url('img/nube.png');
     background-position: center;
     background-size: 106% 110%;
     background-repeat: no-repeat;
-    padding: 20pt;
-    padding-bottom: 40pt;
-  }
-  
-  .dialogo2 {
+    padding: 20pt 20pt 40pt;
+}
+
+.dialogo2 {
     display: none;
     width: 200pt;
     height: 149pt;
     position: relative;
     top: -106pt;
-    right: 205pt;
-    background-image: url(img/nube2.png);
+    right: 119pt;
+    background-image: url('img/nube2.png');
     background-position: center;
     background-size: 106% 110%;
     background-repeat: no-repeat;
-    padding: 20pt;
-    padding-bottom: 40pt;
-  }
-  
-  #parrafo1, #parrafo2 {
+    padding: 20pt 20pt 40pt;
+}
+
+#parrafo1,
+#parrafo2 {
     font-size: 17pt;
     font-weight: bold;
-  }
-  
-  .swal2-modal {
-    top: 42% !important;
+}
+
+.swal2-modal {
+    /* top: 42% !important; */
     width: 40% !important
-  }
-  
-  
-  .centered-div {
+}
+
+.centered-div {
     position: relative;
     left: 51% !important;
     top: -115% !important;
     transform: translate(-50%, -50%);
-    -webkit-box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0); 
-    box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
-  }
+    -webkit-box-shadow: 0 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+    box-shadow: 0 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+}
+
+.custom-swal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-swal-popup {
+  width: 50%; /* Ajusta el ancho según tu necesidad */
+}
+
+
+#modalMultimediaTematica {
+    overflow: hidden;
+    height: 550px;
+}

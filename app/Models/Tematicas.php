@@ -99,7 +99,6 @@ class Tematicas extends Model
             ->delete();
     }
 
-
     public static function EliminarTematica($id)
     {
         return DB::connection('mysql')->table('etno_ped.tematicas')->where('id', $id)->update([

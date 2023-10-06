@@ -20,7 +20,9 @@ class PregRelacione extends Model
 
     public static function Modificar($datos)
     {
-        $respuesta = DB::connection('mysql')->table('etno_ped.eval_relacione')->where('id', $datos['id-relacione'])->update([
+        $respuesta = DB::connection('mysql')->table('etno_ped.eval_relacione')
+        ->where('id', $datos['id-relacione'])
+        ->update([
             'enunciado' => $datos['EnuncRelacione'],
             'puntaje' => $datos['puntaje'],
         ]);
@@ -29,7 +31,7 @@ class PregRelacione extends Model
 
     public static function ConRela($id)
     {
-        $PregRelacione =  DB::connection('mysql')->table('etno_ped.eval_relacione')
+        $PregRelacione = DB::connection('mysql')->table('etno_ped.eval_relacione')
             ->where('id', $id)
             ->first();
         return $PregRelacione;

@@ -7,19 +7,19 @@
             <li id="Principal"><a href="{{ url('/Principal') }}"><i class="feather icon-home"></i><span class="menu-title"
                         data-i18n="Dashboard">Principal</span></a>
             </li>
-            <li id="Gramatica" class="nav-item"><a href="{{ url('/GramaticaLenguaje/GestionarGramatica/GramaticaLenguaje') }}"><i class="fa fa-comments"></i><span class="menu-title"
+            <li id="Gramatica" class="nav-item"><a href="{{ url('/Visualizacion/Modulos/GramaticaLenguaje') }}"><i class="fa fa-comments"></i><span class="menu-title"
                         data-i18n="Templates">Gramatica y Lenguaje</span></a>
 
             </li>
-            <li class=" nav-item"><a href="#"><i class="fa fa-envira"></i><span class="menu-title"
+            <li id="MedicinaTradicional" class="nav-item"><a href="{{ url('/Visualizacion/Modulos/MedicinaTradicional') }}"><i class="fa fa-envira"></i><span class="menu-title"
                         data-i18n="Layouts">Medicina Tradicional</span></a>
 
             </li>
-            <li class=" nav-item"><a href="#"><i class="fa fa-gg"></i><span class="menu-title"
-                        data-i18n="Starter kit">Uso y Costumbres</span></a>
+            <li id="UsosCostumbres" class="nav-item"><a href="{{ url('/Visualizacion/Modulos/UsosCostumbres') }}"><i class="fa fa-gg"></i><span class="menu-title"
+                        data-i18n="Starter kit">Usos y Costumbres</span></a>
 
             </li>
-            <li class=" nav-item"><a href="#"><i class="fa fa-list-ul"></i><span class="menu-title"
+            <li id="Diccionario" class=" nav-item"><a href="{{ url('/Visualizacion/Modulos/Diccionario') }}"><i class="fa fa-list-ul"></i><span class="menu-title"
                         data-i18n="Starter kit">Diccionario</span></a>
 
             </li>
@@ -42,14 +42,14 @@
                     </ul>
 
                 </li>
-                <li class="nav-item"><a href="#"><i class="fa fa-cogs"></i><span class="menu-title"
+                <li id="GestionMedicinaTradicional" class="nav-item"><a href="{{ url('/AdminMedicinaTradicional/GestionarMedicinaTradicional/') }}"><i class="fa fa-cogs"></i><span class="menu-title"
                             data-i18n="Templates">Medicina Tradicional</span></a>
                 </li>
-                <li class=" nav-item"><a href="#"><i class="fa fa-cogs"></i><span class="menu-title"
-                            data-i18n="Starter kit">Cultura y Tradiciones</span></a>
+                <li id="GestionUsosCostumbres" class=" nav-item"><a href="{{ url('/AdminUsoCostumbres/GestionarUsosCostumbres/') }}"><i class="fa fa-cogs"></i><span class="menu-title"
+                            data-i18n="Starter kit">Usos y Costumbres</span></a>
 
                 </li>
-                <li class=" nav-item"><a href="#"><i class="fa fa-cogs"></i><span class="menu-title"
+                <li id="GestionDiccionario" class="nav-item"><a href="{{ url('/AdminDiccionario/GestionarDiccionario/') }}"><i class="fa fa-cogs"></i><span class="menu-title"
                             data-i18n="Starter kit">Diccionario</span></a>
 
                 </li>

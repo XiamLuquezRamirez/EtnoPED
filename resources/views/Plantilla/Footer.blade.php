@@ -25,14 +25,25 @@
 <script src="{{ asset('app-assets/js/scripts/forms/validation/form-validation.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/quill/highlight.min.js') }}"></script>
+<script src="{{asset('app-assets/vendors/js/pickers/daterange/daterangepicker.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/vendors/js/pickers/pickadate/picker.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/vendors/js/pickers/pickadate/picker.date.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/validation/jquery.validate.min.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/vendors/js/extensions/jquery.steps.min.js')}}" type="text/javascript"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/quill/quill.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/quill/katex.min.js') }}"></script>
 <script src="{{ asset('app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}"></script>
-<script src="{{asset('app-assets/js/scripts/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
-<script src="{{asset('app-assets/js/scripts/ckeditor/styles.js')}}" type="text/javascript"></script>
-<script src="{{asset('app-assets/vendors/js/forms/icheck/icheck.min.js')}}" type="text/javascript"></script>
-<script src="{{asset('app-assets/vendors/js/ui/plyr.min.js')}}" type="text/javascript"></script>
-<script src="{{asset('app-assets/js/scripts/forms/checkbox-radio.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/js/scripts/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/js/scripts/ckeditor/styles.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/icheck/icheck.min.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/vendors/js/ui/plyr.min.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/js/scripts/forms/checkbox-radio.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/js/avnPlugin.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/js/avnSkeleton/avnSkeleton.js')}}" type="text/javascript"></script>
+<script src="{{ asset('app-assets/js/scripts/forms/wizard-steps.js')}}" type="text/javascript"></script>
+<script src="{{asset('app-assets/js/scripts/timer.jquery.min.js')}}" type="text/javascript"></script>
+
+
 <!-- END: Theme JS-->
 
 <!-- BEGIN: Page JS-->

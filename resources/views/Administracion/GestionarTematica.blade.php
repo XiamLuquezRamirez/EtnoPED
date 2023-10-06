@@ -541,6 +541,7 @@
                         });
                         return;
                     }
+                    
                     if ($("#unidades").val() === "") {
                         Swal.fire({
                             type: "warning",
@@ -553,15 +554,11 @@
                         return;
                     }
 
-
-
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
 
-
                     var form = $("#formGuardar");
                     var url = form.attr("action");
-
 
                     var token = $("#token").val();
                     var accion = $("#accion").val();
@@ -632,11 +629,9 @@
 
                     var form = $("#formBuscarTema");
 
-                    $("#idUnidad").remove();
-                    form.append("<input type='hidden' id='idTema' name='idTema'  value='" + id +
-                        "'>");
-                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
-                        "'>");
+                    $("#idTema").remove();
+                    form.append("<input type='hidden' id='idTema' name='idTema'  value='" + id + "'>");
+                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion + "'>");
 
                     var url = form.attr("action");
                     var datos = form.serialize();

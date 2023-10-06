@@ -2,10 +2,7 @@
 @section('title', 'Gestionar Practicas')
 @section('Contenido')
 
-
-
-
-    <div class="content-header row">
+ <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
