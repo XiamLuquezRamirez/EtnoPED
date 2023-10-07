@@ -104,3 +104,7 @@ Route::post('/AdminDiccionario/CargarDiccionario', [AdministracionController::cl
 Route::post('/AdminDiccionario/GuardarDiccionario', [AdministracionController::class,'GuardarDiccionario']);
 Route::post('/AdminDiccionario/BuscarDiccionario', [AdministracionController::class,'BuscarDiccionario']);
 Route::post('/AdminDiccionario/EliminarDiccionario', [AdministracionController::class,'EliminarDiccionario']);
+
+
+////VISUALIZACION DICCIONARIO
+Route::post('/Diccionario/CargarPalabraDicc', [VisualizacionController::class,'CargarPalabraDicc']);

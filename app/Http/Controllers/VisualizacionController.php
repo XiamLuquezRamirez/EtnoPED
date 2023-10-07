@@ -27,12 +27,12 @@ use App\Models\MedicinaTradicional;
 use App\Models\UpdIntEval;
 use App\Models\RespMultPreg;
 use App\Models\RespVerFal;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\UnidadesTematicas;
 use App\Models\Tematicas;
 use App\Models\UsosCostumbres;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\DomCrawler\Crawler;
 
 class VisualizacionController extends Controller
 {
@@ -422,6 +422,79 @@ class VisualizacionController extends Controller
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
+    }
+
+    public function CargarPalabraDicc()
+    {
+        $perPage = 5; // Número de posts por página
+        $page = request()->get('page', 1);
+        $searchTerm = request()->get('search');
+        if (!is_numeric($page)) {
+            $page = 1; // Establecer un valor predeterminado si no es numérico
+        }
+
+        $palabras = DB::connection('mysql')
+            ->table('etno_ped.diccionario')
+            ->where('estado', 'ACTIVO');
+        if ($searchTerm) {
+            $palabras->where('palabra_espanol', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchTerm . '%');
+        }
+        $Listpalabras = $palabras->paginate($perPage, ['*'], 'page', $page);
+
+        $div_palabra = '';
+        $x = ($page - 1) * $perPage + 1;
+
+        foreach ($Listpalabras as $i => $item) {
+            if (!is_null($item)) {
+
+                $crawlerDef = new Crawler($item->definicion);
+               $textoDef = $crawlerDef->filter('p')->text();
+
+                $definicion = $textoDef ?
+                    (strlen($textoDef) > 100 ? substr($textoDef, 0, 100) . '...' : $textoDef) :
+                    "Sin definición";
+
+               if($item->imagen !=""){
+                $imagen = $item->imagen;
+               }else{
+                $imagen ="noIMg.png";
+               }
+
+               $crawlerEsp = new Crawler($item->palabra_espanol);
+               $textoEsp = $crawlerEsp->filter('p')->text();
+               $crawlerWayu = new Crawler($item->palabra_wuayuunaiki);
+               $textoWayu = $crawlerWayu->filter('p')->text();
+               $crawlerPron = new Crawler($item->palabra_lectura);
+               $prononciacion = $crawlerPron->filter('p')->text();
+            
+
+              
+                $div_palabra .= ' <ul class="media-list p-0" style="cursor: pointer;" onclick="$.verPalabra('.$item->id.');">
+                <li class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object width-150" src="' . asset('app-assets/contenidoMultimedia/imgDiccionario/' . $imagen) . '" alt="Generic placeholder image">
+                        </a>
+                    </div>
+                    <div class="media-body media-search">
+                        <p style="font-size:30px;" class="lead mb-0"><a href="#"><span class="text-bold-700">'.$textoEsp.'</span> - '.$textoWayu.'</a></p>
+                        <p><span class="text-bold-600">Pronunciación: </span> '.$prononciacion.'</p>
+                        <p><span class="text-bold-600">Definición: </span> '.$definicion.'</p>
+                    </div>
+                </li>
+            </ul>';
+
+                $x++;
+            }
+        }
+
+        $pagination = $Listpalabras->links('Administracion.Paginacion')->render();
+
+        return response()->json([
+            'palabras' => $div_palabra,
+            'links' => $pagination,
+        ]);
     }
 
 
