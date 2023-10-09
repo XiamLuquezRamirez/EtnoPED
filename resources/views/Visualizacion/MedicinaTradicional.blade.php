@@ -207,8 +207,10 @@
                               console.log(url);
                                 $("#cont-vidPre").show();
                                 ContentVidPreparacion.innerHTML =
-                                '<video style="width: 100%;"  controls><source  src="' + url +
+                                '<video id="vidPrepa"  style="width: 100%;"  controls><source  src="' + url +
                                 '" type="video/mp4"></video>';
+
+                                var video_player = new Plyr("#vidPrepa");
 
                             }else{
                                 $("#cont-vidPre").hide();

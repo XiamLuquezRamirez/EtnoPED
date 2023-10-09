@@ -5,9 +5,9 @@
                 <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs"
                         href="#"><i class="feather icon-menu font-large-1"></i></a></li>
                 <li class="nav-item"><a class="navbar-brand" href="#"><img class="brand-logo" alt="stack admin logo"
-                            width="40" src="../../../app-assets/images/logo/stack-logo-light.png">
+                            width="40" src="{{ asset('app-assets/images/logo/stack-logo-light.png') }}">
                         <img class="brand-logo ml-1" alt="stack admin logo" width="90"
-                            src="../../../app-assets/images/logo/nombre.png">
+                            src="{{ asset('app-assets/images/logo/nombre.png') }}">
                     </a></li>
                 <li class="nav-item d-md-none"><a class="nav-link open-navbar-container" data-toggle="collapse"
                         data-target="#navbar-mobile"><i class="fa fa-ellipsis-v"></i></a></li>

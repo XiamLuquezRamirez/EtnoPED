@@ -447,7 +447,11 @@
                     editorWayuu.setData('<p></p>');
                     editorLectura.setData('<p></p>');
                     editorDefinic.setData('<p>Ingresa la Definicion Aquí</p>');
-                    editorEjemplo.setData('<p>Ingresa el ejemplo Aquí</p>');
+                    editorEjemplo.setData('');
+
+                    $("#btnGuardar").show();
+                    $("#btnCancelar").show();
+                    $("#btnNuevo").hide();
 
                     $("#audDicc").val("");
                     $("#imgDicc").val("");

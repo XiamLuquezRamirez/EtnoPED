@@ -194,12 +194,12 @@
             </div>
         </div>
     </div>
-    <div class="modal fade text-left" id="modalPracticaTematica" style="height: 90% !important; overflow: hidden;"
+    <div class="modal fade text-left" id="modalPracticaTematica"  style="height: 90% !important; overflow: hidden; "
         tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
+            <div class="modal-content"  style="background-image: url({{ asset('assets/css/img/fondo.png') }})">
                 <div class="modal-header">
-                    <h4 id="titPractica" class="modal-title">Contenido Ejemplo</h4>
+                    <h4 id="titPractica" style="color: #fff; font-weight: bold;" class="modal-title">Contenido Ejemplo</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -207,10 +207,10 @@
                 <div class="px-1">
                     <ul class="list-inline list-inline-pipe text-center p-1 border-bottom-grey border-bottom-lighten-3">
                         <div class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1">
-                            <span>En este espacio colocaras en practica lo aprendido.</span>
+                            <span>En este espacio colocaras en practica lo aprendido. <br> Deberas seleccionar la respuesta correcta segun la pregunta
+                                que sea relizada por el personaje mostrado a tu izquierda. </span>
                         </div>
-                        <li><span class="text-muted"></span> Deberas seleccionar la respuesta correcta segun la pregunta
-                            que sea relizada por el personaje mostrado a tu izquierda. </li>
+                        <li><span class="text-muted"></span>  </li>
                     </ul>
                 </div>
                 <div class="modal-body">
@@ -236,7 +236,7 @@
 
                             </div>
                             <div class="col-12">
-                                <div id="div-opcionesP" style="display: none; width: 30%; text-align: center;"
+                                <div id="div-opcionesP" style="display: none; width: 30%; text-align: center; background-color:#F5F7FA"
                                     class="centered-div">
                                     <h4 id="titoOpciones">Seleccione la Respuesta</h4>
                                     <div id="div-opciones"></div>
@@ -686,8 +686,9 @@
                             url + '"></iframe>';
                     } else if (tipMuil.substr(0, 5) === 'video') {
                         modalContent.innerHTML =
-                            '<video style="width: 100%; height:360px;"  controls><source  src="' + url +
+                            '<video id="vidPrac" style="width: 100%; height:360px;"  controls><source  src="' + url +
                             '" type="video/mp4"></video>';
+                            var video_player = new Plyr("#vidPrac");
                     } else {
                         modalContent.innerHTML =
                             '<div class="mb-1" style="width:100%; height:340px;"><img src="' + url +
@@ -720,6 +721,8 @@
                     }
 
                     $("#modalContentEjemplo").html(ejemplo);
+
+                    var audio_player = new Plyr("#audioEjemplo");
 
                     let audio = document.getElementById('audioEjemplo');
                     if (audio) {

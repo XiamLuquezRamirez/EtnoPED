@@ -52,4 +52,10 @@ class Diccionario extends Model
             'estado' => 'ELIMINADO',
         ]);
     }
+
+    public static function BuscarPalabra($id){
+        return DB::connection('mysql')->table('etno_ped.medicina_tradicional')
+        ->where('id', $id)
+        ->first();
+    }
 }

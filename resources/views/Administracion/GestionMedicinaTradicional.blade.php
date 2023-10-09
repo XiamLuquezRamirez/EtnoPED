@@ -406,6 +406,11 @@
                 limpiar: function() {
                     var form = document.getElementById("formGuardar");
                     form.reset();
+
+                    $("#btnGuardar").show();
+                    $("#btnCancelar").show();
+                    $("#btnNuevo").hide();
+                    
                     editorTitulo.setData('<p></p>');
                     editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
                     editorPreparacion.setData('<p>Ingresa la preparación Aquí</p>');

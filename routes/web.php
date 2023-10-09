@@ -108,3 +108,4 @@ Route::post('/AdminDiccionario/EliminarDiccionario', [AdministracionController::
 
 ////VISUALIZACION DICCIONARIO
 Route::post('/Diccionario/CargarPalabraDicc', [VisualizacionController::class,'CargarPalabraDicc']);
+Route::post('/Diccionario/CargarDetpalabra', [VisualizacionController::class,'CargarDetpalabra']);

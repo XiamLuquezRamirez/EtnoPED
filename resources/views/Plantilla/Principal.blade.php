@@ -7,9 +7,9 @@
 
     <!-- fixed-top-->
     @include('Plantilla.Cabecera')
-    <!-- ////////////////////////////////////////////////////////////////////////////-->|
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
     @include('Plantilla.Menu')
-    <div class="app-content content">
+    <div class="app-content content" style="background-image: url({{ asset('app-assets/images/backgrounds/fondo.png') }})">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
             @yield('Contenido')

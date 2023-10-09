@@ -13,6 +13,7 @@
 <!-- BEGIN Vendor JS-->
 
 <!-- BEGIN: Page Vendor JS-->
+
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->

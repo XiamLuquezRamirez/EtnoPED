@@ -15,7 +15,7 @@
    }
    
    .card2:hover .img-section {
-    transform: translateY(1em);
+     transform: translateY(-1em); 
    }
    
    .card-desc2 {
@@ -37,7 +37,9 @@
     transition: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    background: hsl(195, 74%, 62%);
+    
+    transform: translateY(1em);
+    height: 100px;
    }
    
    .card-header2 {

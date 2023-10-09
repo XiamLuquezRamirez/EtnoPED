@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CosEval;
+use App\Models\Diccionario;
 use App\Models\EvalPregComplete;
 use App\Models\EvalPregDidact;
 use App\Models\EvalPregEnsay;
@@ -101,7 +102,7 @@ class VisualizacionController extends Controller
     {
         if (Auth::check()) {
             $idUnidad = request()->get('idUnidad');
-            
+
             $unidad = UnidadesTematicas::BuscarUnidad($idUnidad);
             $Temas = Tematicas::AllTemas($idUnidad);
             if (request()->ajax()) {
@@ -118,10 +119,10 @@ class VisualizacionController extends Controller
     {
         if (Auth::check()) {
             $idPractica = request()->get('idPractica');
-            
+
             $PregPractica = PregPractica::ConsulPregAll($idPractica);
             $OpcPractica = OpcPractica::ConsulGrupOpcPregAll($idPractica);
-          
+
             if (request()->ajax()) {
                 return response()->json([
                     'PregPractica' => $PregPractica,
@@ -136,12 +137,28 @@ class VisualizacionController extends Controller
     {
         if (Auth::check()) {
             $idMedicina = request()->get('idMedicina');
-            
+
             $Medicina = MedicinaTradicional::BuscarMedi($idMedicina);
-          
+
             if (request()->ajax()) {
                 return response()->json([
                     'Medicina' => $Medicina
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function CargarDetpalabra()
+    {
+        if (Auth::check()) {
+            $idPalabra = request()->get('idPalabra');
+
+            $detPalabra = Diccionario::BuscarPalabra($idPalabra);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'detPalabra' => $detPalabra
                 ]);
             }
         } else {
@@ -152,9 +169,9 @@ class VisualizacionController extends Controller
     {
         if (Auth::check()) {
             $idUso = request()->get('idUso');
-            
+
             $detUsos = UsosCostumbres::BuscarUso($idUso);
-          
+
             if (request()->ajax()) {
                 return response()->json([
                     'detUsos' => $detUsos
@@ -180,11 +197,11 @@ class VisualizacionController extends Controller
 
             //cargar practicas
             $TemasPracticas = Practicas::allPracticas($idTema);
-          
+
             //cargar evaluacion
-            if(Auth::user()->tipo_usuario=="Estudiante"){
+            if (Auth::user()->tipo_usuario == "Estudiante") {
                 $TemasEvaluacion = Evaluacion::allEvaluacionEst($idTema);
-            }else{
+            } else {
                 $TemasEvaluacion = Evaluacion::allEvaluacion($idTema);
             }
 
@@ -202,14 +219,15 @@ class VisualizacionController extends Controller
         }
     }
 
-    public function CargarDetEvaluacion(){
+    public function CargarDetEvaluacion()
+    {
         if (Auth::check()) {
             $idEvaluacion = request()->get('idEvaluacion');
             $DesEva = Evaluacion::BusEval($idEvaluacion);
 
             $DatEva = Evaluacion::DatosEvla($DesEva->id);
-           
-            if(Auth::user()->tipo_usuario!="Estudiante"){
+
+            if (Auth::user()->tipo_usuario != "Estudiante") {
                 $intreal = 0;
             } else {
                 $intreal = $DatEva->int_realizados;
@@ -253,14 +271,14 @@ class VisualizacionController extends Controller
                     'idvideo' => $id
                 ]);
             }
-
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
-    public function CargarPreguntaEvaluacion(){
-        
+    public function CargarPreguntaEvaluacion()
+    {
+
         if (Auth::check()) {
             $IdPreg = request()->get('Pregunta');
             $TipPreg = request()->get('TipPregunta');
@@ -332,13 +350,13 @@ class VisualizacionController extends Controller
                     ]);
                 }
             }
-
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
-    public function GuardarRespEvaluaciones(){
+    public function GuardarRespEvaluaciones()
+    {
         if (Auth::check()) {
             $datos = request()->all();
 
@@ -349,30 +367,26 @@ class VisualizacionController extends Controller
                 $InfEval = Evaluacion::DatosEvla($datos['IdEvaluacion']);
                 $Respuesta = RespEvalEnsay::Guardar($InfPreg, $datos, $fecha);
                 $InfEval->OriEva = "Estudiante";
-
             } else if ($datos['TipPregunta'] == "COMPLETE") {
 
                 $InfPreg = EvalPregComplete::ConsultComplete($datos['Pregunta']);
                 $InfEval = Evaluacion::DatosEvla($datos['IdEvaluacion']);
                 $Respuesta = RespEvalComp::Guardar($InfPreg, $datos, $fecha);
                 $InfEval->OriEva = "Estudiante";
-
             } else if ($datos['TipPregunta'] == "OPCMULT") {
                 $Respuesta = RespMultPreg::Guardar($datos, $fecha);
                 $InfEval = Evaluacion::DatosEvla($datos['IdEvaluacion']);
                 $InfEval->OriEva = "Estudiante";
             } else if ($datos['TipPregunta'] == "VERFAL") {
                 $Respuesta = RespVerFal::Guardar($datos, $fecha);
-                
+
                 $InfEval = Evaluacion::DatosEvla($datos['IdEvaluacion']);
                 $InfEval->OriEva = "Estudiante";
-
             } else if ($datos['TipPregunta'] == "RELACIONE") {
                 $Respuesta = RespEvalRelacione::Guardar($datos, $fecha);
-               
+
                 $InfEval = Evaluacion::DatosEvla($datos['IdEvaluacion']);
                 $InfEval->OriEva = "Estudiante";
-
             } else if ($datos['TipPregunta'] == "TALLER") {
 
                 if (request()->hasfile('archiTaller')) {
@@ -387,7 +401,6 @@ class VisualizacionController extends Controller
                 $Respuesta = RespEvalTaller::Guardar($InfPreg, $name, $fecha);
                 $InfEval = Evaluacion::DatosEvla($datos['IdEvaluacion'], 'IFEVAL');
                 $InfEval->OriEva = "Estudiante";
-
             }
 
             if ($datos['nPregunta'] === "Ultima") {
@@ -406,10 +419,9 @@ class VisualizacionController extends Controller
                         ]);
                     }
                 }
-
             } else {
                 $LibroCalif = LibroCalificaciones::Guardar($datos, $Respuesta['RegViejo'], $Respuesta['RegNuevo'], $InfEval, $fecha);
-               
+
                 if ($LibroCalif) {
                     if (request()->ajax()) {
                         return response()->json([
@@ -418,7 +430,6 @@ class VisualizacionController extends Controller
                     }
                 }
             }
-
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
@@ -438,7 +449,7 @@ class VisualizacionController extends Controller
             ->where('estado', 'ACTIVO');
         if ($searchTerm) {
             $palabras->where('palabra_espanol', 'LIKE', '%' . $searchTerm . '%')
-            ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchTerm . '%');
+                ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchTerm . '%');
         }
         $Listpalabras = $palabras->paginate($perPage, ['*'], 'page', $page);
 
@@ -449,39 +460,53 @@ class VisualizacionController extends Controller
             if (!is_null($item)) {
 
                 $crawlerDef = new Crawler($item->definicion);
-               $textoDef = $crawlerDef->filter('p')->text();
+                $textoDef = $crawlerDef->filter('p')->text();
 
                 $definicion = $textoDef ?
                     (strlen($textoDef) > 100 ? substr($textoDef, 0, 100) . '...' : $textoDef) :
                     "Sin definición";
 
-               if($item->imagen !=""){
-                $imagen = $item->imagen;
-               }else{
-                $imagen ="noIMg.png";
-               }
+                if ($item->imagen != "") {
+                    $imagen = $item->imagen;
+                } else {
+                    $imagen = "noIMg.png";
+                }
 
-               $crawlerEsp = new Crawler($item->palabra_espanol);
-               $textoEsp = $crawlerEsp->filter('p')->text();
-               $crawlerWayu = new Crawler($item->palabra_wuayuunaiki);
-               $textoWayu = $crawlerWayu->filter('p')->text();
-               $crawlerPron = new Crawler($item->palabra_lectura);
-               $prononciacion = $crawlerPron->filter('p')->text();
-            
+                $crawlerEsp = new Crawler($item->palabra_espanol);
+                $textoEsp = $crawlerEsp->filter('p')->text();
+                $crawlerWayu = new Crawler($item->palabra_wuayuunaiki);
+                $textoWayu = $crawlerWayu->filter('p')->text();
+                $crawlerPron = new Crawler($item->palabra_lectura);
+                $prononciacion = $crawlerPron->filter('p')->text();
 
-              
-                $div_palabra .= ' <ul class="media-list p-0" style="cursor: pointer;" onclick="$.verPalabra('.$item->id.');">
-                <li class="media">
-                    <div class="media-left">
+                if($item->ejemplo !="") {
+                    $display="block;";
+                }else{
+                    $display="none;";
+                }
+
+                $div_palabra .= ' <ul class="media-list p-0" style="cursor: pointer;" >
+                <li class="media row justify-content-center align-items-center" >
+                    <div class="col-2 media-left">
                         <a href="#">
                             <img class="media-object width-150" src="' . asset('app-assets/contenidoMultimedia/imgDiccionario/' . $imagen) . '" alt="Generic placeholder image">
                         </a>
                     </div>
-                    <div class="media-body media-search">
-                        <p style="font-size:30px;" class="lead mb-0"><a href="#"><span class="text-bold-700">'.$textoEsp.'</span> - '.$textoWayu.'</a></p>
-                        <p><span class="text-bold-600">Pronunciación: </span> '.$prononciacion.'</p>
-                        <p><span class="text-bold-600">Definición: </span> '.$definicion.'</p>
-                    </div>
+                    <div class="media-body media-search col-10" >
+                        <p style="font-size:20px;" class="lead mb-0"><a href="#"><span class="text-bold-700" style="font-size:20px;">' . $textoEsp . '</span> - ' . $textoWayu . '</a></p>';
+               
+                if ($item->audio != "") {
+                    $div_palabra .= '<audio  class="audioEjemplo" id="audioEjemplo'.$x.'" style="max-width:40% !important;" controls>
+                    <source src="' . asset('app-assets/contenidoMultimedia/audioDiccionario/' . $item->audio) . '" type="audio/mp3" />
+                    <source src="' . asset('app-assets/contenidoMultimedia/audioDiccionario/' . $item->audio) . '" type="audio/ogg" />
+                  </audio>';
+                }
+
+                $div_palabra .= '<p style="margin-bottom: 0px"><span class="text-bold-600">Pronunciación: </span> ' . $prononciacion . '</p>
+                        <p style="margin-bottom: 0px"><span class="text-bold-600">Definición: </span> ' . $definicion . ' <code style="display: '.$display.'" class="highlighter-rouge" onclick="$.abrirEjemplo('.$x.')"> - Ejemplo</code></p>
+                   
+                        </div>
+                        <div id="contEjemplo'.$x.'" style="display: '.$display.'">'.$item->ejemplo.'</div>
                 </li>
             </ul>';
 

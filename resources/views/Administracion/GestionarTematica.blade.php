@@ -492,6 +492,10 @@
 
                     $('#unidad').val("").trigger('change.select2');
 
+                    $("#btnGuardar").show();
+                    $("#btnCancelar").show();
+                    $("#btnNuevo").hide();
+                    
                     $("#divMultimedia").html("");
                     $("#divMultimedia").hide();
                     $("#divEjemplos").hide();

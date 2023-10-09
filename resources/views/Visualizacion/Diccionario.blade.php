@@ -21,66 +21,67 @@
 
     </div>
     <div class="content-body">
-    <!-- Search form-->
-    <section id="search-website" class="card overflow-hidden">
-        <div class="card-header">
-            <h4 class="card-title">Realiza tu busqueda</h4>
-            <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
-            <div class="heading-elements">
-                <ul class="list-inline mb-0">
-                    <li><a data-action="collapse"><i class="feather icon-minus"></i></a></li>
-                    <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
-                </ul>
+        <!-- Search form-->
+        <section id="search-website" class="card overflow-hidden">
+            <div class="card-header">
+                <h4 class="card-title">Realiza tu busqueda</h4>
+                <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a data-action="collapse"><i class="feather icon-minus"></i></a></li>
+                        <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="card-content collapse show">
-            <div class="card-body pb-0">
-                <fieldset class="form-group position-relative mb-0">
-                    <input type="text" class="form-control form-control-xl input-xl" id="iconLeft1" placeholder="Ingresa la Palabra a Buscar ...">
-                  
-                </fieldset>
-            </div>
-            
-            <div id="search-results" class="card-body">
-                <div class="row">
-                    <div class="col-12 col-md-12" id="div-palabras">
-                        
-                        
-                        
-                    </div>
-                    <div class="text-center">
-                        <div id="pagination-links" class="text-center ml-1 mt-2">
+            <div class="card-content collapse show">
+                <div class="card-body pb-0">
+                    <fieldset class="form-group position-relative mb-0">
+                        <input type="text" class="form-control form-control-xl input-xl" id="searchInput"
+                            placeholder="Ingresa la Palabra a Buscar ...">
 
+                    </fieldset>
+                </div>
+
+                <div id="search-results" class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-12" id="div-palabras">
+
+
+
+                        </div>
+                        <div class="text-center">
+                            <div id="pagination-links" class="text-center ml-1 mt-2">
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
-
-<div class="modal fade text-left" id="modalPalabra" tabindex="-1" role="dialog"
-aria-labelledby="myModalLabel1" aria-hidden="true">
-<div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 id="palabra" class="modal-title"></h4>
-        </div>
-        <div class="modal-body">
-            <div class="card-body" id="div-detPalabra">
-
-            </div>
-            <div class="form-actions right">
-                <button type="button" onclick="$.cerrarPalabra();" class="btn btn-warning mr-1">
-                    <i class="fa fa-reply"></i> Atras
-                </button>
-
-            </div>
-        </div>
-
+        </section>
     </div>
-</div>
-</div>
+
+    <div class="modal fade text-left" id="modalEjempo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="palabra" class="modal-title">Ejemplo</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body" id="div-detEjemplo">
+
+                    </div>
+                    <div class="form-actions right">
+                        <button type="button" onclick="$.cerrarEjemplo();" class="btn btn-warning mr-1">
+                            <i class="fa fa-reply"></i> Atras
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <form action="{{ url('/Diccionario/CargarPalabraDicc') }}" id="formCargarPalabrasDicc" method="POST">
         @csrf
@@ -90,11 +91,6 @@ aria-labelledby="myModalLabel1" aria-hidden="true">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
-    <form action="{{ url('/GramaticaLenguaje/CargarDetPractica') }}" id="formCargarContPractica" method="POST">
-        @csrf
-        <!-- Tus campos del formulario aquí -->
-    </form>
-
 
 @endsection
 @section('scripts')
@@ -126,79 +122,53 @@ aria-labelledby="myModalLabel1" aria-hidden="true">
                         async: false,
                         dataType: "json",
                         success: function(response) {
-                             $('#div-palabras').html(response
+                            $('#div-palabras').html(response
                                 .palabras); // Rellenamos la tabla con las filas generadas  
                             $('#pagination-links').html(response
                                 .links); // Colocamos los enlaces de paginación
                         }
                     });
+                    $.styleRepro();
                 },
-                verPalabra: function(id) {
+                cerrarEjemplo: function() {
+                    $('#modalEjempo').modal('toggle');
+                },
+                styleRepro: function() {
+                    var elementosAudio = document.querySelectorAll('.audioEjemplo');
 
-                    $("#btn-atrasUnidades").show();
-                    $("#btn-atrasModulos").hide();
-                    $("#div-unidades").hide();
-                    $("#div-temas").show();
-
-                    var form = $("#formCargarTemas");
-                    var url = form.attr("action");
-                    $("#idUnidad").remove();
-                    form.append("<input type='hidden' id='idUnidad' name='idUnidad'  value='" +
-                        idUnidad + "'>");
-                    var datos = form.serialize();
-
-                    let tdTable = '';
-                    $.ajax({
-                        type: "POST",
-                        url: url,
-                        data: datos,
-                        async: false,
-                        dataType: "json",
-                        success: function(response) {
-
-                            $("#titulo").html("Gramatica y Lenguaje - " + response.Unidad
-                                .nombre);
-                            $("#titulo").html(response.Unidad.nombre);
-
-                            $.each(response.Temas, function(i, item) {
-                                tdTable +=
-                                    '  <div class="col-12 pb-1" style="cursor:pointer;" ><div onclick="$.verTemas(' +
-                                    item.id +
-                                    ');" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1">' +
-                                    '<h4 class="primary">' + item.titulo + '</h4>' +
-                                    '</div></div>';
-                            });
-
-                            $("#div-temas").html(tdTable);
-                        }
+                    elementosAudio.forEach(function(elemento) {
+                        var audioPlayer = new Plyr(elemento);
                     });
-                },               
-                atrasMedicina: function() {
-                    $("#btn-atrasMedi").hide();
-                    $("#div-medicina").show();
-                    $("#div-detmedicina").hide();
                 },
-                MostVid: function() {
-                    $("#ModVidelo").modal({
+                abrirEjemplo: function(id) {
+                    let cont = $("#contEjemplo" + id);
+                    $("#modalEjempo").modal({
                         backdrop: 'static',
                         keyboard: false
                     });
-                    $('#ModEval').modal('toggle');
-                },
-                SalirAnim: function() {
-                    $('#ModVidelo').modal('toggle');
-                    $("#ModEval").modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
-                    var videoID = 'datruta';
-                    $('#' + videoID).get(0).pause();
-                },
 
-
+                    $('#div-detEjemplo').html(cont.html());
+                }
             })
 
             $.cargarPalabras(1);
+
+
+
+            $(document).on('click', '.pagination a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+
+                // Asegurarse de que 'page' sea un número antes de hacer la solicitud
+                if (!isNaN(page)) {
+                    $.cargarPalabras(page);
+                }
+            });
+
+            $('#searchInput').on('input', function() {
+                var searchTerm = $(this).val();
+                $.cargarPalabras(1, searchTerm); // Cargar la primera página con el término de búsqueda
+            });
 
 
         });

@@ -278,6 +278,8 @@
                 },
                 nuevo: function(){
                     document.getElementById("formGuardar").reset();
+                    $("#btnGuardar").show();
+                    $("#btnNuevo").hide();
                 },
                 editar: function(id) {
 
