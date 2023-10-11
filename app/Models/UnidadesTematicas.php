@@ -22,10 +22,15 @@ class UnidadesTematicas extends Model
     }
     public static function editar($request)
     {
-        return DB::connection('mysql')->table('etno_ped.unidades_tematicas')->where('id', $request['id'])->update([
+       
+        $respuesta = DB::connection('mysql')->table('etno_ped.unidades_tematicas')
+        ->where('id', $request['id'])
+        ->update([
             'nombre' => $request['nombre'],
             'descripcion' => $request['descripcion']
         ]);
+      
+        return $respuesta;
     }
 
     public static function CargarTodos()

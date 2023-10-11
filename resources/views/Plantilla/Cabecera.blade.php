@@ -4,9 +4,8 @@
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs"
                         href="#"><i class="feather icon-menu font-large-1"></i></a></li>
-                <li class="nav-item"><a class="navbar-brand" href="#"><img class="brand-logo" alt="stack admin logo"
-                            width="40" src="{{ asset('app-assets/images/logo/stack-logo-light.png') }}">
-                        <img class="brand-logo ml-1" alt="stack admin logo" width="90"
+                <li class="nav-item"><a class="navbar-brand" href="#">
+                    <img class="brand-logo ml-1" alt="stack admin logo" width="150"
                             src="{{ asset('app-assets/images/logo/nombre.png') }}">
                     </a></li>
                 <li class="nav-item d-md-none"><a class="nav-link open-navbar-container" data-toggle="collapse"
@@ -16,10 +15,7 @@
         <div class="navbar-container content">
             <div class="collapse navbar-collapse" id="navbar-mobile">
                 <ul class="nav navbar-nav mr-auto float-left">
-                    <li class="nav-item d-none d-md-block"><a class="nav-link nav-menu-main menu-toggle hidden-xs"
-                            href="#"><i class="feather icon-menu"></i></a></li>
-
-                    <li class="nav-item d-none d-md-block"><a class="nav-link nav-link-expand" href="#"><i
+                                      <li class="nav-item d-none d-md-block"><a class="nav-link nav-link-expand" href="#"><i
                                 class="ficon feather icon-maximize"></i></a></li>
 
                 </ul>

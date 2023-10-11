@@ -2,8 +2,8 @@
 <footer class="footer footer-static footer-light navbar-border">
     <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span
             class="float-md-left d-block d-md-inline-block">Copyright &copy;<script>document.write(new Date().getFullYear());</script> <a href="#">EtnoPED  </span><span
-            class="float-md-right d-none d-lg-block">Rescatando Cultura y Tradiciones <i
-                class="feather icon-heart pink"></i></span></p>
+            class="float-md-right d-none d-lg-block">Descubre la diversidad, conecta con la herencia  <img class="brand-logo ml-1" alt="stack admin logo" width="15"
+            src="{{ asset('app-assets/images/ico/apple-icon-120.png') }}"></span></p>
 </footer>
 <!-- END: Footer-->
 

@@ -21,16 +21,12 @@
 
     </div>
     <div class="content-body">
-        <div class="row" >
-            <div id="div-Uso" class="col-sm-12 col-md-12">
-
-            </div>
-        </div>
-        <div class="row" id="div-detUso" style="display: none;">
+        
+        <div class="row">
             <div class="col-sm-12 col-md-12"  >
                 <div class="card">
                     <div class="card-header">
-                        <h4 id="titulo-usos" class="card-title"></h4>
+                        <h4 id="titulo-usos" class="card-title">Listado de Usos y Costumbres</h4>
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
@@ -40,7 +36,10 @@
                     </div>
                     <div class="card-content">
                         <div class="card-body">
-                            <div id="conte-Uso" class="card-text">
+                            <div id="div-Uso" class="col-sm-12 col-md-12">
+
+                            </div>
+                            <div id="conte-Uso" style="display: none;" class="card-text">
                                
                             </div>
                         </div>
@@ -85,7 +84,6 @@
                         <button type="button" onclick="$.cerrarMultimedia();" class="btn btn-warning mr-1">
                             <i class="fa fa-reply"></i> Atras
                         </button>
-                        
 
                     </div>
                 </div>
@@ -145,7 +143,7 @@
                 },
                 verDetUsos: function(idUso) {
                     $("#div-Uso").hide();
-                    $("#div-detUso").show();
+                    $("#conte-Uso").show();
                     $("#btn-atrasUso").show();
 
                     var form = $("#formCargarDetUsos");
@@ -178,11 +176,13 @@
                                 let url = $('#urlMult').data("ruta") + "/contenidoMultimedia/UsosCostumbres/" +response.detUsos.url_video ;
                                 var modalContent = document.getElementById('modalContent');
                                 modalContent.innerHTML =
-                                '<video style="width: 100%; height:360px;"  controls><source  src="' + url +
+                                '<video id="vidUsos" style="width: 100%; height:360px;"  controls><source  src="' + url +
                                 '" type="video/mp4"></video>';
                             }else{
                                 $("#btn-vidUso").hide();
                             }
+
+                            var video_player = new Plyr("#vidUsos");
                           
                         }
                     });
@@ -193,7 +193,7 @@
                     $("#btn-atrasUso").hide();
                     $("#btn-vidUso").hide();
                     $("#div-Uso").show();
-                    $("#div-detUso").hide();
+                    $("#conte-Uso").hide();
                 },
                 MostVid: function() {
                     $("#modalMultimediaTematica").modal({

@@ -7,7 +7,7 @@
     <input type="hidden" class="form-control" id="Id_Doce" value="{{ Session::get('DOCENTE') }}" />
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <input type="hidden" data-id='id-dat' id="dattaller"
-    data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
+        data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
     <input type="hidden" class="form-control" id="h" value="" />
     <input type="hidden" class="form-control" id="m" value="" />
     <input type="hidden" class="form-control" id="s" value="" />
@@ -31,99 +31,114 @@
 
     </div>
     <div class="content-body">
-        <div class="row" id="div-unidades">
+        <div class="card p-1" style="border-radius:10px">
+            <div class="card-header">
+                <h4 id='tit-gram' class="card-title">Unidades Tematicas</h4>
+                <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
 
-        </div>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-content collapse show">
+                <div class="row" id="div-unidades">
 
-        <div id="div-temas" style="display: none;">
+                </div>
 
-        </div>
+                <div id="div-temas" style="display: none;">
 
-        <div id="div-detTemas" style="display: none;">
-            <div class="card-body">
-                <ul class="nav nav-tabs nav-linetriangle" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="homeIcon2-tab1" data-toggle="tab" href="#contenido"
-                            aria-controls="homeIcon21" role="tab" aria-selected="true"><i class="fa fa-indent"></i>
-                            Contenido</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="multimedia-tab1" data-toggle="tab" href="#multimedia"
-                            aria-controls="multimedia" role="tab" aria-selected="false"><i
-                                class="fa fa-file-video-o"></i>
-                            Multimedia</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="ejemplos-tab1" data-toggle="tab" href="#ejemplos" aria-controls="ejemplos"
-                            role="tab" aria-selected="false"><i class="fa fa-file-image-o"></i>
-                            Ejemplos</a>
-                    </li>
+                </div>
 
-                    <li class="nav-item">
-                        <a class="nav-link" id="practicas-tab1" data-toggle="tab" href="#practicas"
-                            aria-controls="practicas" role="tab" aria-selected="false"><i class="fa fa-comments-o"></i>
-                            Practicas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="evaluacion-tab1" data-toggle="tab" href="#evaluacion"
-                            aria-controls="evaluacion" role="tab" aria-selected="false"><i
-                                class="fa fa-check-square-o"></i>
-                            Evaluaciones</a>
-                    </li>
-                </ul>
-                <div class="tab-content px-1 pt-1">
-                    <div class="tab-pane active in" id="contenido" aria-labelledby="contenido-tab1" role="tabpanel">
-                        <div id="search-results" style="padding: 0" class="card-body">
-                            <div class="row">
-                                <div class="col-12 col-md-12">
-                                    <ul class="media-list p-0">
-                                        <!--search with list-->
-                                        <li class="media">
-                                            <div class="media-body">
-                                                <p class="lead mb-0"><a href="#"><span id="titu"
-                                                            class="text-bold-600"></span> </a></p>
-                                                <div class="vertical-scroll scroll-example height-300 ps ps--active-y"
-                                                    id="conte">
+                <div id="div-detTemas" style="display: none;">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs nav-linetriangle" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="homeIcon2-tab1" data-toggle="tab" href="#contenido"
+                                    aria-controls="homeIcon21" role="tab" aria-selected="true"><i
+                                        class="fa fa-indent"></i>
+                                    Contenido</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="multimedia-tab1" data-toggle="tab" href="#multimedia"
+                                    aria-controls="multimedia" role="tab" aria-selected="false"><i
+                                        class="fa fa-file-video-o"></i>
+                                    Multimedia</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="ejemplos-tab1" data-toggle="tab" href="#ejemplos"
+                                    aria-controls="ejemplos" role="tab" aria-selected="false"><i
+                                        class="fa fa-file-image-o"></i>
+                                    Ejemplos</a>
+                            </li>
 
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                            <li class="nav-item">
+                                <a class="nav-link" id="practicas-tab1" data-toggle="tab" href="#practicas"
+                                    aria-controls="practicas" role="tab" aria-selected="false"><i
+                                        class="fa fa-comments-o"></i>
+                                    Practicas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="evaluacion-tab1" data-toggle="tab" href="#evaluacion"
+                                    aria-controls="evaluacion" role="tab" aria-selected="false"><i
+                                        class="fa fa-check-square-o"></i>
+                                    Evaluaciones</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content px-1 pt-1">
+                            <div class="tab-pane active in" id="contenido" aria-labelledby="contenido-tab1"
+                                role="tabpanel">
+                                <div id="search-results" style="padding: 0" class="card-body">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <ul class="media-list p-0">
+                                                <!--search with list-->
+                                                <li class="media">
+                                                    <div class="media-body">
+                                                        <p class="lead mb-0"><a href="#"><span id="titu"
+                                                                    class="text-bold-600"></span> </a></p>
+                                                        <div class="vertical-scroll scroll-example height-300 ps ps--active-y"
+                                                            id="conte">
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="multimedia" aria-labelledby="multimedia-tab1" role="tabpanel">
+                                <div id="div-multimedia" class="card-body">
+
+
+
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="ejemplos" aria-labelledby="ejemplos-tab1" role="tabpanel">
+                                <div id="div-ejemplos" class="card-body">
+
+
+
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="practicas" aria-labelledby="practicas-tab1" role="tabpanel">
+                                <div id="div-practicas" class="card-body">
+
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="evaluacion" aria-labelledby="evaluacion-tab1" role="tabpanel">
+                                <div id="div-evaluacion" class="card-body">
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane" id="multimedia" aria-labelledby="multimedia-tab1" role="tabpanel">
-                        <div id="div-multimedia" class="card-body">
 
-
-
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="ejemplos" aria-labelledby="ejemplos-tab1" role="tabpanel">
-                        <div id="div-ejemplos" class="card-body">
-
-
-
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="practicas" aria-labelledby="practicas-tab1" role="tabpanel">
-                        <div id="div-practicas" class="card-body">
-
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="evaluacion" aria-labelledby="evaluacion-tab1" role="tabpanel">
-                        <div id="div-evaluacion" class="card-body">
-
-                        </div>
-                    </div>
                 </div>
             </div>
-
         </div>
-
-
-
 
         <hr>
         <div class="form-actions right">
@@ -194,12 +209,13 @@
             </div>
         </div>
     </div>
-    <div class="modal fade text-left" id="modalPracticaTematica"  style="height: 90% !important; overflow: hidden; "
+    <div class="modal fade text-left" id="modalPracticaTematica" style="height: 90% !important; overflow: hidden; "
         tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content"  style="background-image: url({{ asset('assets/css/img/fondo.png') }})">
+            <div class="modal-content" style="background-image: url({{ asset('assets/css/img/fondo.png') }})">
                 <div class="modal-header">
-                    <h4 id="titPractica" style="color: #fff; font-weight: bold;" class="modal-title">Contenido Ejemplo</h4>
+                    <h4 id="titPractica" style="color: #fff; font-weight: bold;" class="modal-title">Contenido Ejemplo
+                    </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -207,10 +223,11 @@
                 <div class="px-1">
                     <ul class="list-inline list-inline-pipe text-center p-1 border-bottom-grey border-bottom-lighten-3">
                         <div class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1">
-                            <span>En este espacio colocaras en practica lo aprendido. <br> Deberas seleccionar la respuesta correcta segun la pregunta
+                            <span> Deberas seleccionar la respuesta
+                                correcta segun la pregunta
                                 que sea relizada por el personaje mostrado a tu izquierda. </span>
                         </div>
-                        <li><span class="text-muted"></span>  </li>
+                        <li><span class="text-muted"></span> </li>
                     </ul>
                 </div>
                 <div class="modal-body">
@@ -236,9 +253,10 @@
 
                             </div>
                             <div class="col-12">
-                                <div id="div-opcionesP" style="display: none; width: 30%; text-align: center; background-color:#F5F7FA"
+                                <div id="div-opcionesP"
+                                    style="display: none; width: 30%; border-radius: 10px; text-align: center; background-color:#F5F7FA"
                                     class="centered-div">
-                                    <h4 id="titoOpciones">Seleccione la Respuesta</h4>
+                                    <h4 id="titoOpciones" style="padding-top: 5px;">Seleccione la Respuesta</h4>
                                     <div id="div-opciones"></div>
                                 </div>
                             </div>
@@ -250,28 +268,28 @@
         </div>
     </div>
 
-    <div class="modal fade text-left" id="ModVidelo" tabindex="-1" role="dialog"
-    aria-labelledby="myModalLabel15" aria-hidden="true">
-    <div class="modal-dialog  modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-success white">
-                <h4 class="modal-title" style="text-transform: capitalize;" id="titu_temaEva">Contenido
-                    Didactico Cargado</h4>
-            </div>
-            <div class="modal-body">
-                <div id='ListEvalVid' style="height: 400px; overflow: auto;text-align: center;">
-                    <video width="640" height="360" id="datruta" controls
-                        data-ruta="{{ asset('/app-assets/Evaluacion_PregDidact') }}">
-                    </video>
+    <div class="modal fade text-left" id="ModVidelo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel15"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success white">
+                    <h4 class="modal-title" style="text-transform: capitalize;" id="titu_temaEva">Contenido
+                        Didactico Cargado</h4>
                 </div>
+                <div class="modal-body">
+                    <div id='ListEvalVid' style="height: 400px; overflow: auto;text-align: center;">
+                        <video width="640" height="360" id="datruta" controls
+                            data-ruta="{{ asset('/app-assets/Evaluacion_PregDidact') }}">
+                        </video>
+                    </div>
 
-                <button type="button" id="btn_salir" onclick="$.SalirAnim();"
-                    class="btn grey btn-outline-secondary" data-dismiss="modal"><i
-                        class="ft-corner-up-left position-right"></i> Salir</button>
+                    <button type="button" id="btn_salir" onclick="$.SalirAnim();"
+                        class="btn grey btn-outline-secondary" data-dismiss="modal"><i
+                            class="ft-corner-up-left position-right"></i> Salir</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <div class="modal fade text-left" id="ModEval" tabindex="-1" role="dialog" aria-labelledby="myModalLabel15"
         aria-hidden="true">
@@ -418,6 +436,8 @@
                 'Source,Save,NewPage,ExportPdf,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Undo,Redo,Replace,Find,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,SelectAll,Button,ImageButton,HiddenField,Strike,CopyFormatting,RemoveFormat,Indent,Blockquote,Outdent,CreateDiv,JustifyLeft,JustifyCenter,JustifyRight,JustifyBlock,BidiLtr,BidiRtl,Language,Link,Unlink,Anchor,Flash,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Format,BGColor,ShowBlocks,About,Underline,Italic';
         };
 
+        var tempDivTitu = document.createElement('div');
+
         $(document).ready(function() {
 
             $("#Gramatica").addClass("active");
@@ -442,7 +462,7 @@
                     var url = form.attr("action");
 
                     var datos = form.serialize();
-
+                    let descripcion = "";
                     let tdTable = '';
                     $.ajax({
                         type: "POST",
@@ -452,12 +472,13 @@
                         dataType: "json",
                         success: function(response) {
                             $.each(response.Unidades, function(i, item) {
+                                descripcion = item.descripcion !== null ? item.descripcion : "";
                                 tdTable +=
-                                    '  <div class="col-12 pb-1" style="cursor:pointer;" ><div onclick="$.verTemasUnidad(' +
+                                    '  <div class="col-12 pb-1" ><div style="cursor:pointer;background-image: url(\'{{ asset("/app-assets/images/backgrounds/bg_callout.png") }}\'); background-size: 100% 100%;height: 100px; width:100%;" onclick="$.verTemasUnidad(' +
                                     item.id +
-                                    ');" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1">' +
+                                    ');" class="bs-callout-primary p-1 justify-content-center align-items-center">' +
                                     '<h4 class="primary">' + item.nombre + '</h4>' +
-                                    ' <p>' + item.descripcion + '</p>' +
+                                    ' ' + descripcion + '' +
                                     '</div></div>';
                             });
 
@@ -471,6 +492,7 @@
                     $("#btn-atrasModulos").hide();
                     $("#div-unidades").hide();
                     $("#div-temas").show();
+                    $("#tit-gram").html("Tematicas Gramatica y Lenguaje");
 
                     var form = $("#formCargarTemas");
                     var url = form.attr("action");
@@ -488,10 +510,14 @@
                         dataType: "json",
                         success: function(response) {
 
-                            $("#titulo").html("Gramatica y Lenguaje - " + response.Unidad
-                                .nombre);
-                            $("#titulo").html(response.Unidad.nombre);
 
+                            tempDivTitu.innerHTML = response.Unidad.nombre;
+                            var textoTitu = tempDivTitu.firstChild.textContent || tempDivTitu.firstChild.innerText;
+
+                            $("#titulo").html("Gramatica y Lenguaje - " + textoTitu);
+
+
+                          
                             $.each(response.Temas, function(i, item) {
                                 tdTable +=
                                     '  <div class="col-12 pb-1" style="cursor:pointer;" ><div onclick="$.verTemas(' +
@@ -510,6 +536,8 @@
                     $("#btn-atrasUnidades").hide();
                     $("#div-detTemas").show();
                     $("#btn-atrasTemas").show();
+                    $("#tit-gram").html("Desarrollo del Tema");
+
 
                     var form = $("#formCargarDetTemas");
                     var url = form.attr("action");
@@ -533,8 +561,10 @@
                         dataType: "json",
                         success: function(response) {
 
-                            $("#titulo").html("Gramatica y Lenguaje - " + response.Temas
-                                .titulo);
+                            tempDivTitu.innerHTML = response.Temas.titulo;
+                            var textoTitu = tempDivTitu.firstChild.textContent || tempDivTitu.firstChild.innerText;
+
+                            $("#titulo").html("Gramatica y Lenguaje - " + textoTitu);
 
                             //cargar Tematica
                             $("#titu").html(response.Temas.titulo);
@@ -634,22 +664,26 @@
                             //cargar evaluación
                             $.each(response.TemasEvaluacion, function(i, item) {
 
-                                if (item.estado_eval == "TERMINADA" || item.estado_eval == "CALIFICADA") {
+                                if (item.estado_eval == "TERMINADA" || item
+                                    .estado_eval == "CALIFICADA") {
                                     classCallout = "success";
                                     classFa = "fa-check-square-o";
-                                }else{
-                                     classCallout = "info";
-                                     classFa = "fa-square-o";
+                                } else {
+                                    classCallout = "info";
+                                    classFa = "fa-square-o";
                                 }
 
                                 evaluacion +=
                                     '<div style="cursor:pointer;" id="evaluacion' +
                                     item.id + '" data-titulo="' + item.titulo +
                                     '" onclick="$.MostEval(' + item.id +
-                                    ');"  class="bs-callout-'+classCallout+' callout-bordered mb-1">' +
+                                    ');"  class="bs-callout-' + classCallout +
+                                    ' callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
-                                    '<div class="d-flex align-items-center bg-'+classCallout+' p-2">' +
-                                    '<i class="fa '+classFa+' fa-lg white"></i>' +
+                                    '<div class="d-flex align-items-center bg-' +
+                                    classCallout + ' p-2">' +
+                                    '<i class="fa ' + classFa +
+                                    ' fa-lg white"></i>' +
                                     '</div>' +
                                     '<div class="media-body p-1">' +
                                     '<strong>' + item.titulo + '</strong>' +
@@ -686,9 +720,10 @@
                             url + '"></iframe>';
                     } else if (tipMuil.substr(0, 5) === 'video') {
                         modalContent.innerHTML =
-                            '<video id="vidPrac" style="width: 100%; height:360px;"  controls><source  src="' + url +
+                            '<video id="vidPrac" style="width: 100%; height:360px;"  controls><source  src="' +
+                            url +
                             '" type="video/mp4"></video>';
-                            var video_player = new Plyr("#vidPrac");
+                        var video_player = new Plyr("#vidPrac");
                     } else {
                         modalContent.innerHTML =
                             '<div class="mb-1" style="width:100%; height:340px;"><img src="' + url +
@@ -794,9 +829,16 @@
                         $('#dialogo1').fadeToggle(2000);
                         $('#dialogo2').fadeToggle(2000);
                         actual = 0;
-                        $("#div-opcionesP").show();
-                        $("#div-opciones").html("");
-                        $("#titoOpciones").html("Practica Finalizada");
+                        Swal.fire({
+                            type: "success",
+                            title: "Felixtaciones...",
+                            text: "La Practica fue realizada con exito",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 2500,
+                            buttonsStyling: false
+                        });
+                        
+                        
                     }
 
                 },
@@ -806,10 +848,16 @@
                     $("#div-opcionesP").show();
                     $("#div-opciones").html("");
                     let opc = "";
+
+                    var tempDiv = document.createElement('div');
+                    var texto ="";
+                   
                     for (let itemOpc of arrayOpciones) {
-                        opc += '<button style="width: 80%" type="button" data-id="' + itemOpc.correcta +
+                        tempDiv.innerHTML = itemOpc.respuesta;
+                        texto = tempDiv.firstChild.textContent || tempDiv.firstChild.innerText;
+                              opc += '<button style="width: 80%" type="button" data-id="' + itemOpc.correcta +
                             '" onclick="$.verificar_respuesta(this);" class="btn btn-outline-dark round btn-min-width mr-1 mb-1">' +
-                            itemOpc.respuesta + '</button>'
+                            texto + '</button>';
                     }
 
                     $("#div-opciones").html(opc);
@@ -827,6 +875,7 @@
                     } else {
                         elemento.classList.remove("btn-outline-dark");
                         elemento.classList.add("btn-danger");
+
                     }
 
                     if (document.getElementById("dialogo2").style.display == "") {
@@ -838,14 +887,19 @@
                         if (respuesta == "si") {
                             $.maquina("parrafo2", textop, 50, 1);
                         } else {
+                            Swal.fire({
+                                type: "warning",
+                                title: "Oops...",
+                                text: "Respuesta incorrecta sigue practicando",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 2000,
+                                buttonsStyling: false
+                            });
 
                             actual = 0;
-                            $("#div-opcionesP").show();
-                            $("#div-opciones").html("");
-                            $("#titoOpciones").html("Respuesta incorrecta vuelve a intentarlo");
-                            setTimeout(() => {
+                          setTimeout(() => {
                                 $.cerrarPractica();
-                            }, 2000)
+                            }, 1000)
                         }
                     }, 3000)
                 },
@@ -896,6 +950,7 @@
                     $("#btn-atrasModulos").show();
                     $("#div-unidades").show();
                     $("#div-temas").hide();
+                    $("#tit-gram").html("Unidades Tematicas Gramatica y Lenguaje");
                 },
                 atrasTemas: function() {
                     $("#div-detTemas").hide();

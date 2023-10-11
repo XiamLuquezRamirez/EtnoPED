@@ -128,8 +128,7 @@
                                         <div class="form-body">
                                             <div class="form-group">
                                                 <label for="userinput5">Título:</label>
-                                                <input class="form-control border-primary" type="text" name="titulo"
-                                                    placeholder="Título" id="titulo">
+                                                <textarea cols="80" id="titulo" name="titulo" rows="10"></textarea>
                                             </div>
                                             <div class="form-group">
                                                 <label for="userinput5">Unidad Tematica:</label>
@@ -479,6 +478,7 @@
                     $("#btnGuardar").show();
                     $("#btnCancelar").show();
                     $("#btnNuevo").hide();
+                    editorTitulo.setData('');
                     editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
 
                     $.cargarUnidades();
@@ -488,6 +488,8 @@
                 limpiar: function() {
                     var form = document.getElementById("formGuardar");
                     form.reset();
+                    editorTitulo.setData('');
+
                     editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
 
                     $('#unidad').val("").trigger('change.select2');
@@ -495,7 +497,7 @@
                     $("#btnGuardar").show();
                     $("#btnCancelar").show();
                     $("#btnNuevo").hide();
-                    
+
                     $("#divMultimedia").html("");
                     $("#divMultimedia").hide();
                     $("#divEjemplos").hide();
@@ -534,18 +536,21 @@
                         CKEDITOR.instances[instanceName].updateElement();
                     }
 
-                    if ($("#titulo").val().trim() === "") {
+                    var contenido = editorTitulo.getData()
+                        .trim(); // Obtener el contenido y quitar espacios en blanco al inicio y al final
+
+                    if (contenido.length === 0) {
                         Swal.fire({
+                            title: " Alerta!",
+                            text: " Debe de ingresar el título!",
                             type: "warning",
-                            title: "Oops...",
-                            text: "Debes de ingresar el título",
-                            confirmButtonClass: "btn btn-primary",
-                            timer: 1500,
+                            confirmButtonClass: "btn btn-warning",
                             buttonsStyling: false
                         });
+
                         return;
                     }
-                    
+
                     if ($("#unidades").val() === "") {
                         Swal.fire({
                             type: "warning",
@@ -635,7 +640,8 @@
 
                     $("#idTema").remove();
                     form.append("<input type='hidden' id='idTema' name='idTema'  value='" + id + "'>");
-                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion + "'>");
+                    form.append("<input type='hidden' id='accion' name='accion'  value='" + accion +
+                        "'>");
 
                     var url = form.attr("action");
                     var datos = form.serialize();
@@ -650,7 +656,7 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            $("#titulo").val(respuesta.tematica.titulo);
+                            editorTitulo.setData(respuesta.tematica.titulo);
                             $('#unidad').val(respuesta.tematica.unidad).trigger(
                                 'change.select2');
                             editorContenido.setData(respuesta.tematica.contenido);
@@ -1053,14 +1059,26 @@
                     });
 
                 },
+                contTitulo: function(idPrep) {
+                    CKEDITOR.replace('titulo', {
+                        removePlugins: 'toolbar,dialogui', // Quitar todas las herramientas
+                        toolbar: [],
+                        width: '100%',
+                        height: 50
+                    });
+
+                }
 
 
 
             });
-            $.inicialEditorContenido();
             $.cargar(1);
+            $.inicialEditorContenido();
+            $.contTitulo();
 
             var editorContenido = CKEDITOR.instances.contenido;
+            var editorTitulo = CKEDITOR.instances.titulo;
+
             $(document).on('click', '.pagination a', function(event) {
                 event.preventDefault();
                 var page = $(this).attr('href').split('page=')[1];

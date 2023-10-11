@@ -15,7 +15,7 @@
    }
    
    .card2:hover .img-section {
-     transform: translateY(-1em); 
+     transform: translateY(-0.4em); 
    }
    
    .card-desc2 {

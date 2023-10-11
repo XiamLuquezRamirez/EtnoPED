@@ -123,14 +123,16 @@ class AdministracionController extends Controller
         $data = request()->all();
         if ($data['accion'] == "agregar") {
             $respuesta = UnidadesTematicas::guardar($data);
+            if ($respuesta) {
+                $estado = "ok";
+            } else {
+                $estado = "fail";
+            }
         } else if ($data['accion'] == "editar") {
             $respuesta = UnidadesTematicas::editar($data);
-        }
-        if ($respuesta) {
             $estado = "ok";
-        } else {
-            $estado = "fail";
         }
+        
 
         if (request()->ajax()) {
             return response()->json([
@@ -197,6 +199,12 @@ class AdministracionController extends Controller
                     $respuestaMult = Tematicas::guardarEjemplosTema($data);
                 }
             }
+
+            if ($respuesta) {
+                $estado = "ok";
+            } else {
+                $estado = "fail";
+            }
         } else if ($data['accion'] == "editar") {
             $respuesta = Tematicas::editar($data);
 
@@ -250,14 +258,11 @@ class AdministracionController extends Controller
             if (isset($data['contEjemplo'])) {
                 $respuestaMult = Tematicas::guardarEjemplosTema($data);
             }
-        }
-
-
-        if ($respuesta) {
             $estado = "ok";
-        } else {
-            $estado = "fail";
         }
+
+
+       
 
         if (request()->ajax()) {
             return response()->json([

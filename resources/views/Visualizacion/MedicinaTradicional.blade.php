@@ -21,61 +21,75 @@
 
     </div>
     <div class="content-body">
-        <div class="row" >
-            <div id="div-medicina" class="col-sm-12 col-md-12">
+        <div class="card p-1" style="border-radius:10px">
+            <div class="card-header">
+                <h4 class="card-title">Medicinas Tradicionales</h4>
+                <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
 
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="row" id="div-detmedicina" style="display: none;">
-            <div class="row match-height" style="width: 100%;">
-                <!-- Description lists horizontal -->
-                <div class="col-sm-12 col-md-8"  >
-                    <div class="card" style="height: 432.517px;">
-                        <div class="card-header">
-                            <h4 id="titulo-medicina" class="card-title"></h4>
-                            <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
-                            <div class="heading-elements">
-                                <ul class="list-inline mb-0">
-                                    <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-body">
-                                <div id="conte-medicina" class="card-text">
-                                   
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--/ Description lists horizontal-->
+            <div class="card-content collapse show">
+                <div class="row">
+                    <div id="div-medicina" class="col-sm-12 col-md-12">
 
-                <!-- Description lists vertical-->
-                <div class="col-sm-12 col-md-4">
-                    <div class="card" style="height: 432.517px;">
-                        <div class="card-header">
-                            <h4 class="card-title">Preparación</h4>
-                            <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
-                            <div class="heading-elements">
-                                <ul class="list-inline mb-0">
-                                    <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-body">
-                                <div id="conte-preparacion" class="card-text">
-                                
-                                </div>
-                                <div id="cont-vidPre" style="display: none;">
-                                    
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <!--/ Description lists vertical-->
+                <div class="row" id="div-detmedicina" style="display: none;">
+                    <div class="row match-height" style="width: 100%;">
+                        <!-- Description lists horizontal -->
+                        <div class="col-sm-12 col-md-8">
+                            <div class="card" style="height: 432.517px;">
+                                <div class="card-header">
+                                    <h4 id="titulo-medicina" class="card-title"></h4>
+                                    <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div id="conte-medicina" class="card-text">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Description lists horizontal-->
+
+                        <!-- Description lists vertical-->
+                        <div class="col-sm-12 col-md-4">
+                            <div class="card" style="height: 432.517px;">
+                                <div class="card-header">
+                                    <h4 class="card-title">Preparación</h4>
+                                    <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div id="conte-preparacion" class="card-text">
+
+                                        </div>
+                                        <div id="cont-vidPre" style="display: none;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Description lists vertical-->
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -195,24 +209,28 @@
                         dataType: "json",
                         success: function(response) {
                             $("#titulo").html(response.Medicina.nombre);
-                           
+
                             $("#titulo-medicina").html(response.Medicina.nombre);
                             $("#conte-medicina").html(response.Medicina.contenido);
                             $("#conte-preparacion").html(response.Medicina.cotenido_prepa);
 
-                          var ContentVidPreparacion = document.getElementById('cont-vidPre');
-                          let url = $('#urlMult').data("ruta") + "/contenidoMultimedia/PreparacionMedicinaTradicional/" + response.Medicina.video_prepa;
-                            if(response.Medicina.video_prepa =! ""){
-                              
-                              console.log(url);
+                            var ContentVidPreparacion = document.getElementById(
+                                'cont-vidPre');
+                            let url = $('#urlMult').data("ruta") +
+                                "/contenidoMultimedia/PreparacionMedicinaTradicional/" +
+                                response.Medicina.video_prepa;
+                            if (response.Medicina.video_prepa = !"") {
+
+                                console.log(url);
                                 $("#cont-vidPre").show();
                                 ContentVidPreparacion.innerHTML =
-                                '<video id="vidPrepa"  style="width: 100%;"  controls><source  src="' + url +
-                                '" type="video/mp4"></video>';
+                                    '<video id="vidPrepa"  style="width: 100%;"  controls><source  src="' +
+                                    url +
+                                    '" type="video/mp4"></video>';
 
                                 var video_player = new Plyr("#vidPrepa");
 
-                            }else{
+                            } else {
                                 $("#cont-vidPre").hide();
                             }
 
@@ -220,7 +238,7 @@
                     });
 
                 },
-               
+
                 atrasMedicina: function() {
                     $("#btn-atrasMedi").hide();
                     $("#div-medicina").show();
