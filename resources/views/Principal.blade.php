@@ -9,10 +9,9 @@
  <div class="row">
         <div class="col-xl-4 col-lg-6 col-12" onclick="$.abrirModulo(1);">
             <div class="card2 work">
-                <div class="img-section" style="background-image: url(../../../app-assets/images/backgrounds/header_gramatica.png); background-size: 100% 60%; background-repeat: no-repeat;">
-               
+                <div class="img-section" style="background-image: url({{ asset('app-assets/images/backgrounds/header_gramatica.png') }}); background-size: 100% 60%; background-repeat: no-repeat;">
                 </div>
-                <div class="card-desc2" style="background-image: url(../../../app-assets/images/backgrounds/gramatica.png); background-size: 100% 100%">
+                <div class="card-desc2" style="background-image: url({{ asset('app-assets/images/backgrounds/gramatica.png') }}); background-size: 100% 100%">
                     <div class="card-header2">
                         <div class="card-title2"></div>
                       
@@ -37,10 +36,10 @@
         </div>
         <div class="col-xl-4 col-lg-6 col-12" onclick="$.abrirModulo(3);">
             <div class="card2 work">
-                <div class="img-section" style="background-image: url(../../../app-assets/images/backgrounds/header_usos.png); background-size: 100% 60%; background-repeat: no-repeat;">
+                <div class="img-section" style="background-image: url(/app-assets/images/backgrounds/header_usos.png); background-size: 100% 60%; background-repeat: no-repeat;">
                   
                 </div>
-                <div class="card-desc2" style="background-image: url(../../../app-assets/images/backgrounds/usos.png); background-size: 100% 100%">
+                <div class="card-desc2" style="background-image: url(/app-assets/images/backgrounds/usos.png); background-size: 100% 100%">
                     <div class="card-header2" >
                         <div class="card-title2"></div>
                      
