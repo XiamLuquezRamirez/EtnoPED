@@ -544,7 +544,7 @@ html [type="button"],
   background-color: #cccccc; }
 
 .btn-primary ~ .dropdown-menu .dropdown-item.active {
-  background-color: #00b5b8; }
+  background-color: #0098D0; }
 
 .btn-success ~ .dropdown-menu .dropdown-item.active {
   background-color: #16d39a; }
@@ -893,7 +893,7 @@ html [type="button"],
     display: flex; }
 
 .bg-mega {
-  background: linear-gradient(to right, #00b5b8, #16d39a);
+  background: linear-gradient(to right, #0098D0, #025d7d);
   border-radius: 0.5rem; }
 
 .navigation-main .mega-dropdown-menu,
@@ -923,7 +923,7 @@ html [type="button"],
         .navigation-main .mega-dropdown-menu ul li a:hover,
         .navbar-nav .mega-dropdown-menu ul li a:hover {
           text-decoration: none;
-          color: #00b5b8; }
+          color: #0098D0; }
         .navigation-main .mega-dropdown-menu ul li a:focus,
         .navbar-nav .mega-dropdown-menu ul li a:focus {
           text-decoration: none;
@@ -1291,7 +1291,7 @@ html [type="button"],
 .badge {
   color: #fff;
   font-weight: 400;
-  background-color: #00b5b8; }
+  background-color: #0098D0; }
   .badge[class*='badge-'] [class*='icon-'] {
     line-height: 1; }
     .badge[class*='badge-'] [class*='icon-'] ~ span {
@@ -1335,11 +1335,11 @@ html [type="button"],
     background-color: #2c3648; }
 
 .badge-primary {
-  background-color: #00b5b8; }
+  background-color: #0098D0; }
   .badge-primary.badge-glow {
-    box-shadow: 0px 0px 10px #00b5b8; }
+    box-shadow: 0px 0px 10px #0098D0; }
   .badge-primary[href]:hover, .badge-primary[href]:focus {
-    background-color: #008385; }
+    background-color: #037ca8; }
 
 .badge-success {
   background-color: #16d39a; }
@@ -1477,14 +1477,14 @@ html [type="button"],
     background-color: #ffffff;
     color: #55595c; }
     .nav.nav-pills.nav-pill-with-active-bordered .nav-item a.nav-link.active {
-      border: 1px solid #00b5b8;
-      color: #00b5b8; }
+      border: 1px solid #0098D0;
+      color: #0098D0; }
   .nav.nav-pills.nav-active-bordered-pill .nav-item a.nav-link {
     color: #55595c; }
     .nav.nav-pills.nav-active-bordered-pill .nav-item a.nav-link.active {
-      border: 1px solid #00b5b8;
+      border: 1px solid #0098D0;
       border-radius: 0.25rem;
-      color: #00b5b8;
+      color: #0098D0;
       background-color: #ffffff; }
   .nav.nav-pills.nav-pill-toolbar.nav-stacked .nav-item ~ .nav-item a.nav-link {
     border-left: 1px solid #d3d3d3;
@@ -1650,7 +1650,7 @@ html [type="button"],
           -webkit-transform: translate3d(0, 150%, 0);
           transform: translate3d(0, 150%, 0); }
   .nav.nav-tabs.nav-linetriangle {
-    border-bottom-color: #00CED2; }
+    border-bottom-color: ##fc5b02; }
     .nav.nav-tabs.nav-linetriangle .nav-item {
       position: relative;
       z-index: 1;
@@ -1670,9 +1670,9 @@ html [type="button"],
         border: none;
         color: #55595c; }
         .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active {
-          border-bottom: 1px solid #00CED2;
-          border-bottom-color: #00CED2 !important;
-          color: #00CED2; }
+          border-bottom: 1px solid #fc5b02;
+          border-bottom-color: #fc5b02 !important;
+          color: #fc5b02; }
           .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:after, .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:before {
             position: absolute;
             top: 100%;
@@ -1685,20 +1685,20 @@ html [type="button"],
           .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:before {
             margin-left: -11px;
             border-width: 12px;
-            border-top-color: #00CED2; }
+            border-top-color: #fc5b02; }
           .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:after {
             margin-left: -10px;
             border-width: 10px;
             border-top-color: #fff; }
           .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.active:focus {
-            color: #00CED2; }
+            color: #fc5b02; }
         .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.dropdown-toggle:after {
           margin-top: -1rem; }
         .nav.nav-tabs.nav-linetriangle .nav-item a.nav-link.dropdown-toggle.active:after {
           margin-top: 0; }
     .nav.nav-tabs.nav-linetriangle.nav-justified {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      border-bottom-color: #00CED2; }
+      border-bottom-color: #fc5b02; }
       .nav.nav-tabs.nav-linetriangle.nav-justified .nav-item a.nav-link.active {
         top: 0px; }
   .nav.nav-tabs.nav-iconfall {

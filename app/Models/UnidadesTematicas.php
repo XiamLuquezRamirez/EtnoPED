@@ -12,7 +12,7 @@ class UnidadesTematicas extends Model
 
     public static function guardar($request)
     {
-       $respuesta = DB::connection('mysql')->table('etno_ped.unidades_tematicas')->insert([
+        $respuesta = DB::connection('mysql')->table('etno_ped.unidades_tematicas')->insert([
             'nombre' => $request['nombre'],
             'descripcion' => isset($request['descripcion']) ? $request['descripcion'] : '',
             'estado' => 'ACTIVO',
@@ -22,19 +22,24 @@ class UnidadesTematicas extends Model
     }
     public static function editar($request)
     {
-        return DB::connection('mysql')->table('etno_ped.unidades_tematicas')->where('id', $request['id'])->update([
+       
+        $respuesta = DB::connection('mysql')->table('etno_ped.unidades_tematicas')
+        ->where('id', $request['id'])
+        ->update([
             'nombre' => $request['nombre'],
             'descripcion' => $request['descripcion']
         ]);
+      
+        return $respuesta;
     }
 
     public static function CargarTodos()
     {
         $perPage = 10;
         return DB::connection('mysql')->table('etno_ped.unidades_tematicas')
-        ->where('estado', 'ACTIVO')
-        ->paginate($perPage)
-        ->get();
+            ->where('estado', 'ACTIVO')
+            ->paginate($perPage)
+            ->get();
     }
 
     public static function BuscarUnidad($id)
@@ -43,14 +48,16 @@ class UnidadesTematicas extends Model
             ->where('id', $id)
             ->first();
     }
-    
+
     public static function AllUnidades()
     {
         return DB::connection('mysql')->table('etno_ped.unidades_tematicas')
+            ->where('estado', 'ACTIVO')
             ->get();
     }
 
-    public static function EliminarUnidad($id){
+    public static function EliminarUnidad($id)
+    {
         return DB::connection('mysql')->table('etno_ped.unidades_tematicas')->where('id', $id)->update([
             'estado' => 'ELIMINADO',
         ]);

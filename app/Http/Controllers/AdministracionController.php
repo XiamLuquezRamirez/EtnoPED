@@ -6,7 +6,22 @@ use App\Models\UnidadesTematicas;
 use App\Models\Tematicas;
 use App\Models\Evaluacion;
 use App\Models\EvalPregEnsay;
+use App\Models\EvalPregComplete;
+use App\Models\PregOpcMul;
+use App\Models\OpcPregMul;
+use App\Models\EvalVerFal;
+use App\Models\PregRelacione;
+use App\Models\EvalRelacione;
+use App\Models\EvalRelacioneOpc;
+use App\Models\EvalTaller;
+use App\Models\EvalPregDidact;
 use App\Models\CosEval;
+use App\Models\Practicas;
+use App\Models\PregPractica;
+use App\Models\OpcPractica;
+use App\Models\MedicinaTradicional;
+use App\Models\UsosCostumbres;
+use App\Models\Diccionario;
 use App\Models\Log;
 use App\Models\LibroCalificaciones;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +43,76 @@ class AdministracionController extends Controller
                 $tema = $detTemas->titulo;
                 $unidad = $detTemas->nombre;
                 return view('Administracion.GestionEvaluaciones', compact('id', 'tema', 'unidad'));
+            } else if ($ori == "practicas") {
+                $detTemas = Tematicas::BuscarDetTema($id);
+                $tema = strip_tags($detTemas->titulo);
+                $unidad = strip_tags($detTemas->nombre);
+                return view('Administracion.GestionarPracticas', compact('id', 'tema', 'unidad'));
             }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function GestionarMedicinaTradicional()
+    {
+        $bandera = "";
+        return view('Administracion.GestionMedicinaTradicional', compact('bandera'));
+    }
+
+    public function GestionarUsosCostumbres()
+    {
+        $bandera = "";
+        return view('Administracion.GestionUsoCostumbres', compact('bandera'));
+    }
+    public function GestionarDiccionario()
+    {
+        $bandera = "";
+        return view('Administracion.GestionDiccionario', compact('bandera'));
+    }
+
+    public function CargarPractica()
+    {
+        if (Auth::check()) {
+            $ideva = request()->get('ideva');
+
+            $Evaluacion = Evaluacion::BusEval($ideva);
+
+            ///////CONSULTAR PREGUNTA OPCION MULTIPLE COMPLE
+            $PregMult = PregPractica::ConsulPregAll($ideva);
+            $OpciMult = OpcPractica::ConsulGrupOpcPregAll($ideva);
+
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'Evaluacion' => $Evaluacion,
+                    'PregMult' => $PregMult,
+                    'OpciMult' => $OpciMult
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+
+    public function GuardarPractFin()
+    {
+        if (Auth::check()) {
+            $datos = request()->all();
+
+            $idEval = "";
+            $idEval = request()->get('Id_Eval');
+            $ContEval = Practicas::ModifPractFin($datos, $idEval);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'idEval' => $idEval,
+                ]);
+            }
+
+
+            $Log = Log::Guardar('Practica Modificada', $idEval);
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
@@ -39,14 +123,16 @@ class AdministracionController extends Controller
         $data = request()->all();
         if ($data['accion'] == "agregar") {
             $respuesta = UnidadesTematicas::guardar($data);
+            if ($respuesta) {
+                $estado = "ok";
+            } else {
+                $estado = "fail";
+            }
         } else if ($data['accion'] == "editar") {
             $respuesta = UnidadesTematicas::editar($data);
-        }
-        if ($respuesta) {
             $estado = "ok";
-        } else {
-            $estado = "fail";
         }
+        
 
         if (request()->ajax()) {
             return response()->json([
@@ -58,6 +144,7 @@ class AdministracionController extends Controller
     public function GuardarTema()
     {
         $data = request()->all();
+
         if ($data['accion'] == "agregar") {
             $respuesta = Tematicas::guardar($data);
             if ($respuesta) {
@@ -66,6 +153,7 @@ class AdministracionController extends Controller
                 if (request()->has('repeater-list')) {
                     $img = [];
                     $tipo = [];
+                    $nomb = [];
                     $repeaterList = $data['repeater-list'];
 
 
@@ -82,19 +170,40 @@ class AdministracionController extends Controller
                             $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
                             $archivo->move(public_path() . '/app-assets/contenidoMultimedia/tematicas/', $nombreArchivo);
                             $img[] = $nombreArchivo;
+                            $nomb[] = $nombreOriginal;
                             $tipo[] = $tipoMime;
                             // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
                             $data['img'] = $img;
                             $data['tipo'] = $tipo;
+                            $data['nomb'] = $nomb;
                         }
                     }
                 }
 
-
-
                 if (isset($data['img'])) {
                     $respuestaMult = Tematicas::guardarMultimediaTema($data);
                 }
+
+                if (request()->hasfile('ejemplos')) {
+                    foreach (request()->file('ejemplos') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/audios/', $name);
+
+                        $arch[] = $name;
+                    }
+                    $data['Audio'] = $arch;
+                }
+
+                if (isset($data['contEjemplo'])) {
+                    $respuestaMult = Tematicas::guardarEjemplosTema($data);
+                }
+            }
+
+            if ($respuesta) {
+                $estado = "ok";
+            } else {
+                $estado = "fail";
             }
         } else if ($data['accion'] == "editar") {
             $respuesta = Tematicas::editar($data);
@@ -119,10 +228,12 @@ class AdministracionController extends Controller
                         $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
                         $archivo->move(public_path() . '/app-assets/contenidoMultimedia/tematicas/', $nombreArchivo);
                         $img[] = $nombreArchivo;
+                        $nomb[] = $nombreOriginal;
                         $tipo[] = $tipoMime;
                         // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
                         $data['img'] = $img;
                         $data['tipo'] = $tipo;
+                        $data['nomb'] = $nomb;
                     }
                 }
             }
@@ -131,6 +242,196 @@ class AdministracionController extends Controller
             if (isset($data['img'])) {
                 $respuestaMult = Tematicas::guardarMultimediaTema($data);
             }
+
+            if (request()->hasfile('ejemplos')) {
+                foreach (request()->file('ejemplos') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/audios/', $name);
+                    $archOr[] = $file->getClientOriginalName();
+                    $arch[] = $name;
+                }
+                $data['AudioOr'] = $archOr;
+                $data['Audio'] = $arch;
+            }
+
+            if (isset($data['contEjemplo'])) {
+                $respuestaMult = Tematicas::guardarEjemplosTema($data);
+            }
+            $estado = "ok";
+        }
+
+
+       
+
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => $estado,
+            ]);
+        }
+    }
+    public function GuardarMedicina()
+    {
+        $data = request()->all();
+
+        if ($data['accion'] == "agregar") {
+
+
+            if (request()->hasfile('vidPrepa')) {
+                foreach (request()->file('vidPrepa') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/PreparacionMedicinaTradicional/', $name);
+                    $data['VideoOr'] =  $file->getClientOriginalName();
+                    $data['Video'] = $name;
+                }
+            } else {
+                $data['VideoOr'] = "";
+                $data['Video'] = "";
+            }
+
+
+
+            $respuesta = MedicinaTradicional::guardar($data);
+        } else if ($data['accion'] == "editar") {
+
+
+            if (request()->hasfile('vidPrepa')) {
+                foreach (request()->file('vidPrepa') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/PreparacionMedicinaTradicional/', $name);
+                    $data['VideoOr'] =  $file->getClientOriginalName();
+                    $data['Video'] = $name;
+                }
+            } else {
+                $data['VideoOr'] =  $data['nVideoPrepa'];
+                $data['Video'] = $data['VideoPrepa'];
+            }
+
+            $respuesta = MedicinaTradicional::modificar($data);
+        }
+
+
+        if ($respuesta) {
+            $estado = "ok";
+        } else {
+            $estado = "fail";
+        }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => $estado,
+            ]);
+        }
+    }
+    public function GuardarUso()
+    {
+        $data = request()->all();
+
+        if ($data['accion'] == "agregar") {
+
+            if (request()->hasfile('vidUso')) {
+                foreach (request()->file('vidUso') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/UsosCostumbres/', $name);
+                    $data['Video'] = $name;
+                }
+            } else {
+                $data['Video'] = "";
+            }
+
+            $respuesta = UsosCostumbres::guardar($data);
+        } else if ($data['accion'] == "editar") {
+
+            if (request()->hasfile('vidUso')) {
+                foreach (request()->file('vidUso') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/UsosCostumbres/', $name);
+                    $data['Video'] = $name;
+                }
+            } else {
+                $data['Video'] = $data['VideoUso'];
+            }
+
+            $respuesta = UsosCostumbres::modificar($data);
+        }
+
+
+        if ($respuesta) {
+            $estado = "ok";
+        } else {
+            $estado = "fail";
+        }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => $estado,
+            ]);
+        }
+    }
+
+    public function GuardarDiccionario()
+    {
+        $data = request()->all();
+
+        if ($data['accion'] == "agregar") {
+
+
+            if (request()->hasfile('imgDicc')) {
+                foreach (request()->file('imgDicc') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/', $name);
+                    $data['Img'] = $name;
+                }
+            } else {
+
+                $data['Img'] = "";
+            }
+
+            if (request()->hasfile('audDicc')) {
+                foreach (request()->file('audDicc') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/', $name);
+                    $data['Audio'] = $name;
+                }
+            } else {
+
+                $data['Audio'] = "";
+            }
+
+            $respuesta = Diccionario::guardar($data);
+        } else if ($data['accion'] == "editar") {
+
+
+            if (request()->hasfile('imgDicc')) {
+                foreach (request()->file('imgDicc') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/', $name);
+                    $data['Img'] = $name;
+                }
+            } else {
+                $data['Img'] = $data['imgDicc'];
+            }
+
+            if (request()->hasfile('audDicc')) {
+                foreach (request()->file('audDicc') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/', $name);
+                    $data['Audio'] = $name;
+                }
+            } else {
+
+                $data['Audio'] = $data['audDicc'];
+            }
+
+            $respuesta = Diccionario::modificar($data);
         }
 
 
@@ -154,8 +455,57 @@ class AdministracionController extends Controller
     }
     public function EliminarTema()
     {
-        $idUndad = request()->get('idTema');
-        $unidades = Tematicas::EliminarTematica($idUndad);
+        $idTema = request()->get('idTema');
+        $unidades = Tematicas::EliminarTematica($idTema);
+    }
+    public function EliminarMedicina()
+    {
+        $idMedicina = request()->get('idMedicina');
+        $unidades = MedicinaTradicional::Eliminar($idMedicina);
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => "ok",
+            ]);
+        }
+    }
+    public function EliminarUsos()
+    {
+        $idUso = request()->get('idUso');
+        $unidades = UsosCostumbres::Eliminar($idUso);
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => "ok",
+            ]);
+        }
+    }
+    public function EliminarDiccionario()
+    {
+        $idDicc = request()->get('idDicc');
+        $diccionario = Diccionario::BuscarDicc($idDicc);
+
+        $audio = $diccionario->audio;
+        $img = $diccionario->imagen;
+
+        if ($audio != "") {
+            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/' . $audio; // Ruta completa al archivo que deseas eliminar
+            if (file_exists($fileToDelete)) {
+                unlink($fileToDelete);
+            }
+        }
+
+        if ($img != "") {
+            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/' . $img; // Ruta completa al archivo que deseas eliminar
+            if (file_exists($fileToDelete)) {
+                unlink($fileToDelete);
+            }
+        }
+
+        $diccionario = Diccionario::Eliminar($idDicc);
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => "ok",
+            ]);
+        }
     }
 
     public function eliminarMultimedia()
@@ -169,6 +519,28 @@ class AdministracionController extends Controller
         if (file_exists($fileToDelete)) {
             unlink($fileToDelete);
         }
+
+
+        if (request()->ajax()) {
+            return response()->json([
+                'estado' => "ok",
+            ]);
+        }
+    }
+
+    public function eliminarEjemplo()
+    {
+        $idEjemplo = request()->get('idejemplo');
+        $rutaEjemplo = request()->get('rutaEjemplo');
+        $Multmedia = Tematicas::EliminarEjemplo($idEjemplo);
+
+        $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audios/' . $rutaEjemplo; // Ruta completa al archivo que deseas eliminar
+
+        if (file_exists($fileToDelete)) {
+            unlink($fileToDelete);
+        }
+
+
 
 
         if (request()->ajax()) {
@@ -219,10 +591,97 @@ class AdministracionController extends Controller
             }
         }
 
-        $pagination = $Listunidades->links('Administracion.PaginacionUnidades')->render();
+        $pagination = $Listunidades->links('Administracion.Paginacion')->render();
 
         return response()->json([
             'unidades' => $tdTable,
+            'links' => $pagination,
+        ]);
+    }
+    public function CargarUsosCostumbres()
+    {
+        $perPage = 5; // Número de posts por página
+        $page = request()->get('page', 1);
+        $searchUso = request()->get('search');
+        if (!is_numeric($page)) {
+            $page = 1; // Establecer un valor predeterminado si no es numérico
+        }
+
+        $usos = DB::connection('mysql')
+            ->table('etno_ped.usos_costumbres')
+            ->where('estado', 'ACTIVO');
+        if ($searchUso) {
+            $usos->where('nombre', 'LIKE', '%' . $searchUso . '%');
+        }
+        $Listusos = $usos->paginate($perPage, ['*'], 'page', $page);
+
+        $tdTable = '';
+        $x = ($page - 1) * $perPage + 1;
+
+        foreach ($Listusos as $i => $item) {
+            if (!is_null($item)) {
+                $tdTable .= '<tr>' .
+                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                    '    </div>' .
+                    '</td>' .
+                    '<th scope="row">' . $x . '</th>' .
+                    '<td>' . $item->nombre . '</td>' .
+                    '</tr>';
+
+                $x++;
+            }
+        }
+
+        $pagination = $Listusos->links('Administracion.Paginacion')->render();
+
+        return response()->json([
+            'usoCostumbre' => $tdTable,
+            'links' => $pagination,
+        ]);
+    }
+    public function CargarDiccionario()
+    {
+        $perPage = 5; // Número de posts por página
+        $page = request()->get('page', 1);
+        $searchDicc = request()->get('search');
+        if (!is_numeric($page)) {
+            $page = 1; // Establecer un valor predeterminado si no es numérico
+        }
+
+        $diccionario = DB::connection('mysql')
+            ->table('etno_ped.diccionario')
+            ->where('estado', 'ACTIVO');
+        if ($searchDicc) {
+            $diccionario->where('palabra_espanol', 'LIKE', '%' . $searchDicc . '%');
+        }
+        $ListDiccionario = $diccionario->paginate($perPage, ['*'], 'page', $page);
+
+        $tdTable = '';
+        $x = ($page - 1) * $perPage + 1;
+
+        foreach ($ListDiccionario as $i => $item) {
+            if (!is_null($item)) {
+                $tdTable .= '<tr>' .
+                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                    '    </div>' .
+                    '</td>' .
+                    '<th scope="row">' . $x . '</th>' .
+                    '<td>' . $item->palabra_espanol . '</td>' .
+                    '<td>' . $item->palabra_wuayuunaiki . '</td>' .
+                    '</tr>';
+
+                $x++;
+            }
+        }
+
+        $pagination = $ListDiccionario->links('Administracion.Paginacion')->render();
+
+        return response()->json([
+            'diccionario' => $tdTable,
             'links' => $pagination,
         ]);
     }
@@ -238,17 +697,53 @@ class AdministracionController extends Controller
             ]);
         }
     }
+    public function BuscarDiccionario()
+    {
+        $idDicc = request()->get('idDicc');
+        $diccionario = Diccionario::BuscarDicc($idDicc);
+
+        if (request()->ajax()) {
+            return response()->json([
+                'diccionario' => $diccionario,
+            ]);
+        }
+    }
 
     public function BuscarTema()
     {
         $idTema = request()->get('idTema');
         $tematica = Tematicas::BuscarTema($idTema);
         $mulTematica = Tematicas::BuscarMultimedia($idTema);
+        $ejemplos = Tematicas::BuscarEjemplos($idTema);
 
         if (request()->ajax()) {
             return response()->json([
                 'tematica' => $tematica,
                 'mulTematica' => $mulTematica,
+                'ejemplos' => $ejemplos,
+            ]);
+        }
+    }
+
+    public function BuscarMedicina()
+    {
+        $idMedicina = request()->get('idMedicina');
+        $medicina = MedicinaTradicional::BuscarMedi($idMedicina);
+
+        if (request()->ajax()) {
+            return response()->json([
+                'medicina' => $medicina
+            ]);
+        }
+    }
+    public function BuscarUso()
+    {
+        $idUso = request()->get('idUso');
+        $usoCostumbre = UsosCostumbres::BuscarUso($idUso);
+
+        if (request()->ajax()) {
+            return response()->json([
+                'usoCostumbre' => $usoCostumbre
             ]);
         }
     }
@@ -295,7 +790,6 @@ class AdministracionController extends Controller
                     '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
                     '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
                     '<button title="Evaluaciones" type="button" onclick="$.evaluaciones(' . $item->id . ');" class="btn btn-icon btn-pure secondary  "><i class="fa fa-check-square-o"></i> </button>' .
-                    '<button title="Ejemplos" type="button" onclick="$.ejemplos(' . $item->id . ');" class="btn btn-icon btn-pure info "><i class="fa fa-etsy"></i> </button>' .
                     '<button title="Practicas" type="button" onclick="$.practicas(' . $item->id . ');" class="btn btn-icon btn-pure warning  "><i class="fa fa-users"></i> </button>' .
                     '</div>' .
                     '</td>' .
@@ -308,7 +802,51 @@ class AdministracionController extends Controller
             }
         }
 
-        $pagination = $ListTemas->links('Administracion.PaginacionTemas')->render();
+        $pagination = $ListTemas->links('Administracion.Paginacion')->render();
+
+        return response()->json([
+            'temas' => $tdTable,
+            'links' => $pagination,
+        ]);
+    }
+    public function CargarMedicinaTradicional()
+    {
+        $perPage = 5; // Número de posts por página
+        $page = request()->get('page', 1);
+        $searchMedicina = request()->get('search');
+        if (!is_numeric($page)) {
+            $page = 1; // Establecer un valor predeterminado si no es numérico
+        }
+
+        $medicina = DB::connection('mysql')
+            ->table('etno_ped.medicina_tradicional')
+            ->where('etno_ped.medicina_tradicional.estado', 'ACTIVO');
+        if ($searchMedicina) {
+            $medicina->where('nombre', 'LIKE', '%' . $searchMedicina . '%');
+        }
+
+        $ListMedicina = $medicina->paginate($perPage, ['*'], 'page', $page);
+
+        $tdTable = '';
+        $x = ($page - 1) * $perPage + 1;
+
+        foreach ($ListMedicina as $i => $item) {
+            if (!is_null($item)) {
+                $tdTable .= '<tr>' .
+                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                    '</div>' .
+                    '</td>' .
+                    '<th style="vertical-align: middle" scope="row">' . $x . '</th>' .
+                    '<td style="vertical-align: middle">' . $item->nombre . '</td>' .
+                    '</tr>';
+
+                $x++;
+            }
+        }
+
+        $pagination = $ListMedicina->links('Administracion.Paginacion')->render();
 
         return response()->json([
             'temas' => $tdTable,
@@ -350,10 +888,10 @@ class AdministracionController extends Controller
                     '<td><div class="btn-group" role="group" aria-label="First Group">' .
                     '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
                     '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>';
-                    if (Auth::user()->tipo_usuario == "Profesor") {
+                if (Auth::user()->tipo_usuario == "Profesor") {
                     $tdTable .=  '    <button type="button" title="Calificar Evaluación" onclick="$.Calificar(' . $item->id . ');" class="btn btn-icon btn-pure success "><i class="fa fa-check-square-o"></i></button>';
-                    }
-                    $tdTable .= '    </div>' .
+                }
+                $tdTable .= '    </div>' .
                     '</td>' .
                     '<th scope="row">' . $x . '</th>' .
                     '<td>' . $descripcionCortada . '</td>' .
@@ -363,7 +901,7 @@ class AdministracionController extends Controller
             }
         }
 
-        $pagination = $ListEvaluaciones->links('Administracion.PaginacionEvaluaciones')->render();
+        $pagination = $ListEvaluaciones->links('Administracion.Paginacion')->render();
 
         return response()->json([
             'unidades' => $tdTable,
@@ -371,9 +909,60 @@ class AdministracionController extends Controller
         ]);
     }
 
-     ///////////////////GUARDAR EVALUACIÓN
-     public function guardarEvaluacion()
-     {
+    public function CargarPracticas()
+    {
+        $idTema = request()->get('idTema');
+
+        $perPage = 5; // Número de posts por página
+        $page = request()->get('page', 1);
+        $searchTerm = request()->get('search');
+        if (!is_numeric($page)) {
+            $page = 1; // Establecer un valor predeterminado si no es numérico
+        }
+
+        $practicas = DB::connection('mysql')
+            ->table('etno_ped.practicas_tematica')
+            ->where('estado', 'ACTIVO')
+            ->where('tematica', $idTema);
+        if ($searchTerm) {
+            $practicas->where('titulo', 'LIKE', '%' . $searchTerm . '%');
+        }
+        $ListPracticas = $practicas->paginate($perPage, ['*'], 'page', $page);
+
+        $tdTable = '';
+        $x = ($page - 1) * $perPage + 1;
+
+        foreach ($ListPracticas as $i => $item) {
+            if (!is_null($item)) {
+                $descripcionCortada = $item->titulo ?
+                    (strlen($item->titulo) > 100 ? substr($item->titulo, 0, 100) . '...' : $item->titulo) :
+                    "Sin descripción";
+
+                $tdTable .= '<tr>' .
+                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>';
+                $tdTable .= '    </div>' .
+                    '</td>' .
+                    '<th scope="row">' . $x . '</th>' .
+                    '<td>' . $descripcionCortada . '</td>' .
+                    '</tr>';
+
+                $x++;
+            }
+        }
+
+        $pagination = $ListPracticas->links('Administracion.Paginacion')->render();
+
+        return response()->json([
+            'unidades' => $tdTable,
+            'links' => $pagination,
+        ]);
+    }
+
+    ///////////////////GUARDAR EVALUACIÓN
+    public function guardarEvaluacion()
+    {
         if (Auth::check()) {
             $datos = request()->all();
 
@@ -390,10 +979,8 @@ class AdministracionController extends Controller
 
             if ($datos['Tipreguntas'] === "PREGENSAY") {
                 if ($datos['id-pregensay'] === null) {
-                
                     $ContPregEnsayo = EvalPregEnsay::Guardar($datos, $idEval);
                     $ContPregEnsayo = EvalPregEnsay::consulPregEnsay($ContPregEnsayo);
-                    
                     $ConsEval = CosEval::Guardar($datos, $idEval, $ContPregEnsayo->id);
                 } else {
                     $ContPregEnsayo = EvalPregEnsay::ModifPreg($datos);
@@ -415,15 +1002,242 @@ class AdministracionController extends Controller
                         'ContPregEnsayo' => $ContPregEnsayo,
                     ]);
                 }
-            }
+            } else if ($datos['Tipreguntas'] === "COMPLETE") {
+                $datos['cb_Opciones'] = implode(',', $datos['cb_Opciones']);
+                if ($datos['id-pregcomplete'] === null) {
+                    $ContPreComplete = EvalPregComplete::Guardar($datos, $idEval);
+                    $ContPreComplete = EvalPregComplete::ConsultComplete($ContPreComplete);
+                    $ConsEval = CosEval::Guardar($datos, $idEval, $ContPreComplete->id);
+                } else {
+                    $ContPreComplete = EvalPregComplete::Modificar($datos);
+                    $ContPreComplete = EvalPregComplete::ConsultComplete($datos['id-pregcomplete']);
+                }
 
-            
-        }else{
+                $ConsEval = CosEval::GrupPreg($idEval);
+                foreach ($ConsEval as $Preg) {
+                    if ($Preg->tipo == "PREGENSAY" || $Preg->tipo == "COMPLETE" || $Preg->tipo == "TALLER") {
+                        $calxdoc = "SI";
+                    }
+                }
+
+                $ModCalxdoc = Evaluacion::ModifEvalCalxDoc($idEval, $calxdoc);
+                $Log = Log::Guardar('Evaluación Modificada', $idEval);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'idEval' => $idEval,
+                        'ContPreComplete' => $ContPreComplete,
+                    ]);
+                }
+            } else if ($datos['Tipreguntas'] === "OPCMULT") {
+                if ($datos['IdpreguntaMul'] === null) {
+                    $PregOpcMul = PregOpcMul::Guardar($datos['PreMulResp'], $datos['puntaje'], $idEval);
+                    $PregOpcMul = PregOpcMul::ConsulPreg($PregOpcMul);
+
+                    if ($PregOpcMul) {
+                        $ConsEval = CosEval::Guardar($datos, $idEval, $PregOpcMul->id);
+                        $OpciPregMul = OpcPregMul::Guardar($datos, $PregOpcMul->id, $idEval);
+                        $OpciPregMul = OpcPregMul::ConsulGrupOpc($PregOpcMul->id, $idEval);
+                    }
+                } else {
+                    $PregOpcMul = PregOpcMul::ModiPreMul($datos['PreMulResp'], $datos['puntaje'], $datos['IdpreguntaMul'], $idEval);
+                    $PregOpcMul = PregOpcMul::ConsulPreg($datos['IdpreguntaMul']);
+                    if ($PregOpcMul) {
+                        $OpciPregMul = OpcPregMul::ModOpcPreg($datos, $idEval);
+                        $OpciPregMul = OpcPregMul::ConsulGrupOpc($datos['IdpreguntaMul'], $idEval);
+                    }
+                }
+                $ConsEval = CosEval::GrupPreg($idEval);
+
+                foreach ($ConsEval as $Preg) {
+                    if ($Preg->tipo == "PREGENSAY" || $Preg->tipo == "COMPLETE" || $Preg->tipo == "TALLER") {
+                        $calxdoc = "SI";
+                    }
+                }
+
+
+
+                $ModCalxdoc = Evaluacion::ModifEvalCalxDoc($idEval, $calxdoc);
+                $Log = Log::Guardar('Evaluación Modificada', $idEval);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'idEval' => $idEval,
+                        'PregOpcMul' => $PregOpcMul,
+                        'OpciPregMul' => $OpciPregMul,
+                    ]);
+                }
+            } else if ($datos['Tipreguntas'] === "VERFAL") {
+                if ($datos['id-pregverfal'] === null) {
+                    $ContPregVerFal = EvalVerFal::Guardar($datos, $idEval);
+                    $ContPregVerFal = EvalVerFal::ConVerFal($ContPregVerFal);
+                    $ConsEval = CosEval::Guardar($datos, $idEval, $ContPregVerFal->id);
+                } else {
+                    $ContPregVerFal = EvalVerFal::ModifPreg($datos);
+                    $ContPregVerFal = EvalVerFal::ConVerFal($datos['id-pregverfal']);
+                }
+
+                $ConsEval = CosEval::GrupPreg($idEval);
+                foreach ($ConsEval as $Preg) {
+                    if ($Preg->tipo == "PREGENSAY" || $Preg->tipo == "COMPLETE" || $Preg->tipo == "TALLER") {
+                        $calxdoc = "SI";
+                    }
+                }
+
+                $ModCalxdoc = Evaluacion::ModifEvalCalxDoc($idEval, $calxdoc);
+                $Log = Log::Guardar('Evaluación Modificada', $idEval);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'idEval' => $idEval,
+                        'ContPregVerFal' => $ContPregVerFal,
+                    ]);
+                }
+            } else if ($datos['Tipreguntas'] === "RELACIONE") {
+                if ($datos['id-relacione'] === null) {
+                    $PregRel = PregRelacione::Guardar($datos, $idEval);
+                    $PregRel = PregRelacione::ConRela($PregRel);
+                    $ConsEval = CosEval::Guardar($datos, $idEval, $PregRel->id);
+
+                    $ContIndicaciones = EvalRelacione::Guardar($datos, $PregRel->id, $idEval);
+                    $ContPregRespuest = EvalRelacioneOpc::Guardar($datos, $PregRel->id, $idEval);
+                    $PregRelIndi = EvalRelacione::PregRelDef($PregRel->id);
+                    $PregRelResp = EvalRelacioneOpc::PregRelOpc($PregRel->id);
+                } else {
+
+                    $PregRel = PregRelacione::Modificar($datos);
+                    $ContIndicaciones = EvalRelacione::Modificar($datos, $datos['id-relacione'], $idEval);
+                    $ContPregRespuest = EvalRelacioneOpc::Modificar($datos, $datos['id-relacione'], $idEval);
+
+                    $PregRel = PregRelacione::ConRela($datos['id-relacione']);
+
+                    $PregRelIndi = EvalRelacione::PregRelDef($datos['id-relacione']);
+                    $PregRelResp = EvalRelacioneOpc::PregRelOpc($datos['id-relacione']);
+                }
+
+                $ConsEval = CosEval::GrupPreg($idEval);
+                foreach ($ConsEval as $Preg) {
+                    if ($Preg->tipo == "PREGENSAY" || $Preg->tipo == "COMPLETE" || $Preg->tipo == "TALLER") {
+                        $calxdoc = "SI";
+                    }
+                }
+
+                $ModCalxdoc = Evaluacion::ModifEvalCalxDoc($idEval, $calxdoc);
+                $Log = Log::Guardar('Evaluación Modificada', $idEval);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'idEval' => $idEval,
+                        'PregRel' => $PregRel,
+                        'PregRelIndi' => $PregRelIndi,
+                        'PregRelResp' => $PregRelResp,
+                    ]);
+                }
+            } else if ($datos['Tipreguntas'] === "TALLER") {
+                if (request()->hasfile('archiTaller')) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . request()->file('archiTaller')->getClientOriginalName());
+                    request()->file('archiTaller')->move(public_path() . '/app-assets/Archivos_EvaluacionTaller/', $name);
+                }
+                $datos['archivo'] = $name;
+                if ($datos['id-taller'] === null) {
+                    $ContPregTaller = EvalTaller::GuardarTallerArc($datos, $idEval);
+                    $ContPregTaller = EvalTaller::PregTaller($ContPregTaller);
+                    $ConsEval = CosEval::Guardar($datos, $idEval, $ContPregTaller->id);
+                } else {
+                    $ContPregEnsayo = EvalTaller::ModifPreg($datos);
+                    $ContPregTaller = EvalTaller::PregTaller($datos['id-taller']);
+                }
+
+                $ConsEval = CosEval::GrupPreg($idEval);
+                foreach ($ConsEval as $Preg) {
+                    if ($Preg->tipo == "PREGENSAY" || $Preg->tipo == "COMPLETE" || $Preg->tipo == "TALLER") {
+                        $calxdoc = "SI";
+                    }
+                }
+
+                $ModCalxdoc = Evaluacion::ModifEvalCalxDoc($idEval, $calxdoc);
+                $Log = Log::Guardar('Evaluación Modificada', $idEval);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'idEval' => $idEval,
+                        'ContPregTaller' => $ContPregTaller,
+                    ]);
+                }
+            }
+        } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-     }
-     ///CONSULTAR PREGUNTAS EVALUACION
-     public function consulEvalPreg()
+    }
+    ///////////////////GUARDAR PRACTICA
+    public function guardarPractica()
+    {
+        if (Auth::check()) {
+            $datos = request()->all();
+
+            $idEval = "";
+
+            if ($datos['Id_Eval'] === null) {
+                $ContEval = Practicas::Guardar($datos);
+                $idEval = $ContEval;
+            } else {
+                $idEval = request()->get('Id_Eval');
+                $ContEval = Practicas::ModifEval($datos, $idEval);
+            }
+
+            if ($datos['IdpreguntaMul'] === null) {
+                $PregOpcMul = PregPractica::Guardar($datos['PreMulResp'],  $idEval);
+                $PregOpcMul = PregPractica::ConsulPreg($PregOpcMul);
+
+                if ($PregOpcMul) {
+                    $OpciPregMul = OpcPractica::Guardar($datos, $PregOpcMul->id, $idEval);
+                    $OpciPregMul = OpcPractica::ConsulGrupOpc($PregOpcMul->id, $idEval);
+                }
+            } else {
+                $PregOpcMul = PregPractica::ModiPreMul($datos['PreMulResp'],  $datos['IdpreguntaMul'], $idEval);
+                $PregOpcMul = PregPractica::ConsulPreg($datos['IdpreguntaMul']);
+                if ($PregOpcMul) {
+                    $OpciPregMul = OpcPractica::ModOpcPreg($datos, $idEval);
+                    $OpciPregMul = OpcPractica::ConsulGrupOpc($datos['IdpreguntaMul'], $idEval);
+                }
+            }
+
+
+            $Log = Log::Guardar('Practica Modificada', $idEval);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'idEval' => $idEval,
+                    'PregOpcMul' => $PregOpcMul,
+                    'OpciPregMul' => $OpciPregMul,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function consulPractPreg()
+    {
+        $IdPreg = request()->get('Pregunta');
+
+        if (Auth::check()) {
+
+            $PregMult = PregPractica::ConsulPreg($IdPreg);
+            $OpciMult = OpcPractica::ConsulGrupOpcPreg($IdPreg);
+            if (request()->ajax()) {
+                return response()->json([
+                    'PregMult' => $PregMult,
+                    'OpciMult' => $OpciMult,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    ///CONSULTAR PREGUNTAS EVALUACION
+    public function consulEvalPreg()
     {
         $IdPreg = request()->get('Pregunta');
         $TipPreg = request()->get('TipPregunta');
@@ -436,7 +1250,52 @@ class AdministracionController extends Controller
                         'PregEnsayo' => $PregEnsayo,
                     ]);
                 }
-            } 
+            } else if ($TipPreg == "COMPLETE") {
+                $PregComple = EvalPregComplete::ConsultComplete($IdPreg);
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregComple' => $PregComple,
+                    ]);
+                }
+            } else if ($TipPreg == "OPCMULT") {
+                $PregMult = PregOpcMul::ConsulPreg($IdPreg);
+                $OpciMult = OpcPregMul::ConsulGrupOpcPreg($IdPreg);
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregMult' => $PregMult,
+                        'OpciMult' => $OpciMult,
+                    ]);
+                }
+            } else if ($TipPreg == "VERFAL") {
+                $PregVerFal = EvalVerFal::ConVerFal($IdPreg);
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregVerFal' => $PregVerFal,
+                    ]);
+                }
+            } else if ($TipPreg == "RELACIONE") {
+                $PregRelacione = PregRelacione::ConRela($IdPreg);
+                $PregRelIndi = EvalRelacione::PregRelDef($IdPreg);
+                $PregRelResp = EvalRelacioneOpc::PregRelOpc($IdPreg);
+                $PregRelRespAdd = EvalRelacioneOpc::PregRelOpcAdd($IdPreg);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregRelacione' => $PregRelacione,
+                        'PregRelIndi' => $PregRelIndi,
+                        'PregRelResp' => $PregRelResp,
+                        'PregRelRespAdd' => $PregRelRespAdd,
+
+                    ]);
+                }
+            } else if ($TipPreg == "TALLER") {
+                $PregTaller = EvalTaller::PregTaller($IdPreg);
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregTaller' => $PregTaller,
+                    ]);
+                }
+            }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
@@ -450,13 +1309,14 @@ class AdministracionController extends Controller
             $idEval = "";
             $idEval = request()->get('Id_Eval');
             $ContEval = Evaluacion::ModifEvalFin($datos, $idEval);
-            if ($ContEval) {
-                if (request()->ajax()) {
-                    return response()->json([
-                        'idEval' => $idEval,
-                    ]);
-                }
+
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'idEval' => $idEval,
+                ]);
             }
+
 
             $Log = Log::Guardar('Evaluación Modificada', $idEval);
         } else {
@@ -464,27 +1324,28 @@ class AdministracionController extends Controller
         }
     }
 
-    public function EliminarEvaluacion(){
+    public function EliminarEvaluacion()
+    {
         $opc = "NT";
         $mensaje = "";
         $icon = "";
         if (Auth::check()) {
             $id = request()->get('idEval');
             $Verf = Evaluacion::VerfDel($id);
-          
+
             if ($Verf->count() > 0) {
                 $estado = "SINPERMISO";
                 $mensaje = 'Esta Evaluación es Propia de la Plataforma,  No puede ser Eliminada...';
                 $icon = 'warning';
                 $opc = "VU";
-            }else{
+            } else {
                 $Elib = LibroCalificaciones::BusEvalDel($id);
                 if ($Elib) {
                     $estado = "ACTIVO";
                     $mensaje = 'La Evaluación no puede ser Eliminada, ya que ha sido resuelta por un Estudiante';
                     $icon = 'warning';
                     $opc = "VU";
-                }else{
+                } else {
                     $estado = "ELIMINADO";
                     $respuesta = Evaluacion::editarestado($id, $estado);
                     if ($respuesta) {
@@ -496,10 +1357,7 @@ class AdministracionController extends Controller
                     } else {
                         $mensaje = 'La Operación no pudo ser Realizada';
                     }
-
-
                 }
-
             }
             if (request()->ajax()) {
                 return response()->json([
@@ -510,9 +1368,148 @@ class AdministracionController extends Controller
                     'icon' => $icon,
                 ]);
             }
-        }else{
+        } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function EliminarPractica()
+    {
+        $opc = "NT";
+        $mensaje = "";
+        $icon = "";
+        if (Auth::check()) {
+            $id = request()->get('idEval');
+            $Verf = Practicas::VerfDel($id);
 
+            if ($Verf->count() > 0) {
+                $estado = "SINPERMISO";
+                $mensaje = 'Esta Evaluación es Propia de la Plataforma,  No puede ser Eliminada...';
+                $icon = 'warning';
+                $opc = "VU";
+            } else {
+                $estado = "ELIMINADO";
+                $respuesta = Practicas::editarestado($id, $estado);
+                if ($respuesta) {
+                    if ($estado == "ELIMINADO") {
+                        $Log = Log::Guardar('Practica Eliminada', $id);
+                        $mensaje = 'Operación Realizada de Manera Exitosa';
+                        $icon = 'success';
+                    }
+                } else {
+                    $mensaje = 'La Operación no pudo ser Realizada';
+                }
+            }
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                    'mensaje' => $mensaje,
+                    'id' => $id,
+                    'opc' => $opc,
+                    'icon' => $icon,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function CargarEvaluacion()
+    {
+        if (Auth::check()) {
+            $ideva = request()->get('ideva');
+
+            $Evaluacion = Evaluacion::BusEval($ideva);
+
+            $PregEval = CosEval::GrupPreg($ideva);
+            /////CONUSLTAR PREGUNTA ENSAYO
+            $PregEnsayo = EvalPregEnsay::consulPregEnsayAll($ideva);
+
+            ///////CONSULTAR PREGUNTA COMPLETE
+            $PregComple = EvalPregComplete::ConsultCompleteAll($ideva);
+
+            ///////CONSULTAR PREGUNTA OPCION MULTIPLE COMPLE
+            $PregMult = PregOpcMul::ConsulPregAll($ideva);
+            $OpciMult = OpcPregMul::ConsulGrupOpcPregAll($ideva);
+
+            ///////CONSULTAR PREGUNTA VERDADERO Y FALSO
+            $PregVerFal = EvalVerFal::VerFal($ideva);
+
+            ///////CONSULTAR PREGUNTA RELACIONE
+            $PregRelacione = PregRelacione::ConRelaAll($ideva);
+            $PregRelIndi = EvalRelacione::PregRelDefAll($ideva);
+            $PregRelResp = EvalRelacioneOpc::PregRelOpcAll($ideva);
+            $PregRelRespAdd = EvalRelacioneOpc::PregRelOpcaddAll($ideva);
+
+            /////////CONSULTAR TALLER
+            $PregTaller = EvalTaller::PregTallerAll($ideva);
+
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'Evaluacion' => $Evaluacion,
+                    'PregEval' => $PregEval,
+                    'PregEnsayo' => $PregEnsayo,
+                    'PregComple' => $PregComple,
+                    'PregMult' => $PregMult,
+                    'OpciMult' => $OpciMult,
+                    'PregVerFal' => $PregVerFal,
+                    'PregRelacione' => $PregRelacione,
+                    'PregRelIndi' => $PregRelIndi,
+                    'PregRelResp' => $PregRelResp,
+                    'PregRelRespAdd' => $PregRelRespAdd,
+                    'PregTaller' => $PregTaller,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function VideoEval()
+    {
+        if (Auth::check()) {
+            $datos = request()->all();
+            $datos['animacion'] = "SI";
+
+            $idEval = "";
+            $calxdoc = "NO";
+            if ($datos['Id_Eval'] === null) {
+                $ContEval = Evaluacion::Guardar($datos, $calxdoc);
+                $idEval = $ContEval;
+            } else {
+                $idEval = request()->get('Id_Eval');
+                $ContEval = Evaluacion::ModifEval($datos, $idEval, $calxdoc);
+            }
+
+            $ConsEval = CosEval::GrupPreg($idEval);
+
+            foreach ($ConsEval as $Preg) {
+                if ($Preg->tipo == "PREGENSAY" || $Preg->tipo == "COMPLETE" || $Preg->tipo == "TALLER") {
+                    $calxdoc = "SI";
+                }
+            }
+            $ModCalxdoc = Evaluacion::ModifEvalCalxDoc($idEval, $calxdoc);
+
+            if (request()->hasfile('archiVideo')) {
+                $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                $name = self::sanear_string($prefijo . '_' . request()->file('archiVideo')->getClientOriginalName());
+                request()->file('archiVideo')->move(public_path() . '/app-assets/Evaluacion_PregDidact/', $name);
+                $datos['archivo'] = $name;
+                if ($datos['id-video'] === null) {
+                    $EvPDidact = EvalPregDidact::Guardar($datos, $idEval);
+                    $EvPDidact = EvalPregDidact::PregDida($EvPDidact);
+                } else {
+                    $EvPDidact = EvalPregDidact::Modificar($datos, $idEval);
+                    $EvPDidact = EvalPregDidact::PregDida($idEval);
+                }
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'idEval' => $idEval,
+                    'EvPDidact' => $EvPDidact,
+                ]);
+            }
         }
     }
 
@@ -527,7 +1524,26 @@ class AdministracionController extends Controller
             if ($tip == "PREGENSAY") {
                 $respuesta = EvalPregEnsay::DelPreg($id);
                 $delcons = CosEval::DelPreg($id);
-            } 
+            } else if ($tip == "COMPLETE") {
+                $respuesta = EvalPregComplete::DelPreg($id);
+                $delcons = CosEval::DelPreg($id);
+            } else if ($tip == "OPCMULT") {
+                $respuesta = PregOpcMul::DelPregunta((int) $id);
+                $respuesta = OpcPregMul::DelOpciones($id);
+                $delcons = CosEval::DelPreg($id);
+            } else if ($tip == "VERFAL") {
+                $respuesta = EvalVerFal::DelPreg($id);
+                $delcons = CosEval::DelPreg($id);
+            } else if ($tip == "RELACIONE") {
+                $respuesta = PregRelacione::DelPreg((int) $id);
+                $respuesta = EvalRelacione::DelPreg($id);
+                $respuesta = EvalRelacioneOpc::DelPreg($id);
+                $delcons = CosEval::DelPreg($id);
+            } else if ($tip == "TALLER") {
+                $respuesta = EvalTaller::EliminarArch($id);
+                $delcons = CosEval::DelPreg($id);
+            }
+
             $calxdoc = "NO";
 
             $ConsEval = CosEval::GrupPreg($idEval);
@@ -559,10 +1575,33 @@ class AdministracionController extends Controller
         }
     }
 
+    public function EliminarPregPract()
+    {
+        $mensaje = "";
+        $id = request()->get('id');
+        if (Auth::check()) {
+            $respuesta = PregPractica::DelPregunta((int) $id);
+            $respuesta = OpcPractica::DelOpciones($id);
+            if ($respuesta) {
+                $Log = Log::Guardar('Pregunta Practica Eliminada', $id);
+                $mensaje = 'Operación Realizada de Manera Exitosa';
+            } else {
+                $mensaje = 'La Operación no pudo ser Realizada';
+            }
+            if (request()->ajax()) {
+                return response()->json([
+                    'mensaje' => $mensaje,
+                    'id' => $id,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
 
     public function sanear_string($string)
     {
-
         $string = trim($string);
 
         $string = str_replace(

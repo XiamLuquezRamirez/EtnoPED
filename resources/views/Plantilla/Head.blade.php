@@ -23,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/quill/monokai-sublime.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/quill/quill.snow.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/quill/quill.bubble.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/ui/plyr.min.css') }}">
 
     <!-- END: Vendor CSS-->
 
@@ -38,6 +39,13 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-gradient.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/login-register.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/app-todo.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/checkboxes-radios.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-callout.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/js/avnSkeleton/avnSkeleton.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/wizard.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/select-personalizado.css') }}">
+
+
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
@@ -46,7 +54,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/sweetalert2.min.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets/css/plugins/forms/validation/form-validation.css') }}">
-
+        <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/Hover-master/css/hover.css') }}">
     <!-- END: Custom CSS-->
 
 </head>

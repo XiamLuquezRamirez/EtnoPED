@@ -116,7 +116,7 @@
         .app-content .wizard > .actions > ul > li + li {
           margin-left: 10px; }
         .app-content .wizard > .actions > ul > li > a {
-          background: #00b5b8;
+          background: #f99f6b !important;
           color: #fff;
           display: block;
           padding: 7px 12px;

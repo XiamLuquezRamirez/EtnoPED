@@ -77,8 +77,8 @@
 
 .bs-callout-primary {
   display: block;
-  border-color: #00b5b8 !important;
-  background-color: #5cfcff;
+  border-color: #FDEDCB !important;
+  background-color: #FDEDCB;
   border-radius: 0.25rem;
   color: black; }
   .bs-callout-primary h1, .bs-callout-primary h2, .bs-callout-primary h3, .bs-callout-primary h4, .bs-callout-primary h5, .bs-callout-primary h6 {

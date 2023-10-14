@@ -11,7 +11,7 @@ class EvalPregEnsay extends Model
     {
         $respuesta = DB::connection('mysql')->table('etno_ped.eval_pregensayo')->insertGetId([
             'evaluacion' => $eval,
-            'pregunta' => $datos['pregEnsayo'],
+            'pregunta' => $datos['pregEditEnsayo'],
             'puntaje' => $datos['puntaje']
         ]);
         return $respuesta;
@@ -20,7 +20,7 @@ class EvalPregEnsay extends Model
     public static function ModifPreg($datos)
     {
         $respuesta = DB::connection('mysql')->table('etno_ped.eval_pregensayo')->where('id', $datos['id-pregensay'])->update([
-            'pregunta' => $datos['pregEnsayo'],
+            'pregunta' => $datos['pregEditEnsayo'],
             'puntaje' => $datos['puntaje']
         ]);
         return $respuesta;
@@ -37,6 +37,17 @@ class EvalPregEnsay extends Model
         return DB::connection('mysql')->table('etno_ped.eval_pregensayo')
         ->where('id', $id)
         ->delete();
+    }
+
+    
+    public static function consulPregEnsayAll($id)
+    {
+        
+        return DB::connection('mysql')->table('etno_ped.eval_pregensayo')
+        ->where('evaluacion', $id)
+            ->get();
+       
+
     }
 
 }
