@@ -21,8 +21,8 @@
 
     </div>
     <div class="content-body">
-        <div class="card p-1" style="border-radius:10px">
-            <div class="card-header">
+        <div class="card p-1" style="border-radius:10px;background-color: rgba(0,0,0,0);">
+            <div class="card-header" style="background-color: rgba(0,0,0,0);">
                 <h4 class="card-title">Medicinas Tradicionales</h4>
                 <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                 <div class="heading-elements">
@@ -41,9 +41,9 @@
                 <div class="row" id="div-detmedicina" style="display: none;">
                     <div class="row match-height" style="width: 100%;">
                         <!-- Description lists horizontal -->
-                        <div class="col-sm-12 col-md-8">
-                            <div class="card" style="height: 432.517px;">
-                                <div class="card-header">
+                        <div class="col-sm-12 col-md-8" style="">
+                            <div class="card" style="height: 432.517px; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
+                                <div class="card-header" >
                                     <h4 id="titulo-medicina" class="card-title"></h4>
                                     <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
@@ -64,8 +64,8 @@
                         <!--/ Description lists horizontal-->
 
                         <!-- Description lists vertical-->
-                        <div class="col-sm-12 col-md-4">
-                            <div class="card" style="height: 432.517px;">
+                        <div class="col-sm-12 col-md-4" style="">
+                            <div class="card" style="height: 432.517px; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                                 <div class="card-header">
                                     <h4 class="card-title">Preparación</h4>
                                     <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
@@ -171,9 +171,9 @@
                         success: function(response) {
                             $.each(response.Medicinas, function(i, item) {
                                 tdTable +=
-                                    '  <div class="col-12 pb-1" style="cursor:pointer;" ><div onclick="$.verDetMedicina(' +
+                                    '  <div class="col-12 pb-1" style="cursor:pointer;" ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;" onclick="$.verDetMedicina(' +
                                     item.id +
-                                    ');" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1">' +
+                                    ');" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1 pl-2 hvr-grow-shadow">' +
                                     '<h4 class="primary">' + item.nombre + '</h4>' +
                                     '</div></div>';
                             });

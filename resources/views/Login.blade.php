@@ -43,7 +43,7 @@
 
 <!-- BEGIN: Body-->
 
-<body class="vertical-layout vertical-menu 1-column  bg-full-screen-image blank-page blank-page" data-open="click" data-menu="vertical-menu" data-col="1-column">
+<body class="vertical-layout vertical-menu 1-column  bg-full-screen-image blank-page blank-page" style="background-size: 100% 100% !important" data-open="click" data-menu="vertical-menu" data-col="1-column">
     <!-- BEGIN: Content-->
     <div class="app-content content">
         <div class="content-overlay"></div>
@@ -52,8 +52,8 @@
             </div>
             <div class="content-body">
                 <section class="row flexbox-container">
-                    <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="col-lg-4 col-md-8 col-10 box-shadow-2 p-0">
+                    <div class="col-12 d-flex align-items-center justify-content-right">
+                        <div class="col-lg-4 col-md-8 col-10 box-shadow-2 p-0 ml-4">
                             <div class="card border-grey border-lighten-3 px-1 py-1 m-0">
                                 <div class="card-header border-0">
                                     <div class="card-title text-center">

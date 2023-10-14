@@ -24,6 +24,7 @@ Route::get('/', function () {
 
 ///INICIO DE SESIÓN
 Route::post('/Login', [UsuariosController::class,'Login']);
+Route::get('/Perfil', [UsuariosController::class,'Perfil']);
 Route::get('/Logout', [UsuariosController::class,'Logout']);
 Route::get('/Principal', [UsuariosController::class,'Administracion']);
 
@@ -109,3 +110,12 @@ Route::post('/AdminDiccionario/EliminarDiccionario', [AdministracionController::
 ////VISUALIZACION DICCIONARIO
 Route::post('/Diccionario/CargarPalabraDicc', [VisualizacionController::class,'CargarPalabraDicc']);
 Route::post('/Diccionario/CargarDetpalabra', [VisualizacionController::class,'CargarDetpalabra']);
+
+
+
+
+
+////PERFIL DE USUARIO
+Route::post('/Usuarios/ValidarUsuario', [UsuariosController::class,'ValidarUsuario']);
+Route::post('/Usuarios/ValidarIdentificacion', [UsuariosController::class,'ValidarIdentificacion']);
+Route::post('/Perfil/GuardarPerfil', [UsuariosController::class,'GuardarPerfil']);

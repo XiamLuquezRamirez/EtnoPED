@@ -54,7 +54,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/sweetalert2.min.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets/css/plugins/forms/validation/form-validation.css') }}">
-
+        <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/Hover-master/css/hover.css') }}">
     <!-- END: Custom CSS-->
 
 </head>

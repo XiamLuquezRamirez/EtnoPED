@@ -12,7 +12,7 @@
                         data-target="#navbar-mobile"><i class="fa fa-ellipsis-v"></i></a></li>
             </ul>
         </div>
-        <div class="navbar-container content">
+        <div class="navbar-container content" style="background-image: url({{ asset('app-assets/images/backgrounds/bg-header.png') }});  background-repeat: no-repeat; "> 
             <div class="collapse navbar-collapse" id="navbar-mobile">
                 <ul class="nav navbar-nav mr-auto float-left">
                                       <li class="nav-item d-none d-md-block"><a class="nav-link nav-link-expand" href="#"><i
@@ -32,9 +32,13 @@
                                 class="user-name">{{ Auth::user()->nombre_usuario }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="user-profile.html"><i class="feather icon-user"></i> Editar
+                            @if(Auth::user()->tipo_usuario != 'Administrador')
+                            <a class="dropdown-item" href="{{ url('/Perfil') }}"><i class="feather icon-user"></i> Editar
                                 Perfil</a>
-                            <div class="dropdown-divider"></div><a class="dropdown-item" href="{{ url('/Logout') }}"><i
+                                <div class="dropdown-divider"></div>
+                            @endif    
+                            
+                            <a class="dropdown-item" href="{{ url('/Logout') }}"><i
                                     class="feather icon-power"></i> Cerrar Sesión</a>
                         </div>
                     </li>

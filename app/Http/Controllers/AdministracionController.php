@@ -45,8 +45,8 @@ class AdministracionController extends Controller
                 return view('Administracion.GestionEvaluaciones', compact('id', 'tema', 'unidad'));
             } else if ($ori == "practicas") {
                 $detTemas = Tematicas::BuscarDetTema($id);
-                $tema = $detTemas->titulo;
-                $unidad = $detTemas->nombre;
+                $tema = strip_tags($detTemas->titulo);
+                $unidad = strip_tags($detTemas->nombre);
                 return view('Administracion.GestionarPracticas', compact('id', 'tema', 'unidad'));
             }
         } else {

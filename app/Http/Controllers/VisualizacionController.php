@@ -485,7 +485,7 @@ class VisualizacionController extends Controller
                     $display="none;";
                 }
 
-                $div_palabra .= ' <ul class="media-list p-0" style="cursor: pointer;" >
+                $div_palabra .= ' <ul class="media-list p-0 border-blue" style="cursor: pointer;" >
                 <li class="media row justify-content-center align-items-center" >
                     <div class="col-2 media-left">
                         <a href="#">
@@ -503,10 +503,10 @@ class VisualizacionController extends Controller
                 }
 
                 $div_palabra .= '<p style="margin-bottom: 0px"><span class="text-bold-600">Pronunciación: </span> ' . $prononciacion . '</p>
-                        <p style="margin-bottom: 0px"><span class="text-bold-600">Definición: </span> ' . $definicion . ' <code style="display: '.$display.'" class="highlighter-rouge" onclick="$.abrirEjemplo('.$x.')"> - Ejemplo</code></p>
+                        <p style="margin-bottom: 0px"><span class="text-bold-600">Definición: </span> ' . $definicion . ' <code style="display: '.$display.'; background-color: transparent;" class="highlighter-rouge" onclick="$.abrirEjemplo('.$x.')"> - Ejemplo</code></p>
                    
                         </div>
-                        <div id="contEjemplo'.$x.'" style="display: '.$display.'">'.$item->ejemplo.'</div>
+                        <div id="contEjemplo'.$x.'" style="display:none; ">'.$item->ejemplo.'</div>
                 </li>
             </ul>';
 

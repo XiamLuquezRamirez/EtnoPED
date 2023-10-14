@@ -20,9 +20,9 @@
         </div>
 
     </div>
-    <div class="content-body">
+    <div class="content-body" >
         <!-- Search form-->
-        <section id="search-website" class="card overflow-hidden">
+        <section id="search-website" style="background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})" class="card overflow-hidden">
             <div class="card-header">
                 <h4 class="card-title">Realiza tu busqueda</h4>
                 <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
@@ -36,7 +36,7 @@
             <div class="card-content collapse show">
                 <div class="card-body pb-0">
                     <fieldset class="form-group position-relative mb-0">
-                        <input type="text" class="form-control form-control-xl input-xl" id="searchInput"
+                        <input type="text" style="color: #404E67" class="form-control form-control-xl input-xl" id="searchInput"
                             placeholder="Ingresa la Palabra a Buscar ...">
 
                     </fieldset>

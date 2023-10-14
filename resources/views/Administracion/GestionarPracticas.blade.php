@@ -124,8 +124,8 @@
                                         <div class="col-6">
                                             <div class="card-text">
                                                 <dl class="row">
-                                                    <dt class="col-sm-2">Unidad:</dt>
-                                                    <dd class="col-sm-10">{{ $tema }}</dd>
+                                                    <dt class="col-sm-3">Unidad:</dt>
+                                                    <dd class="col-sm-9">{{ $tema }}</dd>
                                                 </dl>
                                             </div>
                                         </div>

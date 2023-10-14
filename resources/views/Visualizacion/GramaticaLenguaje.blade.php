@@ -31,16 +31,11 @@
 
     </div>
     <div class="content-body">
-        <div class="card p-1" style="border-radius:10px">
-            <div class="card-header">
+        <div class="card p-1" style="border-radius:10px; background-color: rgba(0,0,0,0);">
+            <div class="card-header" style="background-color: rgba(0,0,0,0);">
                 <h4 id='tit-gram' class="card-title">Unidades Tematicas</h4>
                 <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
-                <div class="heading-elements">
-                    <ul class="list-inline mb-0">
-                        <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
 
-                    </ul>
-                </div>
             </div>
             <div class="card-content collapse show">
                 <div class="row" id="div-unidades">
@@ -291,10 +286,10 @@
         </div>
     </div>
 
-    <div class="modal fade text-left" id="ModEval" tabindex="-1" role="dialog" aria-labelledby="myModalLabel15"
+    <div class="modal fade text-left"  id="ModEval"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel15"
         aria-hidden="true">
         <div class="modal-dialog  modal-xl" role="document">
-            <div class="modal-content ">
+            <div class="modal-content" style="background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                 <div class="modal-body">
 
                     <article id='DetEval' style="text-transform: capitalize;" class="wrapper">
@@ -312,7 +307,7 @@
                     <div id="contTiempo" style="text-align: left; font-size: 25px;display: none; padding-right: 20px;">
                         <div class="content-header row">
 
-                            <div class="content-header-left col-md-12 col-12">
+                            <div class="content-header-left col-md-12 col-12" style="pointer-events:none;">
                                 <div class="btn-group float-md-right" role="group"
                                     aria-label="Button group with nested dropdown">
 
@@ -471,13 +466,18 @@
                         async: false,
                         dataType: "json",
                         success: function(response) {
+                            var textoTitu = "";
                             $.each(response.Unidades, function(i, item) {
-                                descripcion = item.descripcion !== null ? item.descripcion : "";
+                                descripcion = item.descripcion !== null ? item
+                                    .descripcion : "";
+                                tempDivTitu.innerHTML = item.nombre;
+                                textoTitu = tempDivTitu.firstChild.textContent ||
+                                    tempDivTitu.firstChild.innerText;
                                 tdTable +=
-                                    '  <div class="col-12 pb-1" ><div style="cursor:pointer;background-image: url(\'{{ asset("/app-assets/images/backgrounds/bg_callout.png") }}\'); background-size: 100% 100%;height: 100px; width:100%;" onclick="$.verTemasUnidad(' +
+                                    '  <div class="col-12 pb-1 justify-content-center " ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;height: 100px; width:100%;display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="$.verTemasUnidad(' +
                                     item.id +
-                                    ');" class="bs-callout-primary p-1 justify-content-center align-items-center">' +
-                                    '<h4 class="primary">' + item.nombre + '</h4>' +
+                                    ');" class="bs-callout-primary p-1 pl-2 align-items-stretch hvr-grow-shadow">' +
+                                    '<h4 class="primary ">' + textoTitu + '</h4>' +
                                     ' ' + descripcion + '' +
                                     '</div></div>';
                             });
@@ -512,19 +512,21 @@
 
 
                             tempDivTitu.innerHTML = response.Unidad.nombre;
-                            var textoTitu = tempDivTitu.firstChild.textContent || tempDivTitu.firstChild.innerText;
+                            var textoTitu = tempDivTitu.firstChild.textContent ||
+                                tempDivTitu.firstChild.innerText;
 
                             $("#titulo").html("Gramatica y Lenguaje - " + textoTitu);
 
 
-                          
+
                             $.each(response.Temas, function(i, item) {
                                 tdTable +=
-                                    '  <div class="col-12 pb-1" style="cursor:pointer;" ><div onclick="$.verTemas(' +
+                                    '  <div class="col-12 pb-1 justify-content-center " ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;height: 100px; width:100%;display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="$.verTemas(' +
                                     item.id +
-                                    ');" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1">' +
-                                    '<h4 class="primary">' + item.titulo + '</h4>' +
+                                    ');" class="bs-callout-primary p-1 pl-2 align-items-stretch hvr-grow-shadow">' +
+                                    '<h4 class="primary ">' + textoTitu + '</h4>' +
                                     '</div></div>';
+
                             });
 
                             $("#div-temas").html(tdTable);
@@ -553,6 +555,7 @@
                     let x = 1;
                     let claseCallout = "";
                     let iconCallout = "";
+                    let img = "bg_callout_video.png";
                     $.ajax({
                         type: "POST",
                         url: url,
@@ -562,29 +565,37 @@
                         success: function(response) {
 
                             tempDivTitu.innerHTML = response.Temas.titulo;
-                            var textoTitu = tempDivTitu.firstChild.textContent || tempDivTitu.firstChild.innerText;
+                            var textoTitu = tempDivTitu.firstChild.textContent ||
+                                tempDivTitu.firstChild.innerText;
 
                             $("#titulo").html("Gramatica y Lenguaje - " + textoTitu);
 
                             //cargar Tematica
                             $("#titu").html(response.Temas.titulo);
                             $("#conte").html(response.Temas.contenido);
-
+                            let urlMul = "";
                             //cargarMultimedia
                             $.each(response.TemasMult, function(i, item) {
 
                                 if (item.tipo_multimedia === 'application/pdf') {
                                     claseCallout = "danger";
                                     iconCallout = "fa-file-pdf-o";
+                                    img = "bg_callout_pdf.png";
                                 } else if (item.tipo_multimedia.substr(0, 5) ===
                                     'video') {
                                     claseCallout = "info";
                                     iconCallout = "fa-file-video-o";
+                                    img = "bg_callout_img.png";
                                 } else {
                                     claseCallout = "success";
                                     iconCallout = "fa-picture-o";
+                                    img = "bg_callout_video.png";
                                 }
-                                console.log(item.url_contenido);
+
+
+                                urlMul = $('#urlMult').data("ruta") +
+                                    "/images/backgrounds/" + img;
+
 
                                 multi +=
                                     ' <div style="cursor:pointer;" onclick="$.Ver(this.id);" id="div_' +
@@ -593,12 +604,8 @@
                                     .tipo_multimedia + '" class="bs-callout-' +
                                     claseCallout + ' callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
-                                    '<div class="d-flex align-items-center bg-' +
-                                    claseCallout + ' p-2">' +
-                                    '<i class="fa ' + iconCallout +
-                                    ' fa-lg white"></i>' +
-                                    '</div>' +
-                                    '<div class="media-body p-1">' +
+                                    '<div class="media-body p-1 pl-2 hvr-grow-shadow" style="background-image: url(' +
+                                    urlMul + '); background-size: 100% 100%;  border-radius:7px;">' +
                                     '<strong>' + item.nombre.slice(0, -4) +
                                     '</strong>' +
                                     '</div>' +
@@ -610,8 +617,12 @@
                             $("#div-multimedia").html(multi);
 
                             x = 1;
+                            let urlEjemplo = "";
                             //cargar ejemplos
                             $.each(response.TemasEjemplos, function(i, item) {
+
+                                urlEjemplo = $('#urlMult').data("ruta") +
+                                    "/images/backgrounds/bg_callout_ejemplo.png";
 
                                 ejemplos +=
                                     '<div style="display:none;" id="contEjemplohide' +
@@ -622,10 +633,10 @@
                                     '"  data-audio="' + item.url_audio +
                                     '" class="bs-callout-danger callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
-                                    '<div class="d-flex align-items-center bg-danger p-2">' +
-                                    '<i class="fa fa-child fa-lg white"></i>' +
-                                    '</div>' +
-                                    '<div class="media-body p-1">' +
+
+                                    '<div class="media-body p-1 pl-2 hvr-grow-shadow" style="background-image: url(' +
+                                    urlEjemplo +
+                                    '); background-size: 100% 100%;  border-radius:7px;">' +
                                     '<strong>' + item.nombre + '</strong>' +
                                     '</div>' +
                                     '</div>' +
@@ -636,8 +647,11 @@
                             $("#div-ejemplos").html(ejemplos);
 
                             x = 1;
+                            let urlPractica = "";
                             //cargar practicas
                             $.each(response.TemasPracticas, function(i, item) {
+                                urlPractica = $('#urlMult').data("ruta") +
+                                    "/images/backgrounds/bg_callout_ejemplo.png";
 
                                 practicas +=
                                     '<div style="cursor:pointer;" id="practica' +
@@ -645,10 +659,10 @@
                                     '" onclick="$.VerPractica(' + item.id +
                                     ');"  class="bs-callout-danger callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
-                                    '<div class="d-flex align-items-center bg-danger p-2">' +
-                                    '<i class="fa fa-comments-o fa-lg white"></i>' +
-                                    '</div>' +
-                                    '<div class="media-body p-1">' +
+
+                                    '<div class="media-body p-1 pl-2 hvr-grow-shadow" style="background-image: url(' +
+                                    urlPractica +
+                                    '); background-size: 100% 100%;  border-radius:7px; ">' +
                                     '<strong>' + item.titulo + '</strong>' +
                                     '<p>' + item.objetivo + '</p>' +
                                     '</div>' +
@@ -659,33 +673,32 @@
 
                             $("#div-practicas").html(practicas);
                             x = 1;
-                            let classCallout = "info";
-                            let classFa = "fa-square-o";
+                            let estadoEval = "";
+                            let urlEvaluacion = "";
+
                             //cargar evaluación
                             $.each(response.TemasEvaluacion, function(i, item) {
 
                                 if (item.estado_eval == "TERMINADA" || item
                                     .estado_eval == "CALIFICADA") {
-                                    classCallout = "success";
-                                    classFa = "fa-check-square-o";
+                                    estadoEval = "bg_callout_eval_ok.png";
                                 } else {
-                                    classCallout = "info";
-                                    classFa = "fa-square-o";
+                                    estadoEval = "bg_callout_eval.png";
                                 }
+
+                                urlEvaluacion = $('#urlMult').data("ruta") +
+                                    "/images/backgrounds/" + estadoEval;
+
 
                                 evaluacion +=
                                     '<div style="cursor:pointer;" id="evaluacion' +
                                     item.id + '" data-titulo="' + item.titulo +
                                     '" onclick="$.MostEval(' + item.id +
-                                    ');"  class="bs-callout-' + classCallout +
-                                    ' callout-bordered mb-1">' +
+                                    ');"  class="callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
-                                    '<div class="d-flex align-items-center bg-' +
-                                    classCallout + ' p-2">' +
-                                    '<i class="fa ' + classFa +
-                                    ' fa-lg white"></i>' +
-                                    '</div>' +
-                                    '<div class="media-body p-1">' +
+                                    '<div class="media-body p-1 pl-2 hvr-grow-shadow" style="background-image: url(' +
+                                    urlEvaluacion +
+                                    '); background-size: 100% 100%; border-radius:7px;">' +
                                     '<strong>' + item.titulo + '</strong>' +
                                     '</div>' +
                                     '</div>' +
@@ -837,8 +850,8 @@
                             timer: 2500,
                             buttonsStyling: false
                         });
-                        
-                        
+
+
                     }
 
                 },
@@ -850,12 +863,12 @@
                     let opc = "";
 
                     var tempDiv = document.createElement('div');
-                    var texto ="";
-                   
+                    var texto = "";
+
                     for (let itemOpc of arrayOpciones) {
                         tempDiv.innerHTML = itemOpc.respuesta;
                         texto = tempDiv.firstChild.textContent || tempDiv.firstChild.innerText;
-                              opc += '<button style="width: 80%" type="button" data-id="' + itemOpc.correcta +
+                        opc += '<button style="width: 80%" type="button" data-id="' + itemOpc.correcta +
                             '" onclick="$.verificar_respuesta(this);" class="btn btn-outline-dark round btn-min-width mr-1 mb-1">' +
                             texto + '</button>';
                     }
@@ -897,7 +910,7 @@
                             });
 
                             actual = 0;
-                          setTimeout(() => {
+                            setTimeout(() => {
                                 $.cerrarPractica();
                             }, 1000)
                         }

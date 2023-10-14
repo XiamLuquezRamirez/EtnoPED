@@ -24,8 +24,8 @@
         
         <div class="row">
             <div class="col-sm-12 col-md-12"  >
-                <div class="card">
-                    <div class="card-header">
+                <div class="card p-1" style="border-radius:10px;background-color: rgba(0,0,0,0);">
+                    <div class="card-header" style="background-color: rgba(0,0,0,0);">
                         <h4 id="titulo-usos" class="card-title">Listado de Usos y Costumbres</h4>
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
@@ -130,9 +130,9 @@
                         success: function(response) {
                             $.each(response.Usos, function(i, item) {
                                 tdTable +=
-                                    '  <div class="col-12 pb-1" style="cursor:pointer;" ><div onclick="$.verDetUsos(' +
+                                    '  <div class="col-12 pb-1" style="cursor:pointer;" ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;" onclick="$.verDetUsos(' +
                                     item.id +
-                                    ');" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1">' +
+                                    ');" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1 pl-2 hvr-grow-shadow">' +
                                     '<h4 class="primary">' + item.nombre + '</h4>' +
                                     '</div></div>';
                             });
