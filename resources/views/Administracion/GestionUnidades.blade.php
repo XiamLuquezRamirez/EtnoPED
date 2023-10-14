@@ -43,8 +43,7 @@
                             </div>
                             <div class="col-8">
                                 <div class="position-relative">
-                                    <input type="text" id="searchInput" class="form-control"
-                                        placeholder="Busqueda...">
+                                    <input type="text" id="searchInput" class="form-control" placeholder="Busqueda...">
                                     <div class="form-control-position">
                                         <i class="fa fa-search text-size-base text-muted"></i>
                                     </div>
@@ -103,42 +102,38 @@
 
                                     <div class="form-group">
                                         <label for="userinput5">Nombre:</label>
-                                        <div class="controls">
-                                            <input class="form-control border-primary" type="text" required
-                                                data-validation-required-message="This field is required" name="nombre"
-                                                placeholder="Nombre" id="nombre">
-                                        </div>
+                                        <textarea cols="80" id="nombre" name="nombre" rows="10"></textarea>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label for="userinput8">Descripción:</label>
-                                        <textarea id="descripcion" rows="5" class="form-control border-primary" name="descripcion"
-                                            placeholder="Descripcion"></textarea>
-                                    </div>
-
                                 </div>
 
-                                <div class="form-actions right">
-                                    <button type="reset" class="btn btn-warning mr-1">
-                                        <i class="feather icon-x"></i> Cancelar
-                                    </button>
-                                    <button type="button" id="btnGuardar" onclick="$.guardar()"
-                                        class="btn btn-success">
-                                        <i class="fa fa-check-square-o"></i> Guardar
-                                    </button>
-                                    <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
-                                        class="btn btn-primary">
-                                        <i class="feather icon-plus"></i> Nuevo
-                                    </button>
+                                <div class="form-group">
+                                    <label for="userinput8">Descripción:</label>
+                                    <textarea id="descripcion" rows="5" class="form-control border-primary" name="descripcion"
+                                        placeholder="Descripcion"></textarea>
                                 </div>
-                            </form>
 
                         </div>
-                    </div>
 
+                        <div class="form-actions right">
+                            <button type="button"  onclick="$.nuevo();" class="btn btn-warning mr-1">
+                                <i class="feather icon-x"></i> Cancelar
+                            </button>
+                            <button type="button" id="btnGuardar" onclick="$.guardar()" class="btn btn-success">
+                                <i class="fa fa-check-square-o"></i> Guardar
+                            </button>
+                            <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
+                                class="btn btn-primary">
+                                <i class="feather icon-plus"></i> Nuevo
+                            </button>
+                        </div>
+                        </form>
+
+                    </div>
                 </div>
+
             </div>
         </div>
+    </div>
 
     </div>
 
@@ -160,6 +155,67 @@
 @endsection
 @section('scripts')
     <script>
+        ///////////////////CONFIGURACION EDITOR
+
+        CKEDITOR.editorConfig = function(config) {
+            config.toolbarGroups = [{
+                    name: 'document',
+                    groups: ['mode', 'document', 'doctools']
+                },
+                {
+                    name: 'clipboard',
+                    groups: ['clipboard', 'undo']
+                },
+                {
+                    name: 'styles',
+                    groups: ['styles']
+                },
+                {
+                    name: 'editing',
+                    groups: ['find', 'selection', 'spellchecker', 'editing']
+                },
+                {
+                    name: 'forms',
+                    groups: ['forms']
+                },
+                {
+                    name: 'basicstyles',
+                    groups: ['basicstyles', 'cleanup']
+                },
+                {
+                    name: 'paragraph',
+                    groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']
+                },
+                {
+                    name: 'links',
+                    groups: ['links']
+                },
+                {
+                    name: 'insert',
+                    groups: ['insert']
+                },
+                {
+                    name: 'colors',
+                    groups: ['colors']
+                },
+                {
+                    name: 'tools',
+                    groups: ['tools']
+                },
+                {
+                    name: 'others',
+                    groups: ['others']
+                },
+                {
+                    name: 'about',
+                    groups: ['about']
+                }
+            ];
+
+            config.removeButtons =
+                'Source,Save,NewPage,ExportPdf,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Undo,Redo,Replace,Find,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,SelectAll,Button,ImageButton,HiddenField,Strike,CopyFormatting,RemoveFormat,Indent,Blockquote,Outdent,CreateDiv,JustifyLeft,JustifyCenter,JustifyRight,JustifyBlock,BidiLtr,BidiRtl,Language,Link,Unlink,Anchor,Flash,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Format,BGColor,ShowBlocks,About,Underline,Italic';
+        };
+
         $(document).ready(function() {
             $("#Princioal").removeClass("active");
             $("#MenuGramatica").addClass("has-sub open");
@@ -167,14 +223,15 @@
 
 
             $.extend({
-                cargar: function(page,searchTerm = '') {
+                cargar: function(page, searchTerm = '') {
                     var form = $("#formCargarUnidad");
                     var url = form.attr("action");
                     $('#page').remove();
                     $('#searchTerm').remove();
                     form.append("<input type='hidden' id='page' name='page'  value='" + page +
                         "'>");
-                    form.append("<input type='hidden' id='searchTerm' name='search'  value='" + searchTerm +
+                    form.append("<input type='hidden' id='searchTerm' name='search'  value='" +
+                        searchTerm +
                         "'>");
                     var datos = form.serialize();
 
@@ -207,25 +264,34 @@
                     });
                     $("#tituloUnidad").html("Gestionar Unidades Tematicas");
                     $("#accion").val("agregar");
-                    document.getElementById("formGuardar").reset();
+
+                    editorNombre.setData('');
+                    editorDescripcion.setData('');
+                  
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
-                  
+
 
                 },
                 guardar: function() {
-                    
-                    if($("#nombre").val().trim()==""){
-                            Swal.fire({
-                              title: " Alerta!",
-                              text: " Debe de ingresar el nombre!",
-                              type: "warning",
-                              confirmButtonClass: "btn btn-warning",
-                              buttonsStyling: false
-                            });
-                            
-                         
-                          return;
+
+                    for (var instanceName in CKEDITOR.instances) {
+                        CKEDITOR.instances[instanceName].updateElement();
+                    }
+
+                    var contenido = editorNombre.getData()
+                        .trim(); // Obtener el contenido y quitar espacios en blanco al inicio y al final
+
+                    if (contenido.length === 0) {
+                        Swal.fire({
+                            title: " Alerta!",
+                            text: " Debe de ingresar el nombre!",
+                            type: "warning",
+                            confirmButtonClass: "btn btn-warning",
+                            buttonsStyling: false
+                        });
+
+                        return;
                     }
 
                     var form = $("#formGuardar");
@@ -258,11 +324,10 @@
                                 });
                                 $("#btnGuardar").hide();
                                 $("#btnNuevo").show();
-                                
+
                             }
 
                             $.cargar();
-
 
                         },
                         error: function() {
@@ -277,8 +342,12 @@
                     });
 
                 },
-                nuevo: function(){
-                    document.getElementById("formGuardar").reset();
+                nuevo: function() {
+                    editorNombre.setData('');
+                    editorDescripcion.setData('');
+                    $("#accion").val("agregar");
+                    $("#btnGuardar").show();
+                    $("#btnNuevo").hide();
                 },
                 editar: function(id) {
 
@@ -311,8 +380,8 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            $("#nombre").val(respuesta.unidades.nombre);
-                            $("#descripcion").val(respuesta.unidades.descripcion);
+                            editorNombre.setData(respuesta.unidades.nombre);
+                            editorDescripcion.setData(respuesta.unidades.descripcion);
                         }
                     });
 
@@ -370,9 +439,31 @@
                         }
                     });
 
-                }
+                },
+                contDescripcion: function(idPrep) {
+                    CKEDITOR.replace('descripcion', {
+                        width: '100%',
+                        height: 150
+                    });
+
+                },
+                contNombre: function() {
+                    CKEDITOR.replace('nombre', {
+                        removePlugins: 'toolbar,dialogui', // Quitar todas las herramientas
+                        toolbar: [],
+                        width: '100%',
+                        height: 50
+                    });
+
+                },
             });
             $.cargar(1);
+
+            $.contDescripcion();
+            $.contNombre();
+
+            var editorNombre = CKEDITOR.instances.nombre;
+            var editorDescripcion = CKEDITOR.instances.descripcion;
 
             $(document).on('click', '.pagination a', function(event) {
                 event.preventDefault();
@@ -388,7 +479,7 @@
                 var searchTerm = $(this).val();
                 $.cargar(1, searchTerm); // Cargar la primera página con el término de búsqueda
             });
-            
+
         });
     </script>
 @endsection
