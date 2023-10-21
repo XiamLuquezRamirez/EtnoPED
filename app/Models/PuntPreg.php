@@ -35,11 +35,19 @@ class PuntPreg extends Model
 
     public static function ConsulPuntEval($eval, $alum)
     {
-
         $Opc = DB::connection('mysql')->table('etno_ped.puntuacion_preguntas')
             ->where('evaluacion', $eval)
             ->where('alumno', $alum)
             ->get();
+        return $Opc;
+    }
+
+    public static function ConsulPunt($preg, $alum)
+    {
+        $Opc = DB::connection('mysql')->table('etno_ped.puntuacion_preguntas')
+            ->where('pregunta', $preg)
+            ->where('alumno', $alum)
+            ->first();
         return $Opc;
     }
 }

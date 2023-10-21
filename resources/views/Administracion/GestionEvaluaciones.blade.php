@@ -2,9 +2,6 @@
 @section('title', 'Gestionar Evaluaciones')
 @section('Contenido')
 
-
-
-
     <div class="content-header row">
         <div class="content-header-left col-md-12 col-12 mb-2">
             <div class="row breadcrumbs-top">
@@ -23,7 +20,7 @@
 
     </div>
     <div class="content-body">
-        <div class="row">
+        <div class="row" id="div-listEval">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
@@ -89,6 +86,163 @@
                 </div>
             </div>
         </div>
+
+        <div id="detCalificacion" style="display: none;" class="row">
+            <div class="col-12">
+                <div class="card p-1">
+                    <div class="card-header">
+                        <h4 class="card-title">Lista de Estudiantes</h4>
+                        <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="reload"><i class="feather icon-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label class="form-label">Grado:</label>
+                                        <select class="form-control select2" id="selGrado">
+                                            <option value="" selected>Seleccionar...</option>
+                                            <option value="1">Grado 1</option>
+                                            <option value="2">Grado 2</option>
+                                            <option value="3">Grado 3</option>
+                                            <option value="4">Grado 4</option>
+                                            <option value="5">Grado 5</option>
+                                            <option value="6">Grado 6</option>
+                                            <option value="7">Grado 7</option>
+                                            <option value="8">Grado 8</option>
+                                            <option value="9">Grado 9</option>
+                                            <option value="10">Grado 10</option>
+                                            <option value="11">Grado 11</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Grupo:</label>
+                                        <select class="form-control select2" id="selGrupo">
+                                            <option value="" selected>Seleccionar...</option>
+                                            <option value="1">Grupo 1</option>
+                                            <option value="2">Grupo 2</option>
+                                            <option value="3">Grupo 3</option>
+                                            <option value="4">Grupo 4</option>
+                                            <option value="5">Grupo 5</option>
+                                            <option value="6">Grupo 6</option>
+                                            <option value="7">Grupo 7</option>
+                                            <option value="8">Grupo 8</option>
+                                            <option value="9">Grupo 9</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 d-flex align-items-center pt-2">
+
+                                    <div class="form-group">
+                                        <!-- basic buttons -->
+                                        <button onclick="$.consultar()" id="addRow"
+                                            class="btn btn-primary mb-2 ml-1"><i class="fa fa-search"></i>&nbsp;
+                                            Consultar</button>
+                                        <button type="button" id="btnGuardar" onclick="$.mostrasEval()"
+                                            class="btn btn-success mb-2 ml-1">
+                                            <i class="fa fa-reply"></i> Atras
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table id="recent-orders" class="table table-xs mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Opciones</th>
+                                            <th>#</th>
+                                            <th>Identificación</th>
+                                            <th>Nombre</th>
+                                            <th>Calificación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tr_alumnos">
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade text-left" id="large" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17"
+            aria-hidden="true">
+
+            <input type="hidden" class="form-control" id="Id_PregEns" value="" />
+            <input type="hidden" class="form-control" id="TipEva" value="" />
+            <input type="hidden" class="form-control" id="PuntMax" value="" />
+            <input type="hidden" class="form-control" id="TipCali" value="" />
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="text-transform: capitalize;" id="titu_tema"></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="card-subtitle line-on-side text-muted text-center font-small-3 mx-1 my-1">
+                            <h3 class="modal-title" id="h3_alumno" style="text-transform: uppercase;">
+                            </h3>
+
+                        </div>
+
+                        <br>
+                        <div id="enunciadoEval" style="padding-left:15px;"></div>
+                        <div id='cont_eva' style=" overflow-x: scroll;">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+
+                            <div class="col-md-8">
+                                <labe id="fechp">Fecha Presentación:</labe><br>
+                                <labe id="tocupado">Tiempo Ocupado:</labe><br>
+                                <labe id="irealizados">Intentos Realizados:</labe>
+                            </div>
+                            <div class="col-xl-4">
+                                <fieldset class="form-group">
+                                    <label for="roundText">Calificación:</label>
+                                    <input id="txt_califVis" style="text-align: center;color: white; font-weight: bold;"
+                                        class="form-control round" placeholder="Calificación" disabled type="text">
+                                    <input id="txt_calif" style="text-align: center;" class="form-control round"
+                                        placeholder="Calificación" type="hidden">
+                                    <input id="txt_califMax" style="text-align: center;" class="form-control round"
+                                        placeholder="Calificación" type="hidden">
+                                    <input id="TipCalif" style="text-align: center;" class="form-control round"
+                                        placeholder="Calificación" type="hidden">
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <button type="button" id="btn_salir" class="btn grey btn-outline-secondary"
+                            data-dismiss="modal"><i class="ft-corner-up-left position-right"></i>
+                            Salir</button>
+                        <button type="button" id="btn_Conversa" onclick="$.AbrirConv('M');" style="display: none;"
+                            class="btn btn-outline-primary"><i class="ft-message-square position-right"></i>
+                            Comentarios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <form class="form" method="POST" id="formAsigEval"
             action="{{ url('/AdminGramaticaLenguaje/guardarEvaluacion') }}">
 
@@ -107,7 +261,7 @@
             <input type="hidden" class="form-control" id="RutEvalVideo" value="{{ url('/') }}/" />
             <input type="hidden" data-id='id-dat' id="dattaller"
                 data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
-
+            <input type="hidden" name="idEvaluacion" id="idEvaluacion" value="">
             {{--  Modal nueva evaluacion  --}}
             <div class="modal fade text-left" style="position: fixed;" id="modalEvaluacion" tabindex="-1"
                 role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -135,8 +289,8 @@
                                         <div class="col-6">
                                             <div class="card-text">
                                                 <dl class="row">
-                                                    <dt class="col-sm-2">Unidad:</dt>
-                                                    <dd class="col-sm-10">{{ $tema }}</dd>
+                                                    <dt class="col-sm-3">Unidad:</dt>
+                                                    <dd class="col-sm-9">{{ $tema }}</dd>
                                                 </dl>
                                             </div>
                                         </div>
@@ -150,50 +304,86 @@
                                                             class="fa fa-ellipsis-v font-medium-3"></i></a>
                                                     <div class="heading-elements">
                                                         <ul class="list-inline mb-0">
-                                                            <li class="dropdown nav-item mega-dropdown d-none d-lg-block "><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown" aria-expanded="true">Configuración</a>
-                                                                <ul class="mega-dropdown-menu dropdown-menu row" style="width: 250px;">
+                                                            <li class="dropdown nav-item mega-dropdown d-none d-lg-block ">
+                                                                <a class="dropdown-toggle nav-link" href="#"
+                                                                    data-toggle="dropdown"
+                                                                    aria-expanded="true">Configuración</a>
+                                                                <ul class="mega-dropdown-menu dropdown-menu row"
+                                                                    style="width: 250px;">
                                                                     <li class="col-md-12">
                                                                         <div class="modal-header">
-                                                                            <h4 class="modal-title">Configuración de Evaluación</h4>
-                                                
+                                                                            <h4 class="modal-title">Configuración de
+                                                                                Evaluación</h4>
+
                                                                         </div>
                                                                         <div class="modal-body">
                                                                             <div class="card-body">
                                                                                 <div class="row">
-                                                                                    <div class="col-xl-12 col-lg-6 col-md-12">
+                                                                                    <div
+                                                                                        class="col-xl-12 col-lg-6 col-md-12">
                                                                                         <fieldset class="form-group">
-                                                                                            <label for="basicSelect">Intentos permitidos</label>
-                                                                                            <select class="select2 form-control" name="cb_intentosPer"
+                                                                                            <label
+                                                                                                for="basicSelect">Intentos
+                                                                                                permitidos</label>
+                                                                                            <select
+                                                                                                class="select2 form-control"
+                                                                                                name="cb_intentosPer"
                                                                                                 id="cb_intentosPer">
-                                                                                                <option value="1">1</option>
-                                                                                                <option value="2">2</option>
-                                                                                                <option value="3">3</option>
-                                                                                                <option value="4">4</option>
-                                                                                                <option value="5">5</option>
-                                                                                                <option value="6">6</option>
-                                                                                                <option value="7">7</option>
-                                                                                                <option value="8">8</option>
-                                                                                                <option value="9">9</option>
-                                                                                                <option value="10">10</option>
-                                                                                                <option value="0">Ilimitado</option>
+                                                                                                <option value="1">1
+                                                                                                </option>
+                                                                                                <option value="2">2
+                                                                                                </option>
+                                                                                                <option value="3">3
+                                                                                                </option>
+                                                                                                <option value="4">4
+                                                                                                </option>
+                                                                                                <option value="5">5
+                                                                                                </option>
+                                                                                                <option value="6">6
+                                                                                                </option>
+                                                                                                <option value="7">7
+                                                                                                </option>
+                                                                                                <option value="8">8
+                                                                                                </option>
+                                                                                                <option value="9">9
+                                                                                                </option>
+                                                                                                <option value="10">10
+                                                                                                </option>
+                                                                                                <option value="0">
+                                                                                                    Ilimitado</option>
                                                                                             </select>
                                                                                         </fieldset>
                                                                                     </div>
-                                                                                    <div class="col-xl-12 col-lg-6 col-md-12">
+                                                                                    <div
+                                                                                        class="col-xl-12 col-lg-6 col-md-12">
                                                                                         <div class="form-group">
-                                                                                            <label class="form-label" for="porc_modulo">Calificar Usando:</label>
-                                                                                            <select class="select2 form-control" id="cb_CalUsando" name="cb_CalUsando">
-                                                                                                <option value="Puntos">Puntos</option>
-                                                                                                <option value="Porcentaje">Porcentaje</option>
-                                                                                                <option value="Letra">Letra</option>
+                                                                                            <label class="form-label"
+                                                                                                for="porc_modulo">Calificar
+                                                                                                Usando:</label>
+                                                                                            <select
+                                                                                                class="select2 form-control"
+                                                                                                id="cb_CalUsando"
+                                                                                                name="cb_CalUsando">
+                                                                                                <option value="Puntos">
+                                                                                                    Puntos</option>
+                                                                                                <option value="Porcentaje">
+                                                                                                    Porcentaje</option>
+                                                                                                <option value="Letra">
+                                                                                                    Letra</option>
                                                                                             </select>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-lg-12">
                                                                                         <div class="form-group">
-                                                                                            <label class="form-label" for="porc_modulo">Puntos Máximos:</label>
-                                                                                            <input type="text" class="form-control" readonly="" id="Punt_Max"
-                                                                                                value="0" name="Punt_Max" />
+                                                                                            <label class="form-label"
+                                                                                                for="porc_modulo">Puntos
+                                                                                                Máximos:</label>
+                                                                                            <input type="text"
+                                                                                                class="form-control"
+                                                                                                readonly=""
+                                                                                                id="Punt_Max"
+                                                                                                value="0"
+                                                                                                name="Punt_Max" />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -369,8 +559,8 @@
                     </div>
                 </div>
             </div>
-      
-         </form>
+
+        </form>
     </div>
 
     </div>
@@ -393,6 +583,18 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminGramaticaLenguaje/EliminarEvaluacion') }}" id="formEliminarEvaluacion" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminGramaticaLenguaje/CargarAlumnosCalifGrupo') }}" id="formAuxiliarAlumnos" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminGramaticaLenguaje/RespEval') }}" id="formContenidoEva" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminGramaticaLenguaje/consulPregAlumno') }}" id="formAuxiliarCargEval" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -1658,11 +1860,11 @@
                     });
 
                 },
-              
+
                 salirModalEval: function() {
                     $('#modalEvaluacion').modal('toggle');
                 },
-                
+
                 //AGREGAR PREGUNTA ABIERTA
                 AddPregAbierta: function() {
                     edit = "no";
@@ -3221,6 +3423,17 @@
                     $('#RowOpcRelPregAdd' + id).remove();
 
                 },
+
+                calificar: function(idEval) {
+                    $("#idEvaluacion").val(idEval);
+
+                    // $("#titPractica").html("CALIFICACIÓN DE EVALUACIÓN");
+                    $("#div-listEval").hide();
+                    $("#detCalificacion").show();
+                    $("#tr_alumnos").html("");
+                    ////CARGAR ALUMNOS DE GRADO Y GRUPO CORRESPONDIENTES AL TEMA 
+
+                },
                 ////////////GUARDAR PREGUNTAS RELACIONE
                 GuardarEvalRelacione: function(id) {
                     for (var instanceName in CKEDITOR.instances) {
@@ -4155,7 +4368,6 @@
                 SalirVideo: function() {
                     $('#ModVidelo').modal('toggle');
                 },
-
                 //ELIMINAR PREGUNTA
                 DelPregunta: function(id_fila) {
                     Swal.fire({
@@ -4360,6 +4572,11 @@
                     window.open($('#dattaller').data("ruta") + "/" + $('#' + id).data("archivo"),
                         '_blank');
                 },
+
+                mostrasEval: function() {
+                    $('#div-listEval').show();
+                    $('#detCalificacion').hide();
+                },
                 UpdPunMax: function() {
                     let puntPre = $("#puntaje").val();
                     let puntmax = $("#Punt_Max").val();
@@ -4367,6 +4584,7 @@
                     $("#Punt_Max").val(total);
                 },
                 inicialEditorEnunciado: function() {
+
                     CKEDITOR.replace('enunciado', {
                         width: '100%',
                         height: 100
@@ -4430,6 +4648,770 @@
                         height: 100
                     });
 
+                },
+                consultar: function() {
+                    //   $("#titPractica").html("CALIFICACIÓN DE EVALUACIÓN");
+
+                    $("#tr_alumnos").html("");
+                    ////CARGAR ALUMNOS DE GRADO Y GRUPO CORRESPONDIENTES AL TEMA 
+                    let selGrado = $("#selGrado").val();
+                    let selGrupo = $("#selGrupo").val();
+                    let idEval = $("#idEvaluacion").val();
+                    var form = $("#formAuxiliarAlumnos");
+                    $("#graSel").remove();
+                    $("#gruSel").remove();
+                    $("#eval").remove();
+                    form.append("<input type='hidden' name='graSel' id='graSel' value='" +
+                        selGrado + "'>");
+                    form.append("<input type='hidden' name='gruSel' id='gruSel' value='" +
+                        selGrupo + "'>");
+                    form.append("<input type='hidden' name='eval' id='eval' value='" +
+                        idEval + "'>");
+
+                    var datos = form.serialize();
+                    var url = form.attr("action");
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        async: false,
+                        data: datos,
+                        success: function(respuesta) {
+
+                            $.dibujarRespuesta(respuesta);
+
+                        }
+                    });
+                },
+                dibujarRespuesta: function(respuesta) {
+                    let conse = 1;
+                    tablaAlumnos = "";
+                    $.each(respuesta.alumnosListado, function(index, listado) {
+                        let colorCal = "";
+                        let calificacion = "";
+                        tablaAlumnos += "<tr>";
+                        tablaAlumnos +=
+                            '<td class="text-truncate"><button type="button" onclick="$.CalEval(' +
+                            listado.id +
+                            ');" class="btn btn-outline-success btn-sm"><i class="fa fa-check-square-o"></i> Calificar</button></td>';
+                        tablaAlumnos += '<td class="text-truncate">' +
+                            conse + '</td>';
+                        tablaAlumnos += '<td class="text-truncate">' +
+                            listado.ident_alumno + '</td>';
+                        tablaAlumnos += '<td class="text-truncate">' +
+                            listado.nalumno + '</td>';
+
+                        if (listado.estado_eval == "CALIFICADA") {
+                            var porcentaje = (parseInt(listado.puntuacion) /
+                                parseInt(listado.punt_max)) * 100;
+                            console.log(porcentaje);
+                            if (porcentaje <= 50) {
+                                colorCal = "#f20d00";
+                            } else if (porcentaje > 50 && porcentaje <=
+                                60) {
+                                colorCal = "#F08D0E";
+                            } else if (porcentaje > 60 && porcentaje <=
+                                70) {
+                                colorCal = "#F5DA00";
+                            } else if (porcentaje > 70 && porcentaje <=
+                                80) {
+                                colorCal = "#C0EA1C";
+                            } else if (porcentaje > 80 && porcentaje <=
+                                100) {
+                                colorCal = "#1ECD60";
+                            }
+
+                            if (listado.calif_usando === "Puntos") {
+                                calificacion = "Calificada (" + listado.puntuacion + "/" +
+                                    listado.punt_max + ")";
+                            } else if (listado.calif_usando ===
+                                "Porcentaje") {
+                                calificacion = porcentaje + "%";
+                            } else {
+                                switch (true) {
+                                    case (porcentaje < 30):
+                                        calificacion =
+                                            "Deficiente (D) - (" + listado
+                                            .puntuacion + "/" + listado
+                                            .punt_max + ")"
+                                        break;
+                                    case (porcentaje >= 30 && porcentaje <
+                                        65):
+                                        calificacion =
+                                            "Insuficiente - (I) (" + listado
+                                            .puntuacion + "/" + listado
+                                            .punt_max + ")"
+                                        break;
+                                    case (porcentaje >= 65 && porcentaje <
+                                        80):
+                                        calificacion = "Aceptable (A) - (" +
+                                            listado.puntuacion + "/" +
+                                            listado.punt_max + ")"
+                                        break;
+                                    case (porcentaje >= 80 && porcentaje <
+                                        95):
+                                        calificacion =
+                                            "Sobresaliente (S) - (" +
+                                            listado.puntuacion + "/" +
+                                            listado.punt_max + ")"
+                                        break;
+                                    case (porcentaje >= 95):
+                                        calificacion = "Excelente (E) - (" +
+                                            listado.puntuacion + "/" +
+                                            listado.punt_max + ")"
+
+                                        $("#txt_califVis").val(
+                                            "Excelente (E)");
+                                        break;
+                                }
+                            }
+
+                        } else {
+                            calificacion = "Pendiente"
+                        }
+
+
+
+                        tablaAlumnos +=
+                            '<td class="text-truncate"><span class="badge badge-default badge-secondary" style="background-color: ' +
+                            colorCal + '">' + calificacion +
+                            '</span></td>';
+
+                        tablaAlumnos += "</tr>";
+                        conse++;
+                    });
+                    $("#tr_alumnos").html(tablaAlumnos);
+                },
+                CalEval: function(id) {
+
+                    if (id == undefined) {
+
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Este Alumno no ha Presentado la evaluación",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                    } else {
+
+                        $("#large").modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                        var form = $("#formContenidoEva");
+                        $("#idRespEval").remove();
+                        form.append("<input type='hidden' name='idRespEval' id='idRespEval' value='" +
+                            id + "'>");
+                        var url = form.attr("action");
+                        var datos = form.serialize();
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: datos,
+                            async: true,
+                            dataType: "json",
+                            success: function(respuesta) {
+                                $("#idAlumno").val(respuesta.Evaluacion.alumno);
+                                $("#titu_tema").html(respuesta.Evaluacion.titulo);
+
+                                $("#h3_alumno").html(respuesta.Evaluacion.nombre_alumno +
+                                    " " + respuesta.Evaluacion.apellido_alumno);
+
+                                var Puntos = respuesta.Evaluacion.puntuacion;
+                                var puntmax = respuesta.Evaluacion.punt_max;
+                                var calfvis = respuesta.Evaluacion.calificacion;
+                                $("#idAlumno").val(respuesta.Evaluacion.alumno);
+
+                                $("#enunciado").html(respuesta.Evaluacion.enunciado);
+                                $("#txt_calif").val(Puntos);
+                                $("#txt_califMax").val(puntmax);
+                                $("#txt_califVis").val(calfvis);
+
+                                $("#TipCalif").val(respuesta.Evaluacion.calif_usando);
+
+                                $("#fechp").html("<b>Fecha de Presentación:</b> " +
+                                    respuesta.Evaluacion.fecha_pres);
+                                $("#tocupado").html("<b>Tiempo Ocupado:</b> " + respuesta
+                                    .Evaluacion.tiempo_usado);
+                                $("#irealizados").html("<b>Intentos Realizados:</b> " +
+                                    respuesta.int_perm);
+
+                                var contenido =
+                                    '  <div class="row"><div class="card-content collapse show">' +
+                                    '  <div class="card-body" style="padding-top: 0px;">' +
+                                    '        <form method="post" action="{{ url('/') }}/Guardar/GuardarPuntPreg" id="formGuarCalPunt" class="number-tab-stepsPreg wizard-circle">';
+                                var Preg = 1;
+                                var ConsPre = 0;
+
+                                $.MostrCal(Puntos, puntmax, calfvis);
+
+                                ////////////////CARGAR PREGUNTAS
+                                $.each(respuesta.PregEval, function(i, item) {
+                                    contenido += '         <h6>Pregunta</h6>' +
+                                        '         <fieldset>' +
+                                        '              <div class="row p-1">' +
+                                        '   <div  style="width: 100%" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1" >' +
+                                        '              <div class="row" >' +
+                                        '<input type="hidden" id="id-pregunta' +
+                                        ConsPre + '"  value="' + item.idpreg +
+                                        '" />' +
+                                        '<input type="hidden" id="tip-pregunta' +
+                                        ConsPre + '"  value="' + item.tipo +
+                                        '" />' +
+                                        '      <div class="col-md-9"><h4 class="primary">Pregunta ' +
+                                        Preg + '</h4></div>' +
+                                        '      <div class="col-md-3">' +
+                                        '    <fieldset >' +
+                                        '        <div class="input-group">' +
+                                        '          <input type="hidden" class="form-control" id="puntajeOcul' +
+                                        ConsPre + '"' +
+                                        '    name="puntaje" value="10" placeholder="Puntaje" aria-describedby="basic-addon2">' +
+                                        '          <input type="text" class="form-control" onblur="$.ValPunt(' +
+                                        ConsPre +
+                                        ');" onFocus="$.RestCal(this.id)"  id="puntaje' +
+                                        ConsPre + '"' +
+                                        '    name="puntaje" value="10" placeholder="Puntaje" aria-describedby="basic-addon2">' +
+                                        '          <div class="input-group-append">' +
+                                        '            <span class="input-group-text" id="basic-addon2">Puntos</span>' +
+                                        '          </div>' +
+                                        '        </div>' +
+                                        '      </fieldset>' +
+                                        '</div>' +
+                                        '      <div class="col-md-12" id="Pregunta' +
+                                        ConsPre + '">' +
+                                        '           </div>    ' +
+                                        '           </div>    ' +
+                                        '           </div>    ' +
+                                        '             </div>' +
+                                        '        </fieldset>';
+                                    Preg++;
+                                    ConsPre++;
+
+                                });
+
+                                //////////////////////
+
+                                contenido += '</form>' +
+                                    ' </div>' +
+                                    '</div></div>';
+
+                                $("#cont_eva").html(contenido);
+
+
+                                $.CargPreg("0");
+
+                                $(".number-tab-stepsPreg").steps({
+                                    headerTag: "h6",
+                                    bodyTag: "fieldset",
+                                    transitionEffect: "fade",
+                                    titleTemplate: '<span class="step">#index#</span> #title#',
+                                    labels: {
+                                        finish: 'Finalizar'
+                                    },
+                                    onFinished: function(event, currentIndex) {
+                                        $.GuarPunt(currentIndex, 'Ultima');
+                                        if (flagGlobal === "s") {
+                                            return;
+                                        }
+
+                                    },
+                                    onStepChanging: function(event, currentIndex,
+                                        newIndex) {
+                                        // Allways allow previous action even if the current form is not valid!
+                                        $.GuarPunt(currentIndex, 'next');
+                                        if (flagGlobal === "s") {
+                                            return;
+                                        }
+                                        $.CargPreg(newIndex);
+
+                                        if (currentIndex > newIndex) {
+                                            return true;
+                                        }
+                                        form.validate().settings.ignore =
+                                            ":disabled,:hidden";
+                                        return form.valid();
+                                    },
+                                });
+
+                            }
+
+                        });
+                    }
+                },
+                MostrCal: function(punt, max, calf) {
+                    var porcentaje = (parseInt(punt) / parseInt(max)) * 100;
+                    if (porcentaje <= 50) {
+                        $("#txt_califVis").css('background-color', '#f20d00');
+                    } else if (porcentaje > 50 && porcentaje <= 60) {
+                        $("#txt_califVis").css('background-color', '#F08D0E');
+                    } else if (porcentaje > 60 && porcentaje <= 70) {
+                        $("#txt_califVis").css('background-color', '#F5DA00');
+                    } else if (porcentaje > 70 && porcentaje <= 80) {
+                        $("#txt_califVis").css('background-color', '#C0EA1C');
+                    } else if (porcentaje > 80 && porcentaje <= 100) {
+                        $("#txt_califVis").css('background-color', '#1ECD60');
+                    }
+
+                },
+                CargPreg: function(id) {
+
+                    var form = $("#formAuxiliarCargEval");
+                    var Preg = $("#id-pregunta" + id).val();
+                    var tipo = $("#tip-pregunta" + id).val();
+                    var IdLib = $("#idRespEval").val();
+
+                    var opci = "";
+                    var parr = "";
+                    var punt = "";
+
+                    $("#Pregunta").remove();
+                    $("#TipPregunta").remove();
+                    $("#IdLibCalif").remove();
+                    form.append("<input type='hidden' name='Pregunta' id='Pregunta' value='" +
+                        Preg + "'>");
+                    form.append(
+                        "<input type='hidden' name='TipPregunta' id='TipPregunta' value='" + tipo +
+                        "'>");
+                    form.append(
+                        "<input type='hidden' name='IdLibCalif' id='IdLibCalif' value='" + IdLib +
+                        "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+                    var j = 1;
+                    var Pregunta = "";
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: true,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            if (tipo === "PREGENSAY") {
+                                $("#RespEvalEnsayo").remove();
+                                $("#Retro").remove();
+                                $("#puntajeOcul" + id).val(respuesta.PregEnsayo.puntaje);
+
+                                $("#puntaje" + id).val(respuesta.PuntAct);
+                                Pregunta += respuesta.PregEnsayo.pregunta;
+                                Pregunta += '<div class="col-xl-12 col-lg-6 col-md-12">' +
+                                    '   <label style="font-weight:bold;" for="placeTextarea">Respuesta Estudiante:</label>' +
+                                    ' <div id="RespEvalEnsayo"></div>' +
+                                    ' </div>';
+
+                                    Pregunta += '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                        '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                        ' rows="3"></textarea></div>' +
+                                        ' </div>';
+
+                                $("#Pregunta" + id).html(Pregunta);
+                                if (respuesta.RespPregEnsayo) {
+                                    $('#RespEvalEnsayo').html(respuesta.RespPregEnsayo
+                                        .respuesta);
+                                }
+
+                                $.hab_editRetro();
+                                if (respuesta.Retro) {
+                                    $('#Resptroalimentacion').val(respuesta.Retro);
+                                }
+
+                            } else if (tipo === "COMPLETE") {
+                                $("#RespPregComplete").remove();
+                                $("#Retro").remove();
+                                $("#puntajeOcul" + id).val(respuesta.PregComple.puntaje);
+                                $("#puntaje" + id).val(respuesta.PuntAct);
+                                Pregunta += '<div class="col-xl-12 col-lg-6 col-md-12">' +
+                                    '   <label for="placeTextarea">Complete el Parrafo con las siguientes Opciones:</label>' +
+                                    '<p>' + respuesta.PregComple.opciones + '</p>' +
+                                    ' <div id=""></div>' +
+                                    ' </div>';
+                                    Pregunta += '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                        '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                        ' rows="3"></textarea></div>' +
+                                        ' </div>';
+                      
+                                $("#Pregunta" + id).html(Pregunta);
+                                $('#RespPregComplete').html(respuesta.PregComple.parrafo);
+                                if (respuesta.RespPregComple) {
+                                    $('#RespPregComplete').html(respuesta.RespPregComple
+                                        .respuesta);
+                                }
+                                $.hab_editRetro();
+                                if (respuesta.Retro) {
+                                    $('#Resptroalimentacion').val(respuesta.Retro);
+                                }
+
+                            } else if (tipo === "OPCMULT") {
+                                $("#puntajeOcul" + id).val(respuesta.PregMult.puntuacion);
+                                $("#Retro").remove();
+                                $("#puntaje" + id).val(respuesta.PuntAct);
+                                $("#puntaje" + id).prop("disabled", true);
+                                Pregunta +=
+                                    '<div class="pb-1"><input type="hidden"  name="PreguntaOpc" value="' +
+                                    respuesta.PregMult.id + '" />' + respuesta.PregMult
+                                    .pregunta + '</div>';
+                                opciones = '';
+                                var l = 1;
+                                $.each(respuesta.OpciMult,
+                                    function(k, itemo) {
+
+                                        if ($.trim(itemo
+                                                .pregunta
+                                            ) === $
+                                            .trim(respuesta.PregMult.id)) {
+                                            if (respuesta.RespPregMul) {
+                                                opciones +=
+                                                    '<fieldset>';
+                                                if ($.trim(respuesta.RespPregMul
+                                                        .respuesta) === $.trim(itemo
+                                                        .id)) {
+                                                    opciones +=
+                                                        '<input type="hidden" id="OpcionSel_' +
+                                                        l +
+                                                        '" class="OpcionSel"  name="OpcionSel[]" value="si"/>';
+                                                    opciones +=
+                                                        ' <input type="hidden" id=""  name="Opciones[]" value="' +
+                                                        itemo.id + '"/>';
+                                                    opciones +=
+                                                        '<input onclick="$.RespMulPreg(this.id)" id="' +
+                                                        l +
+                                                        '" class="checksel" checked type="checkbox" >';
+                                                } else {
+                                                    opciones +=
+                                                        '<input type="hidden" id="OpcionSel_' +
+                                                        l +
+                                                        '" class="OpcionSel"  name="OpcionSel[]" value="no"/>';
+                                                    opciones +=
+                                                        ' <input type="hidden" id=""  name="Opciones[]" value="' +
+                                                        itemo.id + '"/>';
+                                                    opciones +=
+                                                        '<input onclick="$.RespMulPreg(this.id)" id="' +
+                                                        l +
+                                                        '" class="checksel" type="checkbox" >';
+                                                }
+
+
+                                                opciones +=
+                                                    ' <label for="input-15"> ' +
+                                                    itemo
+                                                    .opciones +
+                                                    '</label>' +
+                                                    '</fieldset>';
+                                                l++;
+                                            } else {
+                                                opciones +=
+                                                    '<fieldset>';
+                                                opciones +=
+                                                    '<input type="hidden" id="OpcionSel_' +
+                                                    l +
+                                                    '" class="OpcionSel"  name="OpcionSel[]" value="-"/>';
+                                                opciones +=
+                                                    ' <input type="hidden" id=""  name="Opciones[]" value="' +
+                                                    itemo.id + '"/>';
+                                                opciones +=
+                                                    '<input disabled id="' +
+                                                    l +
+                                                    '" class="checksel" type="checkbox" >';
+
+                                                opciones +=
+                                                    ' <label for="input-15"> ' +
+                                                    itemo
+                                                    .opciones +
+                                                    '</label>' +
+                                                    '</fieldset>';
+                                                l++;
+                                            }
+
+                                        }
+
+                                    });
+
+                            var Retro = '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                        '<label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                        ' rows="3"></textarea></div>' +
+                                        '</div>';
+                      
+                                $("#Pregunta" + id).html(Pregunta + opciones + Retro);
+                                $.hab_editRetro();
+                                if (respuesta.Retro) {
+                                    $('#Resptroalimentacion').val(respuesta.Retro);
+                                }
+
+                            } else if (tipo === "VERFAL") {
+                                $("#puntajeOcul" + id).val(respuesta.PregVerFal.puntaje);
+                                $("#puntaje" + id).val(respuesta.PuntAct);
+                                $("#puntaje" + id).prop("disabled", true);
+                                $("#Retro").remove();
+
+                                Pregunta += respuesta.PregVerFal.pregunta;
+                                var Opc =
+                                    '<div class="form-group row">' +
+                                    '<div class="col-md-12">' +
+                                    '    <fieldset >' +
+                                    '        <div class="input-group">';
+
+                                Opc +=
+                                    '<input name="radpregVerFal[]" id="RadVer'+ id+'" value="si"  type="radio">';
+
+                                Opc +=
+                                    ' <div class="input-group-append" style="margin-left:5px;">' +
+                                    '            <span  id="basic-addon2">Verdadero</span>' +
+                                    '          </div>' +
+                                    '        </div>' +
+                                    '      </fieldset>' +
+                                    '</div>' +
+                                    '<div  class="col-md-12">' +
+                                    '    <fieldset >' +
+                                    '        <div class="input-group">';
+                                Opc +=
+                                    ' <input name="radpregVerFal[]" id="RadFal'+ id+'"  value="no"  type="radio">';
+                                Opc +=
+                                    '<div class="input-group-append" style="margin-left:5px;">' +
+                                    '            <span  id="basic-addon2">Falso</span>' +
+                                    '          </div>' +
+                                    '        </div>' +
+                                    '      </fieldset>' +
+                                    '</div>' +
+                                    '            </div>';
+
+                                    var Retro =  '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                        '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                        ' rows="3"></textarea></div>' +
+                                        ' </div>';
+
+
+                                $("#Pregunta" + id).html(Pregunta + Opc+Retro);
+
+                                if (respuesta.RespPregVerFal) {
+                                    if (respuesta.RespPregVerFal.respuesta_alumno ===
+                                        "si") {
+                                        $('#RadVer'+id).prop("checked", "checked");
+                                    } else {
+                                        $('#RadFal'+id).prop("checked", "checked");
+                                    }
+                                }
+                                $.hab_editRetro();
+                                if (respuesta.Retro) {
+                                    $('#Resptroalimentacion').val(respuesta.Retro);
+                                }
+                            } else if (tipo === "RELACIONE") {
+                                $("#puntajeOcul" + id).val(respuesta.PregRelacione.puntaje);
+                                $("#puntaje" + id).val(respuesta.PuntAct);
+                                $("#puntaje" + id).prop("disabled", true);
+                                $("#Retro").remove();
+                                var enun = respuesta.PregRelacione.enunciado;
+                                if (enun === null) {
+                                    enun = "";
+                                }
+                                Pregunta += '<div class="row"><div class="col-md-12"><p>' +
+                                    enun + '</p></div></div><div class="row">';
+                                var j = 1;
+                                var selectPreg = '';
+                                var cons = 1;
+
+                                $.each(respuesta.PregRelIndi, function(k, item) {
+
+                                    selectPreg = '<div class="contenedor' + cons +
+                                        '">' +
+                                        '    <div class="selectbox">' +
+                                        '        <div class="select" id="select' +
+                                        cons + '">' +
+                                        '            <div class="contenido-select">' +
+                                        '               <h5 class="titulo">Seleccione Una Respuesta</h5>' +
+                                        '            </div>' +
+                                        '           <i class="fa fa-angle-down"></i>' +
+                                        '       </div>' +
+                                        '<div class="opciones" id="opciones' +
+                                        cons + '">';
+                                    var j = 1;
+                                    $.each(respuesta.PregRelResp, function(k,
+                                        itemr) {
+                                        selectPreg +=
+                                            ' <a id="' + j +
+                                            '" data-id="' + itemr.id +
+                                            '" class="opcion">' +
+                                            '<div class="contenido-opcion">' +
+                                            itemr.respuesta +
+                                            '     </div>' +
+                                            '   </a>';
+                                        j++;
+                                    });
+                                    selectPreg += '</div>' +
+                                        '   </div>' +
+                                        '    <input type="hidden"  name="RespSelect[]" id="RespSelect' +
+                                        cons + '" value="">' +
+                                        '    <input type="hidden"  name="RespPreg[]" value="' +
+                                        item.id + '">' +
+                                        '    <input type="hidden"  name="ConsPreg[]" id="ConsPreg' +
+                                        cons + '" value="">' +
+                                        ' </div>';
+                                    Pregunta +=
+                                        '<div class="col-md-6 pb-2" style="display: flex;align-items: center;justify-content: center;"> <div  id="DivInd' +
+                                        j + '">' + item.definicion + '</div></div>';
+                                    Pregunta +=
+                                        '<div class="col-md-6 pb-2"> <div id="DivRes' +
+                                        j + '">' + selectPreg + '</div></div>';
+                                    cons++;
+                                });
+
+                                Pregunta += '</div>';
+
+                                Pregunta += '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                    '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                    '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                    ' rows="3"></textarea></div>' +
+                                    ' </div>';
+
+                                $("#Pregunta" + id).html(Pregunta);
+                                cons = 1;
+                                $.each(respuesta.PregRelIndi, function(k, item) {
+                                    const select = document.querySelector(
+                                        '#select' + cons);
+                                    const opciones = document.querySelector(
+                                        '#opciones' + cons);
+                                    const contenidoSelect = document.querySelector(
+                                        '#select' + cons + ' .contenido-select');
+                                    const hiddenInput = document.querySelector(
+                                        '#inputSelect' + cons);
+
+                                    document.querySelectorAll('#opciones' + cons +
+                                        ' > .opcion').forEach((opcion) => {
+                                        opcion.addEventListener('click', (
+                                            e) => {
+                                            e.preventDefault();
+                                            contenidoSelect
+                                                .innerHTML = e
+                                                .currentTarget
+                                                .innerHTML;
+                                            select.classList.toggle(
+                                                'active');
+                                            opciones.classList
+                                                .toggle('active');
+                                        });
+                                    });
+
+                                    select.addEventListener('click', () => {
+                                        select.classList.toggle('active');
+                                        opciones.classList.toggle('active');
+                                    });
+                                    cons++;
+
+                                });
+
+                                cons = 1;
+                                $.each(respuesta.RespPregRelacione, function(k, item) {
+                                    const select = document.querySelector(
+                                        '#select' + cons);
+                                    const opciones = document.querySelector(
+                                        '#opciones' + cons);
+                                    const contenidoSelect = document.querySelector(
+                                        '#select' + cons + ' .contenido-select');
+                                    const hiddenInput = document.querySelector(
+                                        '#inputSelect' + cons);
+                                    const sel = document.querySelectorAll(
+                                        '#opciones' + cons + ' > .opcion')
+
+                                        for (var i = 0; i < sel.length; i++) {
+                                            var item2 = sel[i];
+                                            let optioSel=item2.getAttribute('data-id');
+                                            if(item.respuesta_alumno==optioSel){
+                                                
+                                                contenidoSelect.innerHTML = sel[i].innerHTML;
+                                            }
+    
+                                          }
+                                    select.classList.toggle('active');
+                                    $.selopc(item.consecu, cons)
+                                    cons++;
+                                });
+
+                                $.hab_editRetro();
+                                if (respuesta.Retro) {
+                                    $('#Resptroalimentacion').val(respuesta.Retro);
+                                }
+
+                            } else if (tipo === "TALLER") {
+                                $("#puntajeOcul" + id).val(respuesta.PregTaller.puntaje);
+                                $("#puntaje" + id).val(respuesta.PuntAct);
+                                $("#CargArchi").val("");
+                                $("#Retro").remove();
+
+
+                                Pregunta +=
+                                    '<div class="row"><div class="col-md-12 pb-1">' +
+                                    ' <label class="form-label " for="imagen">Ver Archivo Cargado:</label>' +
+                                    ' <div class="btn-group" role="group" aria-label="Basic example">' +
+                                    '   <button id="idimg' + id +
+                                    '" type="button" data-archivo="' + respuesta.PregTaller
+                                    .nom_archivo +
+                                    '" onclick="$.MostArc(this.id);" class="btn btn-success"><i' +
+                                    '             class="fa fa-download"></i> Descargar Archivo</button>' +
+                                    '      </div>' +
+                                    '</div></div>';
+
+                                Pregunta += ' <div class="row">' +
+                                    '   <div class="col-md-12">' +
+                                    '       <div class="form-group" id="divarchi'+id+'">' +
+                                    '       <h6 class="form-section"><strong>Agregar Desarrollo de Taller: </strong> </h6>' +
+                                    '             <input id="archiTaller"  name="archiTaller" type="file">' +
+                                    '       </div>' +
+                                    '  </div>' +
+                                    '</div>';
+
+                                    Pregunta += '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                        '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                        ' rows="3"></textarea></div>' +
+                                        ' </div>';
+
+                                $("#Pregunta" + id).html(Pregunta);
+
+                                var archivo = "";
+
+                                if (respuesta.RespPregTaller) {
+                                    $("#CargArchi").val(respuesta.RespPregTaller.archivo);
+                                    archivo +=
+                                        ' <div class="form-group" id="id_file" style="display:none;">' +
+                                        '<label class="form-label " for="imagen">Agregar Desarrollo de Taller: </label>' +
+                                        '<input type="file" id="archiTaller" name="archiTaller" />' +
+                                        '</div>' +
+                                        '<div class="form-group" id="id_verf">' +
+                                        '<label class="form-label " for="imagen">Ver Desarrollo de Taller: </label>' +
+                                        '<div class="btn-group" role="group" aria-label="Basic example">' +
+                                        '<button type="button" id="archi" onclick="$.VerArchResp(this.id);" data-archivo="' +
+                                        respuesta.RespPregTaller.archivo +
+                                        '" class="btn btn-success"><i' +
+                                        '            class="fa fa-search"></i> Ver Archivo</button>' +
+                                        ' </div>' +
+                                        ' </div>';
+
+                                    $("#divarchi"+id).html(archivo);
+                                }
+
+                                $.hab_editRetro();
+                                if (respuesta.Retro) {
+                                    $('#Resptroalimentacion').val(respuesta.Retro);
+                                }
+
+                            }
+
+                            
+
+                        }
+
+                    });
+
+                },
+                hab_editRetro: function() {
+                    CKEDITOR.replace('Resptroalimentacion', {
+                        width: '100%',
+                        height: 100
+                    });
                 },
 
             });

@@ -11,10 +11,10 @@ class Alumnos extends Model
 
     public static function guardar($request)
     {
-       
+      
         $respuesta = DB::connection('mysql')->table('pedigital.alumnos')->where('usuario_alumno', Auth::user()->id)->update([
             'ident_alumno' => $request['identificacion'],
-            'nombre_alumno' => $request['nomnbre'],
+            'nombre_alumno' => $request['nombre'],
             'apellido_alumno' => $request['apellido'],
             'direccion_alumno' => $request['direccion'],
             'telefono_alumno' => $request['telefono'],
@@ -41,5 +41,19 @@ class Alumnos extends Model
                 'pedigital.users.tipo_usuario'
             )
             ->where('usuario_alumno', $id)->first();
+    }
+
+    public static function ListarxGradoTotal($grado, $grupo, $eval)
+    {
+        $listAlumnos = DB::connection("mysql")->select("SELECT lc.id, alum.ident_alumno, lc.alumno, 
+        CONCAT(apellido_alumno,' ',nombre_alumno) nalumno, lc.evaluacion, lc.puntuacion, lc.estado_eval, 
+        eval.punt_max, eval.calif_usando
+        FROM pedigital.alumnos alum
+        LEFT JOIN etno_ped.libro_calificaciones lc ON alum.usuario_alumno=lc.alumno AND lc.evaluacion=" . $eval . "
+        LEFT JOIN etno_ped.evaluaciones eval ON eval.id=lc.evaluacion
+        WHERE grado_alumno=" . $grado . " AND grupo=" . $grupo . " AND alum.estado_alumno='ACTIVO'");
+        
+     
+        return $listAlumnos;
     }
 }

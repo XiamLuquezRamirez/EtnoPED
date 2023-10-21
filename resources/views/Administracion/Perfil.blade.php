@@ -56,7 +56,7 @@
                                                 <div class="controls">
                                                     <label>Nombre:</label>
                                                     <input type="text" class="form-control" placeholder="Nombre"
-                                                        value="{{ $Usuario->nombre }}" id="nombre" name="nomnbre">
+                                                        value="{{ $Usuario->nombre }}" id="nombre" name="nombre">
                                                 </div>
                                             </div>
                                         </div>
@@ -117,7 +117,10 @@
                                                                     onclick="$.habilitar(this);"> &nbsp; Cambiar Contraseña
                                                             </div>
                                                         </div>
-                                                        <input type="password" disabled name="password" id="password"
+                                                        <input type="password"  name="password"
+                                                            placeholder="Contraseña" id="password" class="form-control">
+                                                        <input type="password"  placeholder="Repetir Contraseña"
+                                                            onchange="$.validaPass();" name="rpassword" id="rpassword"
                                                             class="form-control">
                                                     </div>
                                                 </fieldset>
@@ -206,6 +209,25 @@
                     });
                 },
 
+                validaPass: function() {
+                    // Obtén las contraseñas ingresadas por el usuario
+                    const password = document.getElementById('password').value;
+                    const rpassword = document.getElementById('rpassword').value;
+
+                    // Compara las contraseñas
+                    if (password !== rpassword) {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Las contraseñas no coinciden... Verificar",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                       document.getElementById("password").value = "";
+                       document.getElementById("rpassword").value = "";
+                    }
+                },
                 VerfLogin: function(valida) {
 
                     var form = $("#formValidarUsuario");
@@ -240,12 +262,16 @@
                 },
                 habilitar: function(checkbox) {
                     const input = document.getElementById('password');
+                    const rinput = document.getElementById('rpassword');
 
                     if (checkbox.checked) {
                         input.disabled = false;
+                        rinput.disabled = false;
                     } else {
                         input.disabled = true;
+                        rinput.disabled = true;
                         input.value = "";
+                        rinput.value = "";
                     }
 
                 },
@@ -267,6 +293,21 @@
                             type: "warning",
                             title: "Oops...",
                             text: "Debes de ingresar un login para el usuario",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    }
+
+                    const pasword = document.getElementById('password');
+                    const check = document.getElementById('checkPasw');
+
+                    if (check.checked && pasword.value == "") {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "Debes de ingresar una contraseña",
                             confirmButtonClass: "btn btn-primary",
                             timer: 1500,
                             buttonsStyling: false

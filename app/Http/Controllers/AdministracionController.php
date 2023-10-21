@@ -24,8 +24,17 @@ use App\Models\UsosCostumbres;
 use App\Models\Diccionario;
 use App\Models\Log;
 use App\Models\LibroCalificaciones;
+use App\Models\Alumnos;
+use App\Models\PuntPreg;
+use App\Models\RespEvalComp;
+use App\Models\RespEvalEnsay;
+use App\Models\RespEvalRelacione;
+use App\Models\RespEvalTaller;
+use App\Models\UpdIntEval;
+use App\Models\Retroalimentacion;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\DomCrawler\Crawler;
 
 class AdministracionController extends Controller
 {
@@ -40,14 +49,37 @@ class AdministracionController extends Controller
                 return view('Administracion.GestionarTematica', compact('bandera'));
             } else if ($ori == "evaluaciones") {
                 $detTemas = Tematicas::BuscarDetTema($id);
-                $tema = $detTemas->titulo;
-                $unidad = $detTemas->nombre;
+                $crawlerTema = new Crawler($detTemas->titulo);
+                $tema = $crawlerTema->filter('p')->text();
+
+                $crawlerUnidad = new Crawler($detTemas->nombre);
+                $unidad = $crawlerUnidad->filter('p')->text();
                 return view('Administracion.GestionEvaluaciones', compact('id', 'tema', 'unidad'));
             } else if ($ori == "practicas") {
                 $detTemas = Tematicas::BuscarDetTema($id);
-                $tema = strip_tags($detTemas->titulo);
-                $unidad = strip_tags($detTemas->nombre);
+                $crawlerTema = new Crawler($detTemas->titulo);
+                $tema = $crawlerTema->filter('p')->text();
+
+                $crawlerUnidad = new Crawler($detTemas->nombre);
+                $unidad = $crawlerUnidad->filter('p')->text();
                 return view('Administracion.GestionarPracticas', compact('id', 'tema', 'unidad'));
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+        public function CargarAlumnosCalifGrupo()
+    {
+        if (Auth::check()) {
+            $graSel = request()->get('graSel');
+            $gruSel = request()->get('gruSel');
+            $eval = request()->get('eval');
+            $alumnosListado = Alumnos::ListarxGradoTotal($graSel, $gruSel,$eval);
+                    if (request()->ajax()) {
+                      return response()->json([
+                    'alumnosListado' => $alumnosListado
+                ]);
             }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
@@ -887,7 +919,8 @@ class AdministracionController extends Controller
                 $tdTable .= '<tr>' .
                     '<td><div class="btn-group" role="group" aria-label="First Group">' .
                     '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
-                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>';
+                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>'.
+                    '    <button type="button" title="Calificar" onclick="$.calificar(' . $item->id . ');" class="btn btn-icon btn-pure success "><i class="fa fa-check-square-o"></i></button>';
                 if (Auth::user()->tipo_usuario == "Profesor") {
                     $tdTable .=  '    <button type="button" title="Calificar Evaluación" onclick="$.Calificar(' . $item->id . ');" class="btn btn-icon btn-pure success "><i class="fa fa-check-square-o"></i></button>';
                 }
@@ -1596,6 +1629,160 @@ class AdministracionController extends Controller
             }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function ConsulContEval()
+    {
+        
+        if (Auth::check()) {
+            $id = request()->get('idRespEval');
+
+            $DesEva = LibroCalificaciones::BusDetLib($id);
+            
+            $ideva = $DesEva->evaluacion;
+
+            $titulo = $DesEva->titulo;
+            $intentos = UpdIntEval::ConsulInt($ideva, $DesEva->alumno);
+            $enunciado = $DesEva->enunciado;
+
+            $tiempo = $DesEva->tiempo_usado;
+            $perfil = Auth::user()->tipo_usuario;
+
+            $Log = Log::Guardar('Calificación de Evaluación', $ideva);
+
+            $PregEval = CosEval::GrupPreg($ideva);
+
+            /////CONSULTAR VIDEO
+            $VideoEval = EvalPregDidact::PregDida($ideva);
+            $video = "no";
+            $id = "no";
+            if ($VideoEval) {
+                $video = $VideoEval->cont_didactico;
+                $id = $VideoEval->id;
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'titulo' => $titulo,
+                    'int_perm' => $intentos->int_realizados,
+                    'enunciado' => $enunciado,
+                    'tiempo' => $tiempo,
+                    'perfil' => $perfil,
+                    'Evaluacion' => $DesEva,
+                    'PregEval' => $PregEval,
+                    'VideoEval' => $video,
+                    'idvideo' => $id,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su sesion ha terminado");
+        }
+    }
+
+    public function consulPregAlumno()
+    {
+        if (Auth::check()) {
+            $IdPreg = request()->get('Pregunta');
+            $TipPreg = request()->get('TipPregunta');
+            $IdLib = request()->get('IdLibCalif');
+
+            $DesEva = LibroCalificaciones::BusDetLib($IdLib);
+
+            if ($TipPreg == "PREGENSAY") {
+                $PregEnsayo = EvalPregEnsay::consulPregEnsay($IdPreg);
+                $RespPregEnsayo = RespEvalEnsay::DesResp($IdPreg, $DesEva->alumno);
+                $PuntPreg = PuntPreg::ConsulPunt($IdPreg, $DesEva->alumno);
+                $Retro = Retroalimentacion::ConsulRetro($IdPreg, $DesEva->alumno);
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregEnsayo' => $PregEnsayo,
+                        'RespPregEnsayo' => $RespPregEnsayo,
+                        'PuntAct' => $PuntPreg->puntos,
+                        'Retro' => $Retro,
+                    ]);
+                }
+            } else if ($TipPreg == "COMPLETE") {
+                $PregComple = EvalPregComplete::ConsultComplete($IdPreg);
+                $RespPregComple = RespEvalComp::DesResp($IdPreg, $DesEva->alumno);
+                $PuntPreg = PuntPreg::ConsulPunt($IdPreg, $DesEva->alumno);
+                $Retro = Retroalimentacion::ConsulRetro($IdPreg, $DesEva->alumno);
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregComple' => $PregComple,
+                        'RespPregComple' => $RespPregComple,
+                        'PuntAct' => $PuntPreg->puntos,
+                        'Retro' => $Retro,
+                    ]);
+                }
+            } else if ($TipPreg == "OPCMULT") {
+                $PregMult = PregOpcMul::ConsulPreg($IdPreg);
+                $OpciMult = OpcPregMul::ConsulGrupOpcPreg($IdPreg);
+                $RespPregMul = OpcPregMul::BuscOpcResp($IdPreg, $DesEva->alumno);
+                $PuntPreg = PuntPreg::ConsulPunt($IdPreg, $DesEva->alumno);
+                $Retro = Retroalimentacion::ConsulRetro($IdPreg, $DesEva->alumno);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregMult' => $PregMult,
+                        'OpciMult' => $OpciMult,
+                        'RespPregMul' => $RespPregMul,
+                        'PuntAct' => $PuntPreg->puntos,
+                        'Retro' => $Retro,
+                    ]);
+                }
+            } else if ($TipPreg == "VERFAL") {
+                $PregVerFal = EvalVerFal::ConVerFal($IdPreg);
+                $RespPregVerFal = EvalVerFal::VerFalResp($IdPreg, $DesEva->alumno);
+                $PuntPreg = PuntPreg::ConsulPunt($IdPreg, $DesEva->alumno);
+                $Retro = Retroalimentacion::ConsulRetro($IdPreg, $DesEva->alumno);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregVerFal' => $PregVerFal,
+                        'RespPregVerFal' => $RespPregVerFal,
+                        'PuntAct' => $PuntPreg->puntos,
+                        'Retro' => $Retro,
+                    ]);
+                }
+            } else if ($TipPreg == "RELACIONE") {
+                $PregRelacione = PregRelacione::ConRela($IdPreg);
+                $PregRelIndi = EvalRelacione::PregRelDef($IdPreg);
+                $PregRelResp = EvalRelacioneOpc::PregRelOpc($IdPreg);
+                $PregRelRespAdd = EvalRelacioneOpc::PregRelOpcAdd($IdPreg);
+
+                $RespPregRelacione = RespEvalRelacione::RelacResp($IdPreg, $DesEva->alumno);
+                $PuntPreg = PuntPreg::ConsulPunt($IdPreg, $DesEva->alumno);
+                $Retro = Retroalimentacion::ConsulRetro($IdPreg, $DesEva->alumno);
+
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregRelacione' => $PregRelacione,
+                        'PregRelIndi' => $PregRelIndi,
+                        'PregRelResp' => $PregRelResp,
+                        'PregRelRespAdd' => $PregRelRespAdd,
+                        'RespPregRelacione' => $RespPregRelacione,
+                        'PuntAct' => $PuntPreg->puntos,
+                        'Retro' => $Retro,
+
+                    ]);
+                }
+            } else if ($TipPreg == "TALLER") {
+                $PregTaller = EvalTaller::PregTaller($IdPreg);
+                $RespPregTaller = RespEvalTaller::RespEvalTallerAlum($IdPreg, $DesEva->alumno);
+                $PuntPreg = PuntPreg::ConsulPunt($IdPreg, $DesEva->alumno);
+                $Retro = Retroalimentacion::ConsulRetro($IdPreg, $DesEva->alumno);
+                if (request()->ajax()) {
+                    return response()->json([
+                        'PregTaller' => $PregTaller,
+                        'RespPregTaller' => $RespPregTaller,
+                        'PuntAct' => $PuntPreg->puntos,
+                        'Retro' => $Retro,
+                    ]);
+                }
+            }
+        } else {
+            return redirect("/")->with("error", "Su sesion ha terminado");
         }
     }
 

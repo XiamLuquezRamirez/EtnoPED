@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Usuarios extends Model
 {
@@ -31,16 +32,20 @@ class Usuarios extends Model
 
     public static function guardar($request)
     {
-       
-        $respuesta = DB::connection('mysql')->table('pedigital.alumnos')->where('usuario_alumno', Auth::user()->id)->update([
-            'nombre' => $request['identificacion'],
-            'login' => $request['login'],
-            'email_usuario' => $request['apellido'],
-            'direccion_alumno' => $request['direccion'],
-            'telefono_alumno' => $request['telefono'],
-            'email_alumno' => $request['email'],
-            'foto_alumno' => $request['img']
+       if($request['password']){
+        $respuesta = DB::connection('mysql')->table('pedigital.users')->where('id', Auth::user()->id)->update([
+            'nombre_usuario' => $request['nombre'].' '.$request['apellido'],
+            'login_usuario' => $request['login'],
+            'email_usuario' => $request['email'],
+            'pasword_usuario' => bcrypt($request['password'])
         ]);
+       }else{
+        $respuesta = DB::connection('mysql')->table('pedigital.users')->where('id', Auth::user()->id)->update([
+            'nombre_usuario' => $request['nombre'].' '.$request['apellido'],
+            'login_usuario' => $request['login'],
+            'email_usuario' => $request['email']
+        ]);
+       }
         return  "ok";
     }
 }

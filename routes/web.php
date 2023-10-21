@@ -47,7 +47,11 @@ Route::post('/AdminGramaticaLenguaje/guardarEvaluacion', [AdministracionControll
 Route::post('/AdminGramaticaLenguaje/GuardarEvalFin', [AdministracionController::class,'GuardarEvalFin']);
 Route::post('/AdminGramaticaLenguaje/EliminarEvaluacion', [AdministracionController::class,'EliminarEvaluacion']);
 Route::post('/AdminGramaticaLenguaje/CargarEvaluacion', [AdministracionController::class,'CargarEvaluacion']);
+Route::post('/AdminGramaticaLenguaje/CargarAlumnosCalifGrupo', [AdministracionController::class,'CargarAlumnosCalifGrupo']);
 Route::post('/Guardar/VideoEval', [AdministracionController::class,'VideoEval']);
+Route::post('/AdminGramaticaLenguaje/RespEval', [AdministracionController::class,'ConsulContEval']);
+Route::post('/AdminGramaticaLenguaje/consulPregAlumno', [AdministracionController::class,'consulPregAlumno']);
+
 ///ADMINITRACCION GRAMATICA Y LENGUAJE - GESTIONAR PRACTICAS
 Route::post('/AdminGramaticaLenguaje/CargarPracticas', [AdministracionController::class,'CargarPracticas']);
 Route::post('/AdminGramaticaLenguaje/guardarPractica', [AdministracionController::class,'guardarPractica']);
@@ -106,13 +110,9 @@ Route::post('/AdminDiccionario/GuardarDiccionario', [AdministracionController::c
 Route::post('/AdminDiccionario/BuscarDiccionario', [AdministracionController::class,'BuscarDiccionario']);
 Route::post('/AdminDiccionario/EliminarDiccionario', [AdministracionController::class,'EliminarDiccionario']);
 
-
 ////VISUALIZACION DICCIONARIO
 Route::post('/Diccionario/CargarPalabraDicc', [VisualizacionController::class,'CargarPalabraDicc']);
 Route::post('/Diccionario/CargarDetpalabra', [VisualizacionController::class,'CargarDetpalabra']);
-
-
-
 
 
 ////PERFIL DE USUARIO

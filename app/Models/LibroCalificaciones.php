@@ -205,4 +205,16 @@ class LibroCalificaciones extends Model
             ->where('evaluacion', $id)
             ->first();
     }
+
+    public static function BusDetLib($id)
+    {
+        $InfEval = DB::connection('mysql')->table('etno_ped.libro_calificaciones')
+            ->join('pedigital.alumnos', 'pedigital.alumnos.usuario_alumno', 'libro_calificaciones.alumno')
+            ->join('etno_ped.evaluaciones', 'etno_ped.evaluaciones.id', 'libro_calificaciones.evaluacion')
+            ->select('pedigital.alumnos.nombre_alumno', 'pedigital.alumnos.apellido_alumno', 'pedigital.alumnos.grado_alumno', 'evaluaciones.titulo', 'evaluaciones.enunciado', 'evaluaciones.calif_usando', 'evaluaciones.punt_max', 'libro_calificaciones.*')
+            ->where('libro_calificaciones.id', $id)
+            ->first();
+        return $InfEval;
+    }
+
 }
