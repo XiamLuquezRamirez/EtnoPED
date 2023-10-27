@@ -1,6 +1,6 @@
 <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
-    <div class="main-menu-content">
-        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+    <div class="main-menu-content" style="background-image: url({{ asset('app-assets/images/backgrounds/fondo-menu.png') }})">
+        <ul class="navigation navigation-main" style="background-color: transparent !important"  id="main-menu-navigation" data-menu="menu-navigation">
             <li class=" navigation-header"><span>Generar</span><i class=" feather icon-minus" data-toggle="tooltip"
                     data-placement="right" data-original-title="Apps"></i>
             </li>
@@ -23,8 +23,9 @@
                         data-i18n="Starter kit">Diccionario</span></a>
 
             </li>
-            <li class=" nav-item"><a href="#"><i class="fa fa-gamepad"></i><span class="menu-title"
-                        data-i18n="Starter kit">Actividades Interactivas</span></a>
+
+            <li id="Juegos" class=" nav-item"><a href="{{ url('/Visualizacion/Modulos/Juegos/') }}" ><i class="fa fa-gamepad"></i><span class="menu-title"
+                        data-i18n="Starter kit">Actividades y Juegos</span></a>
 
             </li>
 

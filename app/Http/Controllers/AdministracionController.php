@@ -69,15 +69,16 @@ class AdministracionController extends Controller
         }
     }
 
-        public function CargarAlumnosCalifGrupo()
+    public function CargarAlumnosCalifGrupo()
     {
         if (Auth::check()) {
             $graSel = request()->get('graSel');
             $gruSel = request()->get('gruSel');
+            $jorSel = request()->get('jorSel');
             $eval = request()->get('eval');
-            $alumnosListado = Alumnos::ListarxGradoTotal($graSel, $gruSel,$eval);
-                    if (request()->ajax()) {
-                      return response()->json([
+            $alumnosListado = Alumnos::ListarxGradoTotal($graSel, $gruSel, $jorSel, $eval);
+            if (request()->ajax()) {
+                return response()->json([
                     'alumnosListado' => $alumnosListado
                 ]);
             }
@@ -164,7 +165,7 @@ class AdministracionController extends Controller
             $respuesta = UnidadesTematicas::editar($data);
             $estado = "ok";
         }
-        
+
 
         if (request()->ajax()) {
             return response()->json([
@@ -294,7 +295,7 @@ class AdministracionController extends Controller
         }
 
 
-       
+
 
         if (request()->ajax()) {
             return response()->json([
@@ -919,7 +920,7 @@ class AdministracionController extends Controller
                 $tdTable .= '<tr>' .
                     '<td><div class="btn-group" role="group" aria-label="First Group">' .
                     '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
-                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>'.
+                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
                     '    <button type="button" title="Calificar" onclick="$.calificar(' . $item->id . ');" class="btn btn-icon btn-pure success "><i class="fa fa-check-square-o"></i></button>';
                 if (Auth::user()->tipo_usuario == "Profesor") {
                     $tdTable .=  '    <button type="button" title="Calificar Evaluación" onclick="$.Calificar(' . $item->id . ');" class="btn btn-icon btn-pure success "><i class="fa fa-check-square-o"></i></button>';
@@ -1634,12 +1635,12 @@ class AdministracionController extends Controller
 
     public function ConsulContEval()
     {
-        
+
         if (Auth::check()) {
             $id = request()->get('idRespEval');
 
             $DesEva = LibroCalificaciones::BusDetLib($id);
-            
+
             $ideva = $DesEva->evaluacion;
 
             $titulo = $DesEva->titulo;
@@ -1780,6 +1781,41 @@ class AdministracionController extends Controller
                         'Retro' => $Retro,
                     ]);
                 }
+            }
+        } else {
+            return redirect("/")->with("error", "Su sesion ha terminado");
+        }
+    }
+
+    public function GuardarPuntPreg()
+    {
+        if (Auth::check()) {
+
+            $Alumno = request()->get('IdAlum');
+            $Eval = request()->get('IdEvaluacion');
+            $Pregunta = request()->get('Pregunta');
+            $Puntaje = request()->get('Puntaje');
+            $PMax = request()->get('PMax');
+            $NPreg = request()->get('nPregunta');
+            $Retroalimentacion = request()->get('Resptroalimentacion');
+
+            $PunPreg = PuntPreg::UpdatePuntPreg($Eval, $Pregunta, $Alumno, $Puntaje);
+
+            $PuntEval = PuntPreg::ConsulPuntEval($Eval, $Alumno);
+            $Puntaje = 0;
+
+            foreach ($PuntEval as $punt) {
+                $Puntaje = $Puntaje + $punt->puntos;
+            }
+
+            $LibroCalif = LibroCalificaciones::UpdatePunt($Eval, $Alumno, $Puntaje, $PMax, $NPreg);
+
+            $Retro = Retroalimentacion::Guardar($Eval, $Pregunta, $Alumno, $Retroalimentacion);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'respuesta' => 'ok',
+                ]);
             }
         } else {
             return redirect("/")->with("error", "Su sesion ha terminado");

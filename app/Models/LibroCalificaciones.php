@@ -217,4 +217,37 @@ class LibroCalificaciones extends Model
         return $InfEval;
     }
 
+
+    public static function UpdatePunt($Eval, $Alumno, $Puntaje, $PMax, $NPreg)
+    {
+        if ($NPreg == "Ultima") {
+
+            $respuesta = DB::connection('mysql')->table('etno_ped.libro_calificaciones')
+            ->where('evaluacion', $Eval)
+            ->where('alumno', $Alumno)
+            ->update([
+                'puntuacion' => $Puntaje,
+                'calificacion' => $Puntaje . "/" . $PMax,
+                'calf_prof' => 'si',
+                'estado_eval' => 'CALIFICADA'
+            ]);
+
+
+        } else {
+
+            $respuesta = DB::connection('mysql')->table('etno_ped.libro_calificaciones')
+            ->where('evaluacion', $Eval)
+            ->where('alumno', $Alumno)
+            ->update([
+                'puntuacion' => $Puntaje,
+                'calificacion' => $Puntaje . "/" . $PMax,
+            ]);
+
+        }
+
+        return $respuesta;
+    }
+
+   
+
 }

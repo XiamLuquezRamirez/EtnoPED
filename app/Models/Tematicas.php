@@ -15,6 +15,7 @@ class Tematicas extends Model
         $respuesta = DB::connection('mysql')->table('etno_ped.tematicas')->insertGetId([
             'titulo' => $request['titulo'],
             'unidad' => $request['unidad'],
+            'objetivo' => $request['objetivo'],
             'contenido' => $request['contenidoEdit'],
             'estado' => 'ACTIVO'
         ]);
@@ -111,6 +112,7 @@ class Tematicas extends Model
         $respuesta = DB::connection('mysql')->table('etno_ped.tematicas')->where('id', $request['id'])->update([
             'titulo' => $request['titulo'],
             'unidad' => $request['unidad'],
+            'objetivo' => $request['objetivo'],
             'contenido' => $request['contenidoEdit'],
         ]);
         return  "ok";

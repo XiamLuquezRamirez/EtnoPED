@@ -45,7 +45,7 @@
                                         class="feather icon-plus"></i>&nbsp; Agregar Usos y Costumbres</button>
                             </div>
                             <div class="col-7">
-                                <div class="bug-list-search">
+                                <div class="bug-list-search pr-1">
                                     <div class="bug-list-search-content">
                                         <div class="sidebar-toggle d-block d-lg-none"><i
                                                 class="feather icon-menu font-large-1"></i></div>

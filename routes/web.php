@@ -51,6 +51,7 @@ Route::post('/AdminGramaticaLenguaje/CargarAlumnosCalifGrupo', [AdministracionCo
 Route::post('/Guardar/VideoEval', [AdministracionController::class,'VideoEval']);
 Route::post('/AdminGramaticaLenguaje/RespEval', [AdministracionController::class,'ConsulContEval']);
 Route::post('/AdminGramaticaLenguaje/consulPregAlumno', [AdministracionController::class,'consulPregAlumno']);
+Route::post('/AdminGramaticaLenguaje/GuardarPuntPreg', [AdministracionController::class,'GuardarPuntPreg']);
 
 ///ADMINITRACCION GRAMATICA Y LENGUAJE - GESTIONAR PRACTICAS
 Route::post('/AdminGramaticaLenguaje/CargarPracticas', [AdministracionController::class,'CargarPracticas']);
@@ -113,6 +114,9 @@ Route::post('/AdminDiccionario/EliminarDiccionario', [AdministracionController::
 ////VISUALIZACION DICCIONARIO
 Route::post('/Diccionario/CargarPalabraDicc', [VisualizacionController::class,'CargarPalabraDicc']);
 Route::post('/Diccionario/CargarDetpalabra', [VisualizacionController::class,'CargarDetpalabra']);
+
+////VISUALIZACION JUEGOS
+Route::get('/Visualizacion/Juegos/{alu}', [VisualizacionController::class,'Juegos']);
 
 
 ////PERFIL DE USUARIO

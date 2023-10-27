@@ -42,9 +42,9 @@
                                         class="feather icon-plus"></i>&nbsp; Agregar Unidad</button>
                             </div>
                             <div class="col-8">
-                                <div class="position-relative">
+                                <div class="position-relative pr-1">
                                     <input type="text" id="searchInput" class="form-control" placeholder="Busqueda...">
-                                    <div class="form-control-position">
+                                    <div class="form-control-position pr-2">
                                         <i class="fa fa-search text-size-base text-muted"></i>
                                     </div>
                                 </div>

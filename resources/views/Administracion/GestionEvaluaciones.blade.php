@@ -105,7 +105,7 @@
                         <div class="col-12">
                             <div class="row">
 
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-label">Grado:</label>
                                         <select class="form-control select2" id="selGrado">
@@ -124,7 +124,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-label">Grupo:</label>
                                         <select class="form-control select2" id="selGrupo">
@@ -138,6 +138,17 @@
                                             <option value="7">Grupo 7</option>
                                             <option value="8">Grupo 8</option>
                                             <option value="9">Grupo 9</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Jornada:</label>
+                                        <select class="form-control select2" id="selJornada">
+                                            <option value="" selected>Seleccionar...</option>
+                                            <option value="JM">Jornada Mañana</option>
+                                            <option value="JT">Jornada Tarde</option>
+                                            <option value="JN">Jornada Nocturna</option>
                                         </select>
                                     </div>
                                 </div>
@@ -233,7 +244,7 @@
                         </div>
 
                         <button type="button" id="btn_salir" class="btn grey btn-outline-secondary"
-                            data-dismiss="modal"><i class="ft-corner-up-left position-right"></i>
+                            data-dismiss="modal"><i class="fa fa-reply position-right"></i>
                             Salir</button>
                         <button type="button" id="btn_Conversa" onclick="$.AbrirConv('M');" style="display: none;"
                             class="btn btn-outline-primary"><i class="ft-message-square position-right"></i>
@@ -249,6 +260,7 @@
             <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
             <input type="hidden" name="Id_Eval" id="Id_Eval" value="">
             <input type="hidden" name="tema_id" id="tema_id" value="{{ $id }}">
+            <input type="hidden" name="idAlumno" id="idAlumno" value="">
             <input type="hidden" class="form-control" id="ConsPreguntas" value="1" />
             <input type="hidden" class="form-control" name="Tipreguntas" id="Tipreguntas" value="" />
             <input type="hidden" class="form-control" name="PregConse" id="PregConse" value="" />
@@ -4656,15 +4668,19 @@
                     ////CARGAR ALUMNOS DE GRADO Y GRUPO CORRESPONDIENTES AL TEMA 
                     let selGrado = $("#selGrado").val();
                     let selGrupo = $("#selGrupo").val();
+                    let selJornada = $("#selJornada").val();
                     let idEval = $("#idEvaluacion").val();
                     var form = $("#formAuxiliarAlumnos");
                     $("#graSel").remove();
                     $("#gruSel").remove();
+                    $("#jorSel").remove();
                     $("#eval").remove();
                     form.append("<input type='hidden' name='graSel' id='graSel' value='" +
                         selGrado + "'>");
                     form.append("<input type='hidden' name='gruSel' id='gruSel' value='" +
                         selGrupo + "'>");
+                    form.append("<input type='hidden' name='jorSel' id='jorSel' value='" +
+                    selJornada + "'>");
                     form.append("<input type='hidden' name='eval' id='eval' value='" +
                         idEval + "'>");
 
@@ -4841,7 +4857,7 @@
                                 var contenido =
                                     '  <div class="row"><div class="card-content collapse show">' +
                                     '  <div class="card-body" style="padding-top: 0px;">' +
-                                    '        <form method="post" action="{{ url('/') }}/Guardar/GuardarPuntPreg" id="formGuarCalPunt" class="number-tab-stepsPreg wizard-circle">';
+                                    '        <form method="post" action="{{ url('/') }}/AdminGramaticaLenguaje/GuardarPuntPreg" id="formGuarCalPunt" class="number-tab-stepsPreg wizard-circle">';
                                 var Preg = 1;
                                 var ConsPre = 0;
 
@@ -4908,7 +4924,9 @@
                                     transitionEffect: "fade",
                                     titleTemplate: '<span class="step">#index#</span> #title#',
                                     labels: {
-                                        finish: 'Finalizar'
+                                        finish: 'Finalizar',
+                                        next: 'Siguiente',
+                                        previous: 'Atras'
                                     },
                                     onFinished: function(event, currentIndex) {
                                         $.GuarPunt(currentIndex, 'Ultima');
@@ -5025,7 +5043,9 @@
                                 Pregunta += '<div class="col-xl-12 col-lg-6 col-md-12">' +
                                     '   <label for="placeTextarea">Complete el Parrafo con las siguientes Opciones:</label>' +
                                     '<p>' + respuesta.PregComple.opciones + '</p>' +
-                                    ' <div id=""></div>' +
+                                    ' <div id="RespPregComplete"></div>' +
+                                    '<hr><strong>Respuesta:</strong>' +
+                                    ' <div id="RespAlumPregComplete"></div>' +
                                     ' </div>';
                                     Pregunta += '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
                                         '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
@@ -5036,7 +5056,7 @@
                                 $("#Pregunta" + id).html(Pregunta);
                                 $('#RespPregComplete').html(respuesta.PregComple.parrafo);
                                 if (respuesta.RespPregComple) {
-                                    $('#RespPregComplete').html(respuesta.RespPregComple
+                                    $('#RespAlumPregComplete').html(respuesta.RespPregComple
                                         .respuesta);
                                 }
                                 $.hab_editRetro();
@@ -5407,11 +5427,187 @@
                     });
 
                 },
+                GuarPunt: function(id, npreg) {
+               
+
+                    for (var instanceName in CKEDITOR.instances) {
+                        CKEDITOR.instances[instanceName].updateElement();
+                    }
+                    
+                    var form = $("#formGuarCalPunt");
+                    var url = form.attr("action");
+                    var IdEval = $("#idEvaluacion").val();
+                    var Alumno = $("#idAlumno").val();
+                    var token = $("#token").val();
+                    var Id_Doce = $("#Id_Doce").val();
+                    var Preg = $("#id-pregunta" + id).val();
+                    var Punt = $("#puntaje" + id).val();
+                    var tipo = $("#tip-pregunta" + id).val();
+                    var PunMmax = $("#txt_califMax").val();
+                    
+                   if (Punt === "") {
+                        flagGlobal = "s";
+                        mensaje = "Debe de Ingresar la Puntuación de esta Pregunta.";
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: mensaje,
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        return;
+                    } else {
+                        flagGlobal = "n";
+
+                    }
+
+
+                    $("#Pregunta").remove();
+                    $("#TipPregunta").remove();
+                    $("#nPregunta").remove();
+                    $("#IdEvaluacion").remove();
+                    $("#IdAlum").remove();
+                    $("#idtoken").remove();
+                    $("#Puntaje").remove();
+                    $("#PMax").remove();
+
+                    form.append("<input type='hidden' name='Pregunta' id='Pregunta' value='" +
+                        Preg + "'>");
+                    form.append("<input type='hidden' name='nPregunta' id='nPregunta' value='" +
+                        npreg + "'>");
+                    form.append(
+                        "<input type='hidden' name='TipPregunta' id='TipPregunta' value='" + tipo +
+                        "'>");
+                    form.append("<input type='hidden' name='IdEvaluacion' id='IdEvaluacion' value='" +
+                        IdEval + "'>");
+                    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token +
+                        "'>");
+                    form.append("<input type='hidden' id='IdAlum' name='IdAlum'  value='" + Alumno +
+                        "'>");
+                    form.append("<input type='hidden' id='Puntaje' name='Puntaje'  value='" + Punt +
+                        "'>");
+
+                    form.append("<input type='hidden' id='PMax' name='PMax'  value='" + PunMmax +
+                        "'>");
+                    var datos = form.serialize();
+                    var contenido = "";
+                    let grupo = $("#selGrupo").val();
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: true,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            var j = 1;
+
+                         if(npreg == "Ultima"){
+                            $.consultar();
+
+                            Swal.fire({
+                                type: "success",
+                                title: "",
+                                text: "Operación realizada exitosamente",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+                         }
+                           
+
+                        }
+                    });
+
+                },
                 hab_editRetro: function() {
                     CKEDITOR.replace('Resptroalimentacion', {
                         width: '100%',
                         height: 100
                     });
+                },
+                ValPunt: function(id) {
+                    var puntPreg = $("#puntajeOcul" + id).val();
+                    var puntAct = $("#puntaje" + id).val();
+
+                    if (parseInt(puntAct) > parseInt(puntPreg)) {
+                        mensaje = "El Puntaje no debe ser Mayor a " + puntPreg + " Puntos";
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: mensaje,
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 1500,
+                            buttonsStyling: false
+                        });
+                        puntAct = $("#puntaje" + id).val("");
+                        return;
+                    }
+
+
+                    $.CalCalif(id);
+
+                },
+                RestCal: function(id) {
+                    $("#" + id).select();
+                    var puntNew = $("#" + id).val();
+                    var puntAct = $("#txt_calif").val();
+
+                    if (puntNew !== "") {
+                        var Calact = parseInt(puntAct) - parseInt(puntNew);
+
+                        $("#txt_calif").val(Calact);
+                    }
+
+
+                },
+                CalCalif: function(id) {
+                    if ($("#puntaje" + id).val() !== "") {
+                        var Puntos = $("#txt_calif").val();
+                        var puntmax = $("#txt_califMax").val();
+                        var TipCali = $("#TipCalif").val();
+
+                        var newpuntos = parseInt(Puntos) + parseInt($("#puntaje" + id).val());
+
+                        $("#txt_calif").val(newpuntos)
+
+                        var porcentaje = (parseInt(newpuntos) / parseInt(puntmax)) * 100;
+                        if (porcentaje <= 50) {
+                            $("#txt_califVis").css('background-color', '#f20d00');
+                        } else if (porcentaje > 50 && porcentaje <= 60) {
+                            $("#txt_califVis").css('background-color', '#F08D0E');
+                        } else if (porcentaje > 60 && porcentaje <= 70) {
+                            $("#txt_califVis").css('background-color', '#F5DA00');
+                        } else if (porcentaje > 70 && porcentaje <= 80) {
+                            $("#txt_califVis").css('background-color', '#C0EA1C');
+                        } else if (porcentaje > 80 && porcentaje <= 100) {
+                            $("#txt_califVis").css('background-color', '#1ECD60');
+                        }
+
+                        if (TipCali === "Puntos") {
+                            $("#txt_califVis").val(newpuntos + "/" + puntmax);
+                        } else if (TipCali === "Porcentaje") {
+                            $("#txt_califVis").val(porcentaje + "%");
+                        } else {
+                            switch (true) {
+                                case (porcentaje < 30):
+                                    $("#txt_califVis").val("Deficiente (D)");
+                                    break;
+                                case (porcentaje >= 30 && porcentaje < 65):
+                                    $("#txt_califVis").val("Insuficiente (I)");
+                                    break;
+                                case (porcentaje >= 65 && porcentaje < 80):
+                                    $("#txt_califVis").val("Aceptable (A)");
+                                    break;
+                                case (porcentaje >= 80 && porcentaje < 95):
+                                    $("#txt_califVis").val("Sobresaliente (S)");
+                                    break;
+                                case (porcentaje >= 95):
+                                    $("#txt_califVis").val("Excelente (E)");
+                                    break;
+                            }
+                        }
+                    }
                 },
 
             });

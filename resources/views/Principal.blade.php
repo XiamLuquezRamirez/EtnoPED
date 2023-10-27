@@ -70,7 +70,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 col-lg-6 col-12">
+            <div class="col-xl-4 col-lg-6 col-12" onclick="$.abrirModulo(5);">
                 <div class="card2 work">
                     <div class="img-section"
                         style="background-image: url({{ asset('app-assets/images/backgrounds/header_juegos.png') }}); background-size: 100% 60%; background-repeat: no-repeat;">
@@ -112,7 +112,7 @@
                             dest = "Diccionario";
                             break;
                         case 5:
-                            dest = "Actividades";
+                            dest = "Juegos";
                             break;
                     }
 

@@ -1,0 +1,137 @@
+[
+  {
+    "pregunta": "¿Por qué grupo indígena es hablado el Wayuunaiki?",
+    "opciones": [
+      ["Wiwa", false],
+      ["Wayuu", true],
+      ["Kogui", false],
+      ["Gitano", false]
+    ]
+  },
+  {
+    "pregunta": "El Wayuunaiki cuenta con:",
+    "opciones": [
+      ["Letras", false],
+      ["Vocales", false],
+      ["Consonantes", true],
+      ["Todas las anteriores", false]
+    ]
+  },
+  {
+    "pregunta": "¿Que significa la palabra wayuu?",
+    "opciones": [
+      ["Personas", true],
+      ["Consonantes", false],
+      ["Idioma", false],
+      ["Todas las anterioes", false]
+    ]
+  },
+  {
+    "pregunta": "El Wayuunaiki hay tres consonantes que se escriben igual que en el castellano, pero con sonido diferente estas son:",
+    "opciones": [
+      ["L,R,Y", true],
+      ["A,B,C", false],
+      ["J,R,K", false],
+      ["Todas las anteriores", false]
+    ]
+  },
+  {
+    "pregunta": "¿Cuales son las tres letras que son sonidos propios del Wayuunaiki?",
+    "opciones": [
+      ["SH,U,Y", true],
+      ["L,R,Y", false],
+      ["J,K,L", false],
+      ["Ninguna de las anteriores", false]
+    ]
+  },
+  {
+    "pregunta": "¿Cuales son las tres consonantes que se duplican y se pronuncian más largas que las letras simples.?",
+    "opciones": [
+      ["NN,MM,TT", true],
+      ["SH,U,Y", false],
+      ["L,R,Y", false],
+      ["Todas las anteriores", false]
+    ]
+  },
+  {
+    "pregunta": "¿Como se llama este signo (>) en el Wayuunaiki?",
+    "opciones": [
+      ["Saltillo o glotal", true],
+      ["Wayuu", false],
+      ["Naiki", false],
+      ["Consonantes", false]
+    ]
+  },
+  {
+    "pregunta": "¿Cuál es su función del signo (>) en el Wayuunaiki?",
+    "opciones": [
+      ["Pausa entre vocal y vocal, vocal doble y consonante", true],
+      ["Utilizar para marcar el rasgo glotal que en la escritura no se registra", false],
+      ["Formar el núcleo de las sílabas", false],
+      ["Forman el inicio de las consonantes ", false]
+    ]
+  },
+  {
+    "pregunta": "¿Cuáles son las consonantes en Wayuunaiki?",
+    "opciones": [
+      ["A, B, C, D, V, F, G, J, CH, L, R, L", false],
+      ["CH –J –K –L –M –N –Ñ –P –R –S –SH –T –V –W –Y ", true],
+      ["Todas las anteriores ", false],
+      ["Ninguna de las anteriores ", false]
+    ]
+  },
+  {
+    "pregunta": "Identifica las letras propias del wayuunaiki.",
+    "opciones": [
+      ["A-CH-E-I-J-K-L-M-N-Ñ-O-P-R-S-SH-T-U- Ü-V-W-Y", true],
+      ["CH –J –K –L –M –N –Ñ –P –R –S –SH –T –V –W –Y ", false],
+      ["A, B, C, D, V, F, G, J, CH, L, R, L", false],
+      ["Todas las anteriores ", false]
+    ]
+  },
+  {
+    "pregunta": "La estructura básica gramatical del Wayuunaiki está conformada por el siguiente esquema en las sencillas o cortas oraciones estas son:",
+    "opciones": [
+      ["Verbo, sujeto, complemento.", true],
+      ["Verbo, predicado, sufijo", false],
+      ["Nombre, verbo, complemento", false],
+      ["Todas las anteriores ", false]
+    ]
+  },
+  {
+    "pregunta": "¿Como termina la escritura de los verbos en Wayuunaiki?",
+    "opciones": [
+      ["Doble letra", true],
+      ["Verbo", false],
+      ["Verbo, sujeto, complemento.", false],
+      ["Nombre, verbo, complemento", false]
+    ]
+  },
+  {
+    "pregunta": "¿Que significa el verbo EKAA?",
+    "opciones": [
+      ["Corriendo", false],
+      ["Comer", true],
+      ["Lbros", false],
+      ["Personas Wayuu", false]
+    ]
+  },
+  {
+    "pregunta": "¿Cuáles son las letras del español que no están en el Wayuunaiki?",
+    "opciones": [
+      ["A  B  C  D  E  F  G  H  I J  K  L M   N  Ñ  O  P  Q  R  S T  U  V  W  X  Y Z ", false],
+      ["B  C  D  E  F  G  H    X   Z ", false],
+      ["A-CH-E-I-J-K-L-M-N-Ñ-O-P-R-S-SH-T-U- Ü-V-W-Y", false],
+      ["Ninguna de las anteriores ", false]
+    ]
+  },
+  {
+    "pregunta": "¿Cuales son vocales largas en Wayuunaiki?",
+    "opciones": [
+      ["a, e,i,o,u, ü ", false],
+      ["a,b,c,d,e            ", true],
+      ["a,b,c,d,e            ", false],
+      ["Ninguna de las anteriores ", false]
+    ]
+  }
+]

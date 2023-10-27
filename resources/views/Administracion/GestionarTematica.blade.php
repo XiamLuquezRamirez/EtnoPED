@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-7">
 
-                                <div class="bug-list-search">
+                                <div class="bug-list-search pr-1">
                                     <div class="bug-list-search-content">
                                         <div class="sidebar-toggle d-block d-lg-none"><i
                                                 class="feather icon-menu font-large-1"></i></div>
@@ -129,6 +129,10 @@
                                             <div class="form-group">
                                                 <label for="userinput5">Título:</label>
                                                 <textarea cols="80" id="titulo" name="titulo" rows="10"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="userinput5">Ojetivo:</label>
+                                                <textarea cols="80" id="objetivo" name="objetivo" rows="10"></textarea>
                                             </div>
                                             <div class="form-group">
                                                 <label for="userinput5">Unidad Tematica:</label>
@@ -479,6 +483,7 @@
                     $("#btnCancelar").show();
                     $("#btnNuevo").hide();
                     editorTitulo.setData('');
+                    editorObjetivo.setData('');
                     editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
 
                     $.cargarUnidades();
@@ -489,6 +494,7 @@
                     var form = document.getElementById("formGuardar");
                     form.reset();
                     editorTitulo.setData('');
+                    editorObjetivo.setData('');
 
                     editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
 
@@ -657,6 +663,7 @@
                         dataType: "json",
                         success: function(respuesta) {
                             editorTitulo.setData(respuesta.tematica.titulo);
+                            editorObjetivo.setData(respuesta.tematica.objetivo);
                             $('#unidad').val(respuesta.tematica.unidad).trigger(
                                 'change.select2');
                             editorContenido.setData(respuesta.tematica.contenido);
@@ -1059,12 +1066,21 @@
                     });
 
                 },
-                contTitulo: function(idPrep) {
+                contTitulo: function() {
                     CKEDITOR.replace('titulo', {
                         removePlugins: 'toolbar,dialogui', // Quitar todas las herramientas
                         toolbar: [],
                         width: '100%',
                         height: 50
+                    });
+
+                },
+                contObjetivo: function() {
+                    CKEDITOR.replace('objetivo', {
+                        removePlugins: 'toolbar,dialogui', // Quitar todas las herramientas
+                        toolbar: [],
+                        width: '100%',
+                        height: 100
                     });
 
                 }
@@ -1075,9 +1091,11 @@
             $.cargar(1);
             $.inicialEditorContenido();
             $.contTitulo();
+            $.contObjetivo();
 
             var editorContenido = CKEDITOR.instances.contenido;
             var editorTitulo = CKEDITOR.instances.titulo;
+            var editorObjetivo = CKEDITOR.instances.objetivo;
 
             $(document).on('click', '.pagination a', function(event) {
                 event.preventDefault();

@@ -43,7 +43,7 @@ class Alumnos extends Model
             ->where('usuario_alumno', $id)->first();
     }
 
-    public static function ListarxGradoTotal($grado, $grupo, $eval)
+    public static function ListarxGradoTotal($grado, $grupo,$jorn, $eval)
     {
         $listAlumnos = DB::connection("mysql")->select("SELECT lc.id, alum.ident_alumno, lc.alumno, 
         CONCAT(apellido_alumno,' ',nombre_alumno) nalumno, lc.evaluacion, lc.puntuacion, lc.estado_eval, 
@@ -51,7 +51,7 @@ class Alumnos extends Model
         FROM pedigital.alumnos alum
         LEFT JOIN etno_ped.libro_calificaciones lc ON alum.usuario_alumno=lc.alumno AND lc.evaluacion=" . $eval . "
         LEFT JOIN etno_ped.evaluaciones eval ON eval.id=lc.evaluacion
-        WHERE grado_alumno=" . $grado . " AND grupo=" . $grupo . " AND alum.estado_alumno='ACTIVO'");
+        WHERE grado_alumno=" . $grado . " AND grupo=" . $grupo . " AND jornada = '".$jorn."' AND alum.estado_alumno='ACTIVO'");
         
      
         return $listAlumnos;

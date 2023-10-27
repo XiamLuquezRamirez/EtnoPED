@@ -487,7 +487,7 @@
                     });
                 },
                 verTemasUnidad: function(idUnidad) {
-
+                    let objetivo = "";
                     $("#btn-atrasUnidades").show();
                     $("#btn-atrasModulos").hide();
                     $("#div-unidades").hide();
@@ -510,21 +510,21 @@
                         dataType: "json",
                         success: function(response) {
 
-
                             tempDivTitu.innerHTML = response.Unidad.nombre;
                             var textoTitu = tempDivTitu.firstChild.textContent ||
                                 tempDivTitu.firstChild.innerText;
 
                             $("#titulo").html("Gramatica y Lenguaje - " + textoTitu);
 
-
-
                             $.each(response.Temas, function(i, item) {
+                                objetivo = item.objetivo !== null ? item
+                                .objetivo : "";
                                 tdTable +=
                                     '  <div class="col-12 pb-1 justify-content-center " ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;height: 100px; width:100%;display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="$.verTemas(' +
                                     item.id +
                                     ');" class="bs-callout-primary p-1 pl-2 align-items-stretch hvr-grow-shadow">' +
                                     '<h4 class="primary ">' + textoTitu + '</h4>' +
+                                    ' ' + objetivo + '' +
                                     '</div></div>';
 
                             });

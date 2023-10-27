@@ -50,4 +50,21 @@ class PuntPreg extends Model
             ->first();
         return $Opc;
     }
+
+    public static function UpdatePuntPreg($Eval, $Pregunta, $Alumno, $Puntaje)
+    {
+
+
+
+        $respuesta = DB::connection('mysql')->table('etno_ped.puntuacion_preguntas')
+            ->where('evaluacion', $Eval)
+            ->where('pregunta', $Pregunta)
+            ->where('alumno', $Alumno)
+            ->update([
+                'puntos' => $Puntaje
+            ]);
+
+
+        return $respuesta;
+    }
 }

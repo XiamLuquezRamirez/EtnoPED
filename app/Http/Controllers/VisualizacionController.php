@@ -30,10 +30,12 @@ use App\Models\RespMultPreg;
 use App\Models\RespVerFal;
 use App\Models\UnidadesTematicas;
 use App\Models\Tematicas;
+use App\Models\Alumnos;
 use App\Models\UsosCostumbres;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\DomCrawler\Crawler;
+use Illuminate\Support\Facades\Session;
 
 class VisualizacionController extends Controller
 {
@@ -49,6 +51,9 @@ class VisualizacionController extends Controller
                 return view('Visualizacion.' . $dest, compact('bandera'));
             } else if ($dest == "Diccionario") {
                 return view('Visualizacion.' . $dest, compact('bandera'));
+            }else if ($dest == "Juegos") {
+                return view('Visualizacion.' . $dest, compact('bandera'));
+
             }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
@@ -83,6 +88,17 @@ class VisualizacionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
+    public function Juegos($Alum)
+    {
+        if (Auth::check()) {
+            Session::put('ZonaJuegoAct', 'si');
+            return view('Visualizacion.Juegos');
+        } else {
+            return redirect("/");
+        }
+    }
+
     public function CargarUsos()
     {
         if (Auth::check()) {
@@ -479,10 +495,10 @@ class VisualizacionController extends Controller
                 $crawlerPron = new Crawler($item->palabra_lectura);
                 $prononciacion = $crawlerPron->filter('p')->text();
 
-                if($item->ejemplo !="") {
-                    $display="block;";
-                }else{
-                    $display="none;";
+                if ($item->ejemplo != "") {
+                    $display = "block;";
+                } else {
+                    $display = "none;";
                 }
 
                 $div_palabra .= ' <ul class="media-list p-0 border-blue" style="cursor: pointer;" >
@@ -494,19 +510,19 @@ class VisualizacionController extends Controller
                     </div>
                     <div class="media-body media-search col-10" >
                         <p style="font-size:20px;" class="lead mb-0"><a href="#"><span class="text-bold-700" style="font-size:20px;">' . $textoEsp . '</span> - ' . $textoWayu . '</a></p>';
-               
+
                 if ($item->audio != "") {
-                    $div_palabra .= '<audio  class="audioEjemplo" id="audioEjemplo'.$x.'" style="max-width:40% !important;" controls>
+                    $div_palabra .= '<audio  class="audioEjemplo" id="audioEjemplo' . $x . '" style="max-width:40% !important;" controls>
                     <source src="' . asset('app-assets/contenidoMultimedia/audioDiccionario/' . $item->audio) . '" type="audio/mp3" />
                     <source src="' . asset('app-assets/contenidoMultimedia/audioDiccionario/' . $item->audio) . '" type="audio/ogg" />
                   </audio>';
                 }
 
                 $div_palabra .= '<p style="margin-bottom: 0px"><span class="text-bold-600">Pronunciación: </span> ' . $prononciacion . '</p>
-                        <p style="margin-bottom: 0px"><span class="text-bold-600">Definición: </span> ' . $definicion . ' <code style="display: '.$display.'; background-color: transparent;" class="highlighter-rouge" onclick="$.abrirEjemplo('.$x.')"> - Ejemplo</code></p>
+                        <p style="margin-bottom: 0px"><span class="text-bold-600">Definición: </span> ' . $definicion . ' <code style="display: ' . $display . '; background-color: transparent;" class="highlighter-rouge" onclick="$.abrirEjemplo(' . $x . ')"> - Ejemplo</code></p>
                    
                         </div>
-                        <div id="contEjemplo'.$x.'" style="display:none; ">'.$item->ejemplo.'</div>
+                        <div id="contEjemplo' . $x . '" style="display:none; ">' . $item->ejemplo . '</div>
                 </li>
             </ul>';
 
