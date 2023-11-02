@@ -31,6 +31,7 @@ use App\Models\RespVerFal;
 use App\Models\UnidadesTematicas;
 use App\Models\Tematicas;
 use App\Models\Alumnos;
+use App\Models\Personajes;
 use App\Models\UsosCostumbres;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -136,6 +137,12 @@ class VisualizacionController extends Controller
         if (Auth::check()) {
             $idPractica = request()->get('idPractica');
 
+            $Practica = Practicas::Practica($idPractica);
+            
+            $datPerso1=Personajes::BusPersonaje($Practica->actor1);
+            $datPerso2=Personajes::BusPersonaje($Practica->actor2);
+
+
             $PregPractica = PregPractica::ConsulPregAll($idPractica);
             $OpcPractica = OpcPractica::ConsulGrupOpcPregAll($idPractica);
 
@@ -143,6 +150,8 @@ class VisualizacionController extends Controller
                 return response()->json([
                     'PregPractica' => $PregPractica,
                     'OpcPractica' => $OpcPractica,
+                    'actor1' => $datPerso1->img,
+                    'actor2' => $datPerso2->img
                 ]);
             }
         } else {

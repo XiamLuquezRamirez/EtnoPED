@@ -32,6 +32,7 @@ use App\Models\RespEvalRelacione;
 use App\Models\RespEvalTaller;
 use App\Models\UpdIntEval;
 use App\Models\Retroalimentacion;
+use App\Models\Personajes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\DomCrawler\Crawler;
@@ -486,11 +487,23 @@ class AdministracionController extends Controller
         $idUndad = request()->get('idUnidad');
         $unidades = UnidadesTematicas::EliminarUnidad($idUndad);
     }
+    
     public function EliminarTema()
     {
         $idTema = request()->get('idTema');
         $unidades = Tematicas::EliminarTematica($idTema);
     }
+
+    public function cargarPersonajes(){
+        $personajes = Personajes::allPersonajes();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'personajes' => $personajes,
+            ]);
+        }
+    }
+
     public function EliminarMedicina()
     {
         $idMedicina = request()->get('idMedicina');

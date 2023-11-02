@@ -42,7 +42,7 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 
 
 .persona1 {
-    background-image: url('img/docente.png');
+    /* background-image: url('img/nino1.png'); */
     background-size: 100%;
     top: 215pt;
     width: 177pt;
@@ -67,7 +67,7 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 }
 
 .persona2 {
-    background-image: url('img/estudianteF.png');
+    /* background-image: url('img/adulto1.png'); */
     background-size: 100%;
     top: 215pt;
     width: 177pt;
@@ -154,3 +154,5 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
     overflow: hidden;
     height: 550px;
 }
+
+

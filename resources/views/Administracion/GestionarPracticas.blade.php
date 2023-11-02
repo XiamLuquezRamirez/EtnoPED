@@ -1,7 +1,7 @@
 @extends('Plantilla.Principal')
 @section('title', 'Gestionar Practicas')
 @section('Contenido')
-
+<input type="hidden" id="urlPersonajes" data-ruta="{{ asset('/app-assets/images') }}" />
  <div class="content-header row">
         <div class="content-header-left col-md-6 col-12 mb-2">
             <div class="row breadcrumbs-top">
@@ -157,6 +157,34 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12 mt-1">
+                                                        <h4>Personajes</h4>
+                                                        <div id="project-info" style="text-align: center" class="card-body row">
+                                                            <div onclick="$.selPersonaje(1);"  class="project-info-count col-lg-6 col-md-12" style="cursor: pointer">
+                                                                <div class="project-info-icon">
+                                                                    <div class="card-profile-image">
+                                                                        <input type="hidden" id="idPersonaje1" value="1" name="idPersonaje1" />
+                                                                        <img id="imgPersonaje1" width="80"  src="{{ asset('app-assets/images/personajes/adulto1.png') }}" class="rounded-circle img-border box-shadow-1" alt="Card image">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="project-info-text pt-1">
+                                                                    <h5 id="tituPersonaje1">Adulto</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div onclick="$.selPersonaje(2);" class="project-info-count col-lg-6 col-md-12" style="cursor: pointer">
+                                                                <div class="project-info-icon">
+                                                                    <div class="card-profile-image">
+                                                                        <input type="hidden" id="idPersonaje2" value="5" name="idPersonaje2" />
+                                                                        <img id="imgPersonaje2" width="80" src="{{ asset('app-assets/images/personajes/nino1.png') }}" class="rounded-circle img-border box-shadow-1" alt="Card image">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="project-info-text pt-1">
+                                                                    <h5 id="tituPersonaje2">Niño</h5>
+                                                                </div>
+                                                            </div>
+                                                      
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
                                                         <h4>Listado Preguntas y Respuestas</h4>
                                                         <p>En este espacio podra agregar preguntas y respuestas para poner
                                                             en practica la gramatica y Vocabulario </p>
@@ -193,6 +221,36 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade text-left" id="modalPersonaje" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel1" aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Seleccionar personaje</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <div id="modalContent" style="align-items: center;">
+                                <div id="personajes-modal" style="text-align: center" class="card-body row">
+                                    
+                                
+                              
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions right">
+                            <button type="button" onclick="$.cerrarPersonajes();" class="btn btn-warning mr-1">
+                                <i class="fa fa-reply"></i> Atras
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         </form>
     </div>
 
@@ -220,6 +278,11 @@
         <!-- Tus campos del formulario aquí -->
     </form>
 
+    <form action="{{ url('/AdminGramaticaLenguaje/cargarPersonajes') }}" id="formCargarPersonajes" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+
 
 
 @endsection
@@ -234,6 +297,8 @@
                 dropdownAutoWidth: true,
                 width: '100%'
             });
+
+            let perSel;
 
             ///////////////////CONFIGURACION EDITOR
 
@@ -331,11 +396,69 @@
                         }
                     });
                 },
+
+                selPersonaje: function(sel){
+                    $("#modalPersonaje").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    }).show();
+
+                    perSel=sel;
+
+                    $('#modalEvaluacion').modal('hide');
+
+                    var form = $("#formCargarPersonajes");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    let urlPerso = '';
+                    let personajes = '';
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $.each(respuesta.personajes, function(i, item) {
+                                urlPerso = $('#urlPersonajes').data("ruta") + "/personajes/"+item.img;
+                              personajes += '<div  onclick="$.selPersonajeModal(this);" data-id="'+item.id+'" data-nombre="'+item.descripcion+'" data-img="'+urlPerso+'" class="project-info-count col-lg-4 col-md-12" style="cursor: pointer">'
+                                +'<div class="project-info-icon">'
+                                    +'    <div class="card-profile-image">'
+                                        +'        <img  width="80"  src="'+urlPerso+'" class="rounded-circle img-border box-shadow-1" alt="Card image">'
+                                        +'   </div>'
+                                        +'</div>'
+                                        +'<div class="project-info-text pt-1">'
+                                            +'  <h5 id="personaje1">'+item.descripcion+'</h5>'
+                                            +'    </div>'
+                                            +'  </div>';
+
+                            });
+                        }
+                    });
+
+                    $("#personajes-modal").html(personajes);
+
+
+                },
+                cerrarPersonajes: function(){
+                    $('#modalPersonaje').modal('hide'); 
+                    $("#modalEvaluacion").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    }).show();
+
+                    $('#modalEvaluacion').css({
+                        'overflow': 'auto'
+                      });
+                },
                 nueva: function() {
                     $("#modalEvaluacion").modal({
                         backdrop: 'static',
                         keyboard: false
-                    });
+                    }).show();
+
                     $("#Id_Eval").val("");
                     $("#ConsPreguntas").val(1);
                     $("#tituloEvaluacion").html("Crear Practica");
@@ -344,6 +467,24 @@
                     editorEnun.setData('<p>Ingresa el objetivo Aquí</p>');
 
                     $("#div-practicas").html("");
+
+                },
+
+                selPersonajeModal: function(element) {
+                   if(perSel==1){
+                    var perso1 = document.getElementById("imgPersonaje1");
+                    var nomPerso1 = document.getElementById("tituPersonaje1");
+                    perso1.src = element.dataset.img;
+                    nomPerso1.innerHTML  = element.dataset.nombre;
+                    document.getElementById("idPersonaje1").value = element.dataset.id; 
+                   }else{
+                    var perso2 = document.getElementById("imgPersonaje2");
+                    var nomPerso2 = document.getElementById("tituPersonaje2");
+                    perso2.src = element.dataset.img;
+                    nomPerso2.innerHTML  = element.dataset.nombre;
+                    document.getElementById("idPersonaje1").value = element.dataset.id; 
+                   }
+                   $.cerrarPersonajes();
 
                 },
                 guardar: function() {
@@ -356,8 +497,6 @@
                             confirmButtonClass: "btn btn-warning",
                             buttonsStyling: false
                         });
-
-
                         return;
                     }
 
@@ -391,12 +530,9 @@
                                 });
                                 $("#btnGuardar").hide();
                                 $("#btnNuevo").show();
-
                             }
 
                             $.cargar();
-
-
                         },
                         error: function() {
                             mensaje = "La Evaluación no pudo ser Guardada";
@@ -543,13 +679,11 @@
                                             $('#Btn-guardarPreg' + cons)
                                                 .prop('disabled', false);
 
-
                                             $("#Btn-guardarPreg" + cons)
                                                 .hide();
                                             $("#Btn-EditPreg" + cons)
                                                 .show();
                                             $("#div-addpreg").show();
-
                                             $("#id-preopcmult" +cons).val(itemp.id);
 
                                             $("#PreguntaMultiple" +cons).html(itemp.pregunta);
@@ -567,25 +701,18 @@
                                                         opciones +=' <label for="input-15"> ' + itemo.respuesta + '</label>' +
                                                             '</fieldset>';
                                                     }
-
                                                 });
-
                                             $("#DivOpcionesMultiples" +
                                                 cons).html(opciones);
                                         }
-
-
                                     });
 
                                     cons++;
                                     edit = "si";
-
                                 $("#ConsPreguntas").val(cons);
-
                             });
                         }
                     });
-
                 },
                 salirModalEval: function() {
                     $('#modalEvaluacion').modal('toggle');

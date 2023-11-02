@@ -207,7 +207,8 @@
     <div class="modal fade text-left" id="modalPracticaTematica" style="height: 90% !important; overflow: hidden; "
         tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="background-image: url({{ asset('assets/css/img/fondo.png') }})">
+            <div class="modal-content" id="div-practia"
+                style="background-image: url({{ asset('assets/css/img/fondo.png') }})">
                 <div class="modal-header">
                     <h4 id="titPractica" style="color: #fff; font-weight: bold;" class="modal-title">Contenido Ejemplo
                     </h4>
@@ -286,10 +287,11 @@
         </div>
     </div>
 
-    <div class="modal fade text-left"  id="ModEval"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel15"
+    <div class="modal fade text-left" id="ModEval" tabindex="-1" role="dialog" aria-labelledby="myModalLabel15"
         aria-hidden="true">
         <div class="modal-dialog  modal-xl" role="document">
-            <div class="modal-content" style="background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
+            <div class="modal-content"
+                style="background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                 <div class="modal-body">
 
                     <article id='DetEval' style="text-transform: capitalize;" class="wrapper">
@@ -443,6 +445,8 @@
             let pregAct;
             let ok = false;
             let arrayOpciones = [];
+            let actor1 = "";
+            let actor2 = "";
 
 
             var flagGlobal = "n";
@@ -518,7 +522,7 @@
 
                             $.each(response.Temas, function(i, item) {
                                 objetivo = item.objetivo !== null ? item
-                                .objetivo : "";
+                                    .objetivo : "";
                                 tdTable +=
                                     '  <div class="col-12 pb-1 justify-content-center " ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;height: 100px; width:100%;display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="$.verTemas(' +
                                     item.id +
@@ -605,7 +609,8 @@
                                     claseCallout + ' callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
                                     '<div class="media-body p-1 pl-2 hvr-grow-shadow" style="background-image: url(' +
-                                    urlMul + '); background-size: 100% 100%;  border-radius:7px;">' +
+                                    urlMul +
+                                    '); background-size: 100% 100%;  border-radius:7px;">' +
                                     '<strong>' + item.nombre.slice(0, -4) +
                                     '</strong>' +
                                     '</div>' +
@@ -784,6 +789,28 @@
                         keyboard: false
                     });
 
+                    let paisajes = [{
+                            fondo: "fondo1.png",
+                        },
+                        {
+                            fondo: "fondo2.png",
+                        },
+                        {
+                            fondo: "fondo3.png",
+                        }
+                    ];
+
+                    const indiceAleatorio = Math.floor(Math.random() * paisajes.length);
+                    let imgPaisaje = $('#urlMult').data("ruta") + "/images/paisajes/" + paisajes[
+                        indiceAleatorio].fondo;
+
+                    // Obtener el div
+                    const miDiv = document.getElementById("div-practia");
+
+                    // Establecer el fondo del div con la imagen aleatoria
+                    miDiv.style.backgroundImage = `url(${imgPaisaje})`;
+
+
                     $("#modalPracticaTematica .modal-dialog").css("height", "400px");
 
                     let titulo = $("#practica" + id).data("titulo");
@@ -805,6 +832,8 @@
                         success: function(response) {
                             pregPractica = response.PregPractica;
                             respPractica = response.OpcPractica;
+                            actor1 = response.actor1;
+                            actor2 = response.actor2
                         }
                     });
 
@@ -819,6 +848,12 @@
                     const divAnimado2 = document.querySelector('.persona2');
                     divAnimado2.style.animationName = 'mover_persona_2';
                     $("#div-opcionesP").hide();
+
+                    let imgActor1 = $('#urlMult').data("ruta") + "/images/personajes/" + actor1;
+                    let imgActor2 = $('#urlMult').data("ruta") + "/images/personajes/" + actor2;
+
+                    divAnimado.style.backgroundImage = 'url("' + imgActor1 + '")';
+                    divAnimado2.style.backgroundImage = 'url("' + imgActor2 + '")';
 
                     setTimeout(() => {
                         $('#dialogo1').fadeToggle(2000);

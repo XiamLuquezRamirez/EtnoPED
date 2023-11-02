@@ -13,6 +13,8 @@ class Practicas extends Model
             'tematica' => $datos['tema_id'],
             'titulo' => $datos['titulo'],
             'objetivo' => $datos['objetivo'],
+            'actor1' => $datos['idPersonaje1'],
+            'actor2' => $datos['idPersonaje2'],
             'estado' => 'INACTIVO'
         ]);
         return $respuesta;
@@ -68,5 +70,11 @@ class Practicas extends Model
         ->where('estado','ACTIVO')
         ->where('tematica', $idTema)
         ->get();
+    }
+    public static function Practica($idPract){
+        return DB::connection('mysql')->table('etno_ped.practicas_tematica')
+        ->where('estado','ACTIVO')
+        ->where('id', $idPract)
+        ->first();
     }
 }
