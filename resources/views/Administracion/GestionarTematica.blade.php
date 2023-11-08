@@ -95,7 +95,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title" id="tituloTematica"></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" style="font-size: 25px;">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -131,7 +131,7 @@
                                                 <textarea cols="80" id="titulo" name="titulo" rows="10"></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <label for="userinput5">Ojetivo:</label>
+                                                <label for="userinput5">Objetivo:</label>
                                                 <textarea cols="80" id="objetivo" name="objetivo" rows="10"></textarea>
                                             </div>
                                             <div class="form-group">
@@ -178,7 +178,10 @@
                                             </button>
                                         </div>
 
-                                        <div class="card-body" id="divMultimedia" style="display:none;">
+                                        <div class="card-body" id="divMultimedia" >
+                            
+                                        </div>
+                                        <div class="card-body" id="divMultimediaLis" style="display:none;">
                                             <h5>Listado de Contenido Multimedia existente</h5>
 
                                             <div class="table-responsive">
@@ -239,9 +242,9 @@
                                 </div>
 
                                 <div class="form-actions right">
-                                    <button id="btnCancelar" type="reset" onclick="$.limpiar()"
+                                    <button id="btnCancelar" type="reset" onclick="$.salir()"
                                         class="btn btn-warning mr-1">
-                                        <i class="feather icon-x"></i> Cancelar
+                                        <i class="feather icon-corner-up-left"></i> Salir
                                     </button>
                                     <button type="button" id="btnGuardar" onclick="$.guardar()"
                                         class="btn btn-primary">
@@ -490,6 +493,10 @@
                     $.limpiar();
 
                 },
+                salir: function() {
+                    $.limpiar();
+                    $('#modalTematica').modal('toggle');
+                },
                 limpiar: function() {
                     var form = document.getElementById("formGuardar");
                     form.reset();
@@ -505,8 +512,8 @@
                     $("#btnNuevo").hide();
 
                     $("#divMultimedia").html("");
-                    $("#divMultimedia").hide();
                     $("#divEjemplos").hide();
+                    $("#divMultimediaLis").hide();
 
                     $("#div-ejemplo").html("");
                     $("#consEjemplo").val("0");
@@ -636,7 +643,7 @@
                     $("#tituloTematica").html("Editar Tematica");
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
-                    $("#btnCancelar").hide();
+                    $("#btnCancelar").show();
 
 
                     $("#id").val(id);
@@ -688,8 +695,9 @@
                                 x++;
                             });
 
-                            if (x > 1) {
-                                $("#divMultimedia").show();
+                            if (x >= 1) {
+                               
+                                $("#divMultimediaLis").show();
 
                             }
                             //llenar ejemplos 
@@ -718,7 +726,7 @@
                             });
 
                             if (x > 1) {
-                                $("#divEjemplos").show();
+                                $("#divMultimediaLis").show();
 
                             }
 
@@ -855,15 +863,20 @@
                     $("#btnAtrasVideo").hide();
                 },
                 cerrarMultimedia: function() {
+                    
                     $("#modalTematica").modal({
                         backdrop: 'static',
                         keyboard: false
                     });
+         
                     $('#modalMultimediaTematica').modal('toggle');
+                    var miDiv = document.getElementById("modalTematica");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+                   
                 },
                 eliminar: function(id) {
                     Swal.fire({
-                        title: "Esta seguro de Eliminar este registro?",
+                        title: "¿Esta seguro de Eliminar este registro?",
                         text: "¡No podrás revertir esto!",
                         type: "warning",
                         showCancelButton: true,

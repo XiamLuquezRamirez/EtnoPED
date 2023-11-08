@@ -13,7 +13,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Inicio</a>
                         </li>
-                        <li class="breadcrumb-item"><a href="#">Lista Palabra Diccionario </a>
+                        <li class="breadcrumb-item"><a href="#">Lista de palabras </a>
                         </li>
 
                     </ol>
@@ -28,7 +28,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Lista Palabra Diccionario</h4>
+                        <h4 class="card-title">Lista de palabras</h4>
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
@@ -45,7 +45,6 @@
                                         class="feather icon-plus"></i>&nbsp; Agregar Palabra</button>
                             </div>
                             <div class="col-7">
-
                                 <div class="bug-list-search pr-1">
                                     <div class="bug-list-search-content">
                                         <div class="sidebar-toggle d-block d-lg-none"><i
@@ -70,8 +69,8 @@
                                     <tr>
                                         <th width="20%">Opciones</th>
                                         <th>#</th>
-                                        <th>Palabra</th>
-                                        <th>Significado</th>
+                                        <th>Palabra / Español</th>
+                                        <th>Traducción / Wayuunaikin</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tdTable">
@@ -95,7 +94,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title" id="tituloDiccionario"></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" style="font-size: 25px;">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -210,9 +209,9 @@
                                 </div>
 
                                 <div class="form-actions right">
-                                    <button id="btnCancelar" type="reset" onclick="$.limpiar()"
+                                    <button id="btnCancelar" type="reset" onclick="$.salir()"
                                         class="btn btn-warning mr-1">
-                                        <i class="feather icon-x"></i> Cancelar
+                                        <i class="feather icon-corner-up-left"></i> Salir
                                     </button>
                                     <button type="button" id="btnGuardar" onclick="$.guardar()"
                                         class="btn btn-primary">
@@ -440,6 +439,10 @@
                                      
                     $.limpiar();
                 },
+                salir: function() {
+                    $.limpiar();
+                    $('#modalDiccionario').modal('toggle');
+                },
                 limpiar: function() {
                     var form = document.getElementById("formGuardar");
                     form.reset();
@@ -582,7 +585,7 @@
                     $("#tituloTematica").html("Editar Medicina Tradicional");
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
-                    $("#btnCancelar").hide();
+                    $("#btnCancelar").show();
 
                     $("#id").val(id);
                     var accion = $("#accion").val();

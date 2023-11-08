@@ -92,7 +92,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title" id="tituloMedicina"></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" style="font-size: 25px;">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -130,9 +130,9 @@
                                 </div>
 
                                 <div class="form-actions right">
-                                    <button id="btnCancelar" type="reset" onclick="$.limpiar()"
+                                    <button id="btnCancelar" type="reset" onclick="$.salir()"
                                         class="btn btn-warning mr-1">
-                                        <i class="feather icon-x"></i> Cancelar
+                                        <i class="feather icon-corner-up-left"></i> Salir
                                     </button>
                                     <button type="button" id="btnGuardar" onclick="$.guardar()"
                                         class="btn btn-primary">
@@ -361,6 +361,10 @@
 
                      $.limpiar();
                 },
+                salir: function() {
+                    $.limpiar();
+                    $('#modalUso').modal('toggle');
+                },
                 limpiar: function() {
                     var form = document.getElementById("formGuardar");
                     form.reset();
@@ -470,7 +474,7 @@
                     $("#tituloTematica").html("Editar Usos y Costumbres");
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
-                    $("#btnCancelar").hide();
+                    $("#btnCancelar").show();
 
                     $("#id").val(id);
                     var accion = $("#accion").val();
@@ -520,6 +524,8 @@
                         keyboard: false
                     }).show();
                     $('#modalMultimediaTematica').modal('hide');
+                    var miDiv = document.getElementById("modalUso");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
                 },
                 eliminar: function(id) {
                     Swal.fire({

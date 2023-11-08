@@ -87,7 +87,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title" id="tituloUnidad"></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" style="font-size: 25px;">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -115,8 +115,8 @@
                         </div>
 
                         <div class="form-actions right">
-                            <button type="button"  onclick="$.nuevo();" class="btn btn-warning mr-1">
-                                <i class="feather icon-x"></i> Cancelar
+                            <button type="button"  onclick="$.salir();" class="btn btn-warning mr-1">
+                                <i class="feather icon-corner-up-left"></i> Salir
                             </button>
                             <button type="button" id="btnGuardar" onclick="$.guardar()" class="btn btn-success">
                                 <i class="fa fa-check-square-o"></i> Guardar
@@ -349,6 +349,15 @@
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
                 },
+
+                salir: function() {
+                    editorNombre.setData('');
+                    editorDescripcion.setData('');
+                    $('#modalUnidad').modal('toggle');
+                    $("#accion").val("agregar");
+                    $("#btnGuardar").show();
+                    $("#btnNuevo").hide();
+                },
                 editar: function(id) {
 
                     $("#modalUnidad").modal({
@@ -388,7 +397,7 @@
                 },
                 eliminar: function(id) {
                     Swal.fire({
-                        title: "Esta seguro de Eliminar este registro?",
+                        title: "¿Esta seguro de Eliminar este registro?",
                         text: "¡No podrás revertir esto!",
                         type: "warning",
                         showCancelButton: true,

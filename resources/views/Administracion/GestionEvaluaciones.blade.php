@@ -203,7 +203,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title" style="text-transform: capitalize;" id="titu_tema"></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" style="font-size: 25px;">&times;</span>
                         </button>
                     </div>
 
@@ -282,7 +282,7 @@
                         <div class="modal-header">
                             <h4 class="modal-title" id="tituloEvaluacion">Crear Evaluación</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                                <span aria-hidden="true" style="font-size: 25px;">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
