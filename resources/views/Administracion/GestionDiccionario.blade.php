@@ -61,7 +61,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="table-responsive">
                             <table class="table table-xs mb-0">
@@ -70,7 +69,7 @@
                                         <th width="20%">Opciones</th>
                                         <th>#</th>
                                         <th>Palabra / Español</th>
-                                        <th>Traducción / Wayuunaikin</th>
+                                        <th>Traducción / Wayuunaiki</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tdTable">
@@ -130,7 +129,7 @@
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="form-group">
-                                                        <label for="userinput5">Palabra en Wayuunaikin:</label>
+                                                        <label for="userinput5">Palabra en Wayuunaiki:</label>
                                                         <textarea cols="80" id="wayuu" name="wayuu" rows="10"></textarea>
                                                     </div>
                                                 </div>
@@ -449,7 +448,7 @@
                     editorEspanol.setData('<p></p>');
                     editorWayuu.setData('<p></p>');
                     editorLectura.setData('<p></p>');
-                    editorDefinic.setData('<p>Ingresa la Definicion Aquí</p>');
+                    editorDefinic.setData('<p></p>');
                     editorEjemplo.setData('');
 
                     $("#btnGuardar").show();
@@ -486,7 +485,7 @@
                         Swal.fire({
                             type: "warning",
                             title: "Oops...",
-                            text: "Debes de ingresar la palabra en wayuunaikin...",
+                            text: "Debes de ingresar la palabra en wayuunaiki...",
                             confirmButtonClass: "btn btn-primary",
                             timer: 1500,
                             buttonsStyling: false
@@ -677,12 +676,10 @@
                         audio.src = url;
                     }
 
-
-
                 },
                 eliminar: function(id) {
                     Swal.fire({
-                        title: "Esta seguro de Eliminar este registro?",
+                        title: "¿Esta seguro de Eliminar este registro?",
                         text: "¡No podrás revertir esto!",
                         type: "warning",
                         showCancelButton: true,

@@ -23,7 +23,8 @@ class Evaluacion extends Model
             'punt_max' => $datos['Punt_Max'],
             'estado' => 'INACTIVO',
             'enunciado' => $datos['enunciado'],
-            'calxdoc' => $calxdoc
+            'calxdoc' => $calxdoc,
+            'origen' => $datos['OrigenEval']
         ]);
         return $respuesta;
     }
@@ -94,6 +95,13 @@ class Evaluacion extends Model
             ->where('id', $id)
             ->first();
     }
+    public static function BusEvalOrigen($id,$origen)
+    {
+        return DB::connection('mysql')->table('etno_ped.evaluaciones')
+            ->where('tematica', $id)
+            ->where('origen', $origen)
+            ->get();
+    }
 
     public static function DatosEvla($id)
     {
@@ -147,6 +155,6 @@ class Evaluacion extends Model
     public static function allEvaluacionEst($idTema)
     {
         return DB::connection('mysql')->select("SELECT eval.*, lib.estado_eval FROM etno_ped.evaluaciones eval
-        LEFT JOIN etno_ped.libro_calificaciones lib ON eval.id=lib.evaluacion AND lib.alumno=" . Auth::user()->id . " WHERE eval.tematica=" . $idTema . " AND evaL.estado='ACTIVO'");
+        LEFT JOIN etno_ped.libro_calificaciones lib ON eval.id=lib.evaluacion AND lib.alumno=" . Auth::user()->id . " WHERE eval.tematica=" . $idTema . " AND eval.estado='ACTIVO'");
     }
 }

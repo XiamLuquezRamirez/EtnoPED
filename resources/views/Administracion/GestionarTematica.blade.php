@@ -487,7 +487,7 @@
                     $("#btnNuevo").hide();
                     editorTitulo.setData('');
                     editorObjetivo.setData('');
-                    editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
+                    editorContenido.setData('<p></p>');
 
                     $.cargarUnidades();
                     $.limpiar();
@@ -503,7 +503,7 @@
                     editorTitulo.setData('');
                     editorObjetivo.setData('');
 
-                    editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
+                    editorContenido.setData('<p></p>');
 
                     $('#unidad').val("").trigger('change.select2');
 
@@ -675,7 +675,7 @@
                                 'change.select2');
                             editorContenido.setData(respuesta.tematica.contenido);
 
-                            //llenar multimedia 
+                            //llenar multimedia
                             let x = 1;
                             $.each(respuesta.mulTematica, function(i, item) {
                                 multimedia +=
@@ -801,7 +801,7 @@
                         id).data("url");
                     let tipMuil = $("#tr_" + id).data("tipo");
 
-                    console.log(tipMuil.substr(0, 4));
+                    
                     $("#modalMultimediaTematica").modal({
                         backdrop: 'static',
                         keyboard: false
@@ -1053,7 +1053,7 @@
                 evaluaciones: function(id) {
                     var rurl = $("#Ruta").val();
                     $(location).attr('href', rurl +
-                        "AdminGramaticaLenguaje/GestionarGramatica/evaluaciones/" + id);
+                        "AdminGramaticaLenguaje/GestionarGramatica/evaluacionesT/" + id);
 
                 },
                 eliminarEjemplo: function(id) {

@@ -52,9 +52,8 @@ class VisualizacionController extends Controller
                 return view('Visualizacion.' . $dest, compact('bandera'));
             } else if ($dest == "Diccionario") {
                 return view('Visualizacion.' . $dest, compact('bandera'));
-            }else if ($dest == "Juegos") {
+            } else if ($dest == "Juegos") {
                 return view('Visualizacion.' . $dest, compact('bandera'));
-
             }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
@@ -138,9 +137,9 @@ class VisualizacionController extends Controller
             $idPractica = request()->get('idPractica');
 
             $Practica = Practicas::Practica($idPractica);
-            
-            $datPerso1=Personajes::BusPersonaje($Practica->actor1);
-            $datPerso2=Personajes::BusPersonaje($Practica->actor2);
+
+            $datPerso1 = Personajes::BusPersonaje($Practica->actor1);
+            $datPerso2 = Personajes::BusPersonaje($Practica->actor2);
 
 
             $PregPractica = PregPractica::ConsulPregAll($idPractica);
@@ -165,9 +164,14 @@ class VisualizacionController extends Controller
 
             $Medicina = MedicinaTradicional::BuscarMedi($idMedicina);
 
+            $evaluaciones = Evaluacion::BusEvalOrigen($idMedicina,'GestionarMedicinaTradicional');
+
+
+
             if (request()->ajax()) {
                 return response()->json([
-                    'Medicina' => $Medicina
+                    'Medicina' => $Medicina,
+                    'evaluaciones' => $evaluaciones
                 ]);
             }
         } else {
@@ -462,55 +466,56 @@ class VisualizacionController extends Controller
 
     public function CargarPalabraDicc()
     {
-        $perPage = 5; // Número de posts por página
-        $page = request()->get('page', 1);
-        $searchTerm = request()->get('search');
-        if (!is_numeric($page)) {
-            $page = 1; // Establecer un valor predeterminado si no es numérico
-        }
+        if (Auth::check()) {
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $searchTerm = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
+            }
 
-        $palabras = DB::connection('mysql')
-            ->table('etno_ped.diccionario')
-            ->where('estado', 'ACTIVO');
-        if ($searchTerm) {
-            $palabras->where('palabra_espanol', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchTerm . '%');
-        }
-        $Listpalabras = $palabras->paginate($perPage, ['*'], 'page', $page);
+            $palabras = DB::connection('mysql')
+                ->table('etno_ped.diccionario')
+                ->where('estado', 'ACTIVO');
+            if ($searchTerm) {
+                $palabras->where('palabra_espanol', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchTerm . '%');
+            }
+            $Listpalabras = $palabras->paginate($perPage, ['*'], 'page', $page);
 
-        $div_palabra = '';
-        $x = ($page - 1) * $perPage + 1;
+            $div_palabra = '';
+            $x = ($page - 1) * $perPage + 1;
 
-        foreach ($Listpalabras as $i => $item) {
-            if (!is_null($item)) {
+            foreach ($Listpalabras as $i => $item) {
+                if (!is_null($item)) {
 
-                $crawlerDef = new Crawler($item->definicion);
-                $textoDef = $crawlerDef->filter('p')->text();
+                    $crawlerDef = new Crawler($item->definicion);
+                    $textoDef = $crawlerDef->filter('p')->text();
 
-                $definicion = $textoDef ?
-                    (strlen($textoDef) > 100 ? substr($textoDef, 0, 100) . '...' : $textoDef) :
-                    "Sin definición";
+                    $definicion = $textoDef ?
+                        (strlen($textoDef) > 100 ? substr($textoDef, 0, 100) . '...' : $textoDef) :
+                        "Sin definición";
 
-                if ($item->imagen != "") {
-                    $imagen = $item->imagen;
-                } else {
-                    $imagen = "noIMg.png";
-                }
+                    if ($item->imagen != "") {
+                        $imagen = $item->imagen;
+                    } else {
+                        $imagen = "noIMg.png";
+                    }
 
-                $crawlerEsp = new Crawler($item->palabra_espanol);
-                $textoEsp = $crawlerEsp->filter('p')->text();
-                $crawlerWayu = new Crawler($item->palabra_wuayuunaiki);
-                $textoWayu = $crawlerWayu->filter('p')->text();
-                $crawlerPron = new Crawler($item->palabra_lectura);
-                $prononciacion = $crawlerPron->filter('p')->text();
+                    $crawlerEsp = new Crawler($item->palabra_espanol);
+                    $textoEsp = $crawlerEsp->filter('p')->text();
+                    $crawlerWayu = new Crawler($item->palabra_wuayuunaiki);
+                    $textoWayu = $crawlerWayu->filter('p')->text();
+                    $crawlerPron = new Crawler($item->palabra_lectura);
+                    $prononciacion = $crawlerPron->filter('p')->text();
 
-                if ($item->ejemplo != "") {
-                    $display = "block;";
-                } else {
-                    $display = "none;";
-                }
+                    if ($item->ejemplo != "") {
+                        $display = "block;";
+                    } else {
+                        $display = "none;";
+                    }
 
-                $div_palabra .= ' <ul class="media-list p-0 border-blue" style="cursor: pointer;" >
+                    $div_palabra .= ' <ul class="media-list p-0 border-blue" style="cursor: pointer;" >
                 <li class="media row justify-content-center align-items-center" >
                     <div class="col-2 media-left">
                         <a href="#">
@@ -520,31 +525,34 @@ class VisualizacionController extends Controller
                     <div class="media-body media-search col-10" >
                         <p style="font-size:20px;" class="lead mb-0"><a href="#"><span class="text-bold-700" style="font-size:20px;">' . $textoEsp . '</span> - ' . $textoWayu . '</a></p>';
 
-                if ($item->audio != "") {
-                    $div_palabra .= '<audio  class="audioEjemplo" id="audioEjemplo' . $x . '" style="max-width:40% !important;" controls>
+                    if ($item->audio != "") {
+                        $div_palabra .= '<audio  class="audioEjemplo" id="audioEjemplo' . $x . '" style="max-width:40% !important;" controls>
                     <source src="' . asset('app-assets/contenidoMultimedia/audioDiccionario/' . $item->audio) . '" type="audio/mp3" />
                     <source src="' . asset('app-assets/contenidoMultimedia/audioDiccionario/' . $item->audio) . '" type="audio/ogg" />
                   </audio>';
-                }
+                    }
 
-                $div_palabra .= '<p style="margin-bottom: 0px"><span class="text-bold-600">Pronunciación: </span> ' . $prononciacion . '</p>
-                        <p style="margin-bottom: 0px"><span class="text-bold-600">Definición: </span> ' . $definicion . ' <code style="display: ' . $display . '; background-color: transparent;" class="highlighter-rouge" onclick="$.abrirEjemplo(' . $x . ')"> - Ejemplo</code></p>
+                    $div_palabra .= '<p style="margin-bottom: 0px;font-size: 14px;"><span class="text-bold-600">Pronunciación: </span> ' . $prononciacion . '</p>
+                        <p style="margin-bottom: 0px;font-size: 14px;"><span class="text-bold-600">Definición: </span> ' . $definicion . ' <code style="display: ' . $display . '; background-color: transparent;" class="highlighter-rouge" onclick="$.abrirEjemplo(' . $x . ')"> - Ejemplo</code></p>
                    
                         </div>
                         <div id="contEjemplo' . $x . '" style="display:none; ">' . $item->ejemplo . '</div>
                 </li>
             </ul>';
 
-                $x++;
+                    $x++;
+                }
             }
+
+            $pagination = $Listpalabras->links('Administracion.Paginacion')->render();
+
+            return response()->json([
+                'palabras' => $div_palabra,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        $pagination = $Listpalabras->links('Administracion.Paginacion')->render();
-
-        return response()->json([
-            'palabras' => $div_palabra,
-            'links' => $pagination,
-        ]);
     }
 
 

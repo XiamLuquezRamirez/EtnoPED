@@ -15,7 +15,7 @@
                     </ol>
                 </div>
             </div>
-            <h3 class="content-header-title mb-0">Evaluaciones - {{ $tema }}</h3>
+            <h3 class="content-header-title mb-0" id="ntema"></h3>
         </div>
 
     </div>
@@ -271,6 +271,8 @@
             <input type="hidden" class="form-control" name="id-relacione" id="id-relacione" value="" />
             <input type="hidden" class="form-control" name="id-taller" id="id-taller" value="" />
             <input type="hidden" class="form-control" id="RutEvalVideo" value="{{ url('/') }}/" />
+            <input type="hidden" class="form-control" name="OrigenEval" id="OrigenEval" value="" />
+
             <input type="hidden" data-id='id-dat' id="dattaller"
                 data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
             <input type="hidden" name="idEvaluacion" id="idEvaluacion" value="">
@@ -617,9 +619,25 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+
+            var ultimaParteURLAnterior = document.referrer.split('/').filter(Boolean).pop();
             $("#Princioal").removeClass("active");
-            $("#MenuGramatica").addClass("has-sub open");
-            $("#MenuGramaticaTematica").addClass("active");
+
+            $("#OrigenEval").val(ultimaParteURLAnterior);
+
+            if (ultimaParteURLAnterior == "-") {
+                $("#MenuGramatica").addClass("has-sub open");
+                $("#MenuGramaticaTematica").addClass("active");
+            } else if (ultimaParteURLAnterior == "GestionarMedicinaTradicional") {
+                $("#MenuGramatica").removeClass("has-sub open");
+                $("#MenuGramaticaTematica").removeClass("active");
+                $("#GestionMedicinaTradicional").addClass("active");
+            } else {
+                $("#MenuGramatica").removeClass("has-sub open");
+                $("#MenuGramaticaTematica").removeClass("active");
+                $("#GestionUsosCostumbres").addClass("active");
+            }
+
 
             $(".select2").select2({
                 dropdownAutoWidth: true,
@@ -692,12 +710,16 @@
                     var form = $("#formCargarevaluaciones");
                     var url = form.attr("action");
                     var idTema = $("#tema_id").val();
+                    var origen = $("#OrigenEval").val();
                     $('#page').remove();
                     $('#idTema').remove();
                     $('#searchTerm').remove();
+                    $('#origen').remove();
                     form.append("<input type='hidden' id='page' name='page'  value='" + page +
                         "'>");
                     form.append("<input type='hidden' id='idTema' name='idTema'  value='" + idTema +
+                        "'>");
+                    form.append("<input type='hidden' id='origen' name='origen'  value='" + origen +
                         "'>");
                     form.append("<input type='hidden' id='searchTerm' name='search'  value='" +
                         searchTerm +
@@ -716,9 +738,10 @@
                         dataType: "json",
                         success: function(response) {
                             $('#tdTable').html(response
-                                .unidades); // Rellenamos la tabla con las filas generadas
+                                .evaluaciones); // Rellenamos la tabla con las filas generadas
                             $('#pagination-links').html(response
                                 .links); // Colocamos los enlaces de paginación
+                            $("#ntema").html(response.titulo); //
                         }
                     });
                 },
@@ -734,7 +757,7 @@
                     $("#Punt_Max").val("0");
 
 
-                    editorEnun.setData('<p>Ingresa el contenido Aquí</p>');
+                    editorEnun.setData('<p></p>');
 
 
                     $("#div-evaluaciones").html("");
@@ -4680,7 +4703,7 @@
                     form.append("<input type='hidden' name='gruSel' id='gruSel' value='" +
                         selGrupo + "'>");
                     form.append("<input type='hidden' name='jorSel' id='jorSel' value='" +
-                    selJornada + "'>");
+                        selJornada + "'>");
                     form.append("<input type='hidden' name='eval' id='eval' value='" +
                         idEval + "'>");
 
@@ -5018,11 +5041,12 @@
                                     ' <div id="RespEvalEnsayo"></div>' +
                                     ' </div>';
 
-                                    Pregunta += '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
-                                        '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
-                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
-                                        ' rows="3"></textarea></div>' +
-                                        ' </div>';
+                                Pregunta +=
+                                    '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                    '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                    '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                    ' rows="3"></textarea></div>' +
+                                    ' </div>';
 
                                 $("#Pregunta" + id).html(Pregunta);
                                 if (respuesta.RespPregEnsayo) {
@@ -5047,12 +5071,13 @@
                                     '<hr><strong>Respuesta:</strong>' +
                                     ' <div id="RespAlumPregComplete"></div>' +
                                     ' </div>';
-                                    Pregunta += '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
-                                        '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
-                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
-                                        ' rows="3"></textarea></div>' +
-                                        ' </div>';
-                      
+                                Pregunta +=
+                                    '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                    '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                    '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                    ' rows="3"></textarea></div>' +
+                                    ' </div>';
+
                                 $("#Pregunta" + id).html(Pregunta);
                                 $('#RespPregComplete').html(respuesta.PregComple.parrafo);
                                 if (respuesta.RespPregComple) {
@@ -5149,12 +5174,13 @@
 
                                     });
 
-                            var Retro = '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
-                                        '<label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
-                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
-                                        ' rows="3"></textarea></div>' +
-                                        '</div>';
-                      
+                                var Retro =
+                                    '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                    '<label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                    '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                    ' rows="3"></textarea></div>' +
+                                    '</div>';
+
                                 $("#Pregunta" + id).html(Pregunta + opciones + Retro);
                                 $.hab_editRetro();
                                 if (respuesta.Retro) {
@@ -5175,7 +5201,8 @@
                                     '        <div class="input-group">';
 
                                 Opc +=
-                                    '<input name="radpregVerFal[]" id="RadVer'+ id+'" value="si"  type="radio">';
+                                    '<input name="radpregVerFal[]" id="RadVer' + id +
+                                    '" value="si"  type="radio">';
 
                                 Opc +=
                                     ' <div class="input-group-append" style="margin-left:5px;">' +
@@ -5188,7 +5215,8 @@
                                     '    <fieldset >' +
                                     '        <div class="input-group">';
                                 Opc +=
-                                    ' <input name="radpregVerFal[]" id="RadFal'+ id+'"  value="no"  type="radio">';
+                                    ' <input name="radpregVerFal[]" id="RadFal' + id +
+                                    '"  value="no"  type="radio">';
                                 Opc +=
                                     '<div class="input-group-append" style="margin-left:5px;">' +
                                     '            <span  id="basic-addon2">Falso</span>' +
@@ -5198,21 +5226,22 @@
                                     '</div>' +
                                     '            </div>';
 
-                                    var Retro =  '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
-                                        '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
-                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
-                                        ' rows="3"></textarea></div>' +
-                                        ' </div>';
+                                var Retro =
+                                    '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                    '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                    '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                    ' rows="3"></textarea></div>' +
+                                    ' </div>';
 
 
-                                $("#Pregunta" + id).html(Pregunta + Opc+Retro);
+                                $("#Pregunta" + id).html(Pregunta + Opc + Retro);
 
                                 if (respuesta.RespPregVerFal) {
                                     if (respuesta.RespPregVerFal.respuesta_alumno ===
                                         "si") {
-                                        $('#RadVer'+id).prop("checked", "checked");
+                                        $('#RadVer' + id).prop("checked", "checked");
                                     } else {
-                                        $('#RadFal'+id).prop("checked", "checked");
+                                        $('#RadFal' + id).prop("checked", "checked");
                                     }
                                 }
                                 $.hab_editRetro();
@@ -5281,7 +5310,8 @@
 
                                 Pregunta += '</div>';
 
-                                Pregunta += '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                Pregunta +=
+                                    '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
                                     '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
                                     '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
                                     ' rows="3"></textarea></div>' +
@@ -5336,15 +5366,17 @@
                                     const sel = document.querySelectorAll(
                                         '#opciones' + cons + ' > .opcion')
 
-                                        for (var i = 0; i < sel.length; i++) {
-                                            var item2 = sel[i];
-                                            let optioSel=item2.getAttribute('data-id');
-                                            if(item.respuesta_alumno==optioSel){
-                                                
-                                                contenidoSelect.innerHTML = sel[i].innerHTML;
-                                            }
-    
-                                          }
+                                    for (var i = 0; i < sel.length; i++) {
+                                        var item2 = sel[i];
+                                        let optioSel = item2.getAttribute(
+                                        'data-id');
+                                        if (item.respuesta_alumno == optioSel) {
+
+                                            contenidoSelect.innerHTML = sel[i]
+                                                .innerHTML;
+                                        }
+
+                                    }
                                     select.classList.toggle('active');
                                     $.selopc(item.consecu, cons)
                                     cons++;
@@ -5376,18 +5408,20 @@
 
                                 Pregunta += ' <div class="row">' +
                                     '   <div class="col-md-12">' +
-                                    '       <div class="form-group" id="divarchi'+id+'">' +
+                                    '       <div class="form-group" id="divarchi' + id +
+                                    '">' +
                                     '       <h6 class="form-section"><strong>Agregar Desarrollo de Taller: </strong> </h6>' +
                                     '             <input id="archiTaller"  name="archiTaller" type="file">' +
                                     '       </div>' +
                                     '  </div>' +
                                     '</div>';
 
-                                    Pregunta += '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
-                                        '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
-                                        '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
-                                        ' rows="3"></textarea></div>' +
-                                        ' </div>';
+                                Pregunta +=
+                                    '<div id="Retro" class="col-xl-12 col-lg-6 col-md-12 pt-1">' +
+                                    '   <label style="font-weight:bold;" for="placeTextarea">Retroalimentacion:</label>' +
+                                    '<div><textarea cols="80" id="Resptroalimentacion" name="Resptroalimentacion"' +
+                                    ' rows="3"></textarea></div>' +
+                                    ' </div>';
 
                                 $("#Pregunta" + id).html(Pregunta);
 
@@ -5410,7 +5444,7 @@
                                         ' </div>' +
                                         ' </div>';
 
-                                    $("#divarchi"+id).html(archivo);
+                                    $("#divarchi" + id).html(archivo);
                                 }
 
                                 $.hab_editRetro();
@@ -5420,7 +5454,7 @@
 
                             }
 
-                            
+
 
                         }
 
@@ -5428,12 +5462,12 @@
 
                 },
                 GuarPunt: function(id, npreg) {
-               
+
 
                     for (var instanceName in CKEDITOR.instances) {
                         CKEDITOR.instances[instanceName].updateElement();
                     }
-                    
+
                     var form = $("#formGuarCalPunt");
                     var url = form.attr("action");
                     var IdEval = $("#idEvaluacion").val();
@@ -5444,8 +5478,8 @@
                     var Punt = $("#puntaje" + id).val();
                     var tipo = $("#tip-pregunta" + id).val();
                     var PunMmax = $("#txt_califMax").val();
-                    
-                   if (Punt === "") {
+
+                    if (Punt === "") {
                         flagGlobal = "s";
                         mensaje = "Debe de Ingresar la Puntuación de esta Pregunta.";
                         Swal.fire({
@@ -5502,19 +5536,19 @@
                         success: function(respuesta) {
                             var j = 1;
 
-                         if(npreg == "Ultima"){
-                            $.consultar();
+                            if (npreg == "Ultima") {
+                                $.consultar();
 
-                            Swal.fire({
-                                type: "success",
-                                title: "",
-                                text: "Operación realizada exitosamente",
-                                confirmButtonClass: "btn btn-primary",
-                                timer: 1500,
-                                buttonsStyling: false
-                            });
-                         }
-                           
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "Operación realizada exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+                            }
+
 
                         }
                     });

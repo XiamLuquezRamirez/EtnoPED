@@ -345,19 +345,25 @@
                         }
                     });
                 },
+                evaluaciones: function(id) {
+                    var rurl = $("#Ruta").val();
+                    $(location).attr('href', rurl +
+                        "AdminGramaticaLenguaje/GestionarGramatica/evaluacionesC/" + id);
+
+                },
                 nueva: function() {
                     $("#modalUso").modal({
                         backdrop: 'static',
                         keyboard: false
                     }).show();
-                    $("#tituloMedicina").html("Gestionar Usos y Costubres");
+                    $("#tituloMedicina").html("Gestionar Usos y Costumbres");
                     $("#accion").val("agregar");
                     document.getElementById("formGuardar").reset();
                     $("#btnGuardar").show();
                     $("#btnCancelar").show();
                     $("#btnNuevo").hide();
                     editorTitulo.setData('<p></p>');
-                    editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
+                    editorContenido.setData('<p></p>');
 
                      $.limpiar();
                 },
@@ -369,7 +375,7 @@
                     var form = document.getElementById("formGuardar");
                     form.reset();
                     editorTitulo.setData('<p></p>');
-                    editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
+                    editorContenido.setData('<p></p>');
                     $("#cargVideo").show();
                     $("#verVideo").hide();
                 },
@@ -529,7 +535,7 @@
                 },
                 eliminar: function(id) {
                     Swal.fire({
-                        title: "Esta seguro de Eliminar este registro?",
+                        title: "¿Esta seguro de Eliminar este registro?",
                         text: "¡No podrás revertir esto!",
                         type: "warning",
                         showCancelButton: true,

@@ -169,7 +169,7 @@
                                 <div class="form-actions right">
                                     <button id="btnCancelar" type="reset" onclick="$.salir()"
                                         class="btn btn-warning mr-1">
-                                        <i class="feather icon-corner-up-left"></i> Cancelar
+                                        <i class="feather icon-corner-up-left"></i> Salir
                                     </button>
                                     <button type="button" id="btnGuardar" onclick="$.guardar()"
                                         class="btn btn-primary">
@@ -397,8 +397,8 @@
                     $("#btnCancelar").show();
                     $("#btnNuevo").hide();
                     editorTitulo.setData('<p></p>');
-                    editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
-                    editorPreparacion.setData('<p>Ingresa la preparación Aquí</p>');
+                    editorContenido.setData('<p></p>');
+                    editorPreparacion.setData('<p></p>');
 
                     $.limpiar();
 
@@ -419,8 +419,8 @@
                     $("#verVideo").hide();
                     
                     editorTitulo.setData('<p></p>');
-                    editorContenido.setData('<p>Ingresa el contenido Aquí</p>');
-                    editorPreparacion.setData('<p>Ingresa la preparación Aquí</p>');
+                    editorContenido.setData('<p></p>');
+                    editorPreparacion.setData('<p></p>');
                     
                 },
                 guardar: function() {
@@ -582,7 +582,7 @@
                 },
                 eliminar: function(id) {
                     Swal.fire({
-                        title: "Esta seguro de Eliminar este registro?",
+                        title: "¿Esta seguro de Eliminar este registro?",
                         text: "¡No podrás revertir esto!",
                         type: "warning",
                         showCancelButton: true,
@@ -606,6 +606,12 @@
                             });
                         }
                     });
+                },
+                evaluaciones: function(id) {
+                    var rurl = $("#Ruta").val();
+                    $(location).attr('href', rurl +
+                        "AdminGramaticaLenguaje/GestionarGramatica/evaluacionesM/" + id);
+
                 },
                 procederEliminar: function(id) {
                     var form = $("#formEliminar");

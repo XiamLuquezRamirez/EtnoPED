@@ -28,11 +28,7 @@
                     <div class="card-header" style="background-color: rgba(0,0,0,0);">
                         <h4 id="titulo-usos" class="card-title">Listado de Usos y Costumbres</h4>
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
-                        <div class="heading-elements">
-                            <ul class="list-inline mb-0">
-                                <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
-                            </ul>
-                        </div>
+                        
                     </div>
                     <div class="card-content">
                         <div class="card-body">

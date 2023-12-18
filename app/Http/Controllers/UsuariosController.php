@@ -79,100 +79,108 @@ class UsuariosController extends Controller
 
     public function ValidarUsuario()
     {
-        $idUsu = request()->get('idUsus');
-        $existe = "no";
+        if (Auth::check()) {
+            $idUsu = request()->get('idUsus');
+            $existe = "no";
 
-        $users = DB::connection('mysql')
-            ->table('pedigital.users')
-            ->where('login_usuario', $idUsu)
-            ->where('estado_usuario', 'ACTIVO')
-            ->where('login_usuario', '!=', Auth::user()->login_usuario)
-            ->first();
+            $users = DB::connection('mysql')
+                ->table('pedigital.users')
+                ->where('login_usuario', $idUsu)
+                ->where('estado_usuario', 'ACTIVO')
+                ->where('login_usuario', '!=', Auth::user()->login_usuario)
+                ->first();
 
-        if ($users) {
-            $existe = "si";
+            if ($users) {
+                $existe = "si";
+            }
+
+            return response()->json([
+                'existe' => $existe,
+
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        return response()->json([
-            'existe' => $existe,
-
-        ]);
     }
 
     public function ValidarIdentificacion()
     {
-        $ident = request()->get('ident');
-        $existe = "no";
-        
-        if(Auth::user()->tipo_usuario=="Estudiante"){
+        if (Auth::check()) {
+            $ident = request()->get('ident');
+            $existe = "no";
 
-            $usuario = DB::connection('mysql')
-            ->table('pedigital.alumnos')
-            ->where('ident_alumno', $ident)
-            ->where('estado_alumno', 'ACTIVO')
-            ->where('usuario_alumno', '!=', Auth::user()->login_usuario)
-            ->first();
-        
-        }else{
+            if (Auth::user()->tipo_usuario == "Estudiante") {
 
-            $usuario = DB::connection('mysql')
-            ->table('pedigital.profesores')
-            ->where('identificacion', $ident)
-            ->where('estado', 'ACTIVO')
-            ->where('usuario_profesor', '!=', Auth::user()->login_usuario)
-            ->first();
+                $usuario = DB::connection('mysql')
+                    ->table('pedigital.alumnos')
+                    ->where('ident_alumno', $ident)
+                    ->where('estado_alumno', 'ACTIVO')
+                    ->where('usuario_alumno', '!=', Auth::user()->login_usuario)
+                    ->first();
+            } else {
 
+                $usuario = DB::connection('mysql')
+                    ->table('pedigital.profesores')
+                    ->where('identificacion', $ident)
+                    ->where('estado', 'ACTIVO')
+                    ->where('usuario_profesor', '!=', Auth::user()->login_usuario)
+                    ->first();
+            }
+
+            if ($usuario) {
+                $existe = "si";
+            }
+
+            return response()->json([
+                'existe' => $existe
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        if ($usuario) {
-            $existe = "si";
-        }
-
-        return response()->json([
-            'existe' => $existe,
-
-        ]);
     }
 
     public function GuardarPerfil()
     {
-        $data = request()->all();
-        $rutaUrl = 'http://localhost/PEDIGITAL/public/app-assets/images/';
+        if (Auth::check()) {
+            $data = request()->all();
+            $rutaUrl = 'http://localhost/PEDIGITAL/public/app-assets/images/';
 
-        if (Auth::user()->tipo_usuario == 'Estudiante') {
+            if (Auth::user()->tipo_usuario == 'Estudiante') {
 
-            if (isset($data['fotoUsuario'])) {
-                $archivo = $data['fotoUsuario'];
-                $nombreOriginal = $archivo->getClientOriginalName();
-                $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
-                $archivo->move($rutaUrl . '/app-assets/images/Img_Estudiantes/', $nombreArchivo);
-                $data['img'] = $nombreArchivo;
-            } else {
-                $data['img'] = $data['foto'];
+                if (isset($data['fotoUsuario'])) {
+                    $archivo = $data['fotoUsuario'];
+                    $nombreOriginal = $archivo->getClientOriginalName();
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
+                    $archivo->move($rutaUrl . '/app-assets/images/Img_Estudiantes/', $nombreArchivo);
+                    $data['img'] = $nombreArchivo;
+                } else {
+                    $data['img'] = $data['foto'];
+                }
+
+                $respuesta = Alumnos::guardar($data);
+            } else if (Auth::user()->tipo_usuario == 'Profesor') {
+                if (isset($data['fotoUsuario'])) {
+                    $archivo = $data['fotoUsuario'];
+                    $nombreOriginal = $archivo->getClientOriginalName();
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
+                    $archivo->move($rutaUrl . '/app-assets/images/Img_Docentes/', $nombreArchivo);
+                    $data['img'] = $nombreArchivo;
+                } else {
+                    $data['img'] = $data['foto'];
+                }
+                $respuesta = Profesores::guardar($data);
             }
+            $respuesta = Usuarios::guardar($data);
 
-            $respuesta = Alumnos::guardar($data);
-
-        } else if (Auth::user()->tipo_usuario == 'Profesor') {
-            if (isset($data['fotoUsuario'])) {
-                $archivo = $data['fotoUsuario'];
-                $nombreOriginal = $archivo->getClientOriginalName();
-                $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
-                $archivo->move($rutaUrl . '/app-assets/images/Img_Docentes/', $nombreArchivo);
-                $data['img'] = $nombreArchivo;
-            } else {
-                $data['img'] = $data['foto'];
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok"
+                ]);
             }
-            $respuesta = Profesores::guardar($data);
-        }
-        $respuesta = Usuarios::guardar($data);
-
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => "ok"
-            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 

@@ -42,13 +42,16 @@ class AdministracionController extends Controller
 
     public function GestionarGramatica($ori, $id)
     {
+
+       
         if (Auth::check()) {
             $bandera = "";
             if ($ori == "unidades") {
                 return view('Administracion.GestionUnidades', compact('bandera'));
             } else if ($ori == "temas") {
                 return view('Administracion.GestionarTematica', compact('bandera'));
-            } else if ($ori == "evaluaciones") {
+            } else if ($ori == "evaluacionesT") {
+
                 $detTemas = Tematicas::BuscarDetTema($id);
                 $crawlerTema = new Crawler($detTemas->titulo);
                 $tema = $crawlerTema->filter('p')->text();
@@ -56,6 +59,27 @@ class AdministracionController extends Controller
                 $crawlerUnidad = new Crawler($detTemas->nombre);
                 $unidad = $crawlerUnidad->filter('p')->text();
                 return view('Administracion.GestionEvaluaciones', compact('id', 'tema', 'unidad'));
+            
+            } else if ($ori == "evaluacionesM") {
+
+                $detTemas = MedicinaTradicional::BuscarMedi($id);
+                $crawlerTema = new Crawler($detTemas->nombre);
+                $tema = $crawlerTema->filter('p')->text();
+
+                $crawlerUnidad = new Crawler($detTemas->nombre);
+                $unidad = $crawlerUnidad->filter('p')->text();
+                return view('Administracion.GestionEvaluaciones', compact('id', 'tema', 'unidad'));
+            
+            } else if ($ori == "evaluacionesC") {
+
+                $detTemas = UsosCostumbres::BuscarUso($id);
+                $crawlerTema = new Crawler($detTemas->nombre);
+                $tema = $crawlerTema->filter('p')->text();
+
+                $crawlerUnidad = new Crawler($detTemas->nombre);
+                $unidad = $crawlerUnidad->filter('p')->text();
+                return view('Administracion.GestionEvaluaciones', compact('id', 'tema', 'unidad'));
+            
             } else if ($ori == "practicas") {
                 $detTemas = Tematicas::BuscarDetTema($id);
                 $crawlerTema = new Crawler($detTemas->titulo);
@@ -154,40 +178,104 @@ class AdministracionController extends Controller
 
     public function GuardarUnidad()
     {
-        $data = request()->all();
-        if ($data['accion'] == "agregar") {
-            $respuesta = UnidadesTematicas::guardar($data);
-            if ($respuesta) {
+        if (Auth::check()) {
+            $data = request()->all();
+            if ($data['accion'] == "agregar") {
+                $respuesta = UnidadesTematicas::guardar($data);
+                if ($respuesta) {
+                    $estado = "ok";
+                } else {
+                    $estado = "fail";
+                }
+            } else if ($data['accion'] == "editar") {
+                $respuesta = UnidadesTematicas::editar($data);
                 $estado = "ok";
-            } else {
-                $estado = "fail";
             }
-        } else if ($data['accion'] == "editar") {
-            $respuesta = UnidadesTematicas::editar($data);
-            $estado = "ok";
-        }
 
 
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => $estado,
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function GuardarTema()
     {
-        $data = request()->all();
 
-        if ($data['accion'] == "agregar") {
-            $respuesta = Tematicas::guardar($data);
-            if ($respuesta) {
-                $data['id'] = $respuesta;
+        if (Auth::check()) {
+            $data = request()->all();
+
+            if ($data['accion'] == "agregar") {
+                $respuesta = Tematicas::guardar($data);
+                if ($respuesta) {
+                    $data['id'] = $respuesta;
+
+                    if (request()->has('repeater-list')) {
+                        $img = [];
+                        $tipo = [];
+                        $nomb = [];
+                        $repeaterList = $data['repeater-list'];
+
+
+                        foreach ($repeaterList as $archivoMultimedia) {
+                            if (isset($archivoMultimedia['multimedia'])) {
+
+                                $archivo = $archivoMultimedia['multimedia'];
+                                $nombreOriginal = $archivo->getClientOriginalName();
+                                $tipoMime = $archivo->getClientMimeType();
+                                // Accede a otros atributos del archivo según sea necesario
+
+                                // Realiza acciones con el archivo, como moverlo a una ubicación deseada
+                                $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                                $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
+                                $archivo->move(public_path() . '/app-assets/contenidoMultimedia/tematicas/', $nombreArchivo);
+                                $img[] = $nombreArchivo;
+                                $nomb[] = $nombreOriginal;
+                                $tipo[] = $tipoMime;
+                                // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
+                                $data['img'] = $img;
+                                $data['tipo'] = $tipo;
+                                $data['nomb'] = $nomb;
+                            }
+                        }
+                    }
+
+                    if (isset($data['img'])) {
+                        $respuestaMult = Tematicas::guardarMultimediaTema($data);
+                    }
+
+                    if (request()->hasfile('ejemplos')) {
+                        foreach (request()->file('ejemplos') as $file) {
+                            $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                            $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                            $file->move(public_path() . '/app-assets/contenidoMultimedia/audios/', $name);
+
+                            $arch[] = $name;
+                        }
+                        $data['Audio'] = $arch;
+                    }
+
+                    if (isset($data['contEjemplo'])) {
+                        $respuestaMult = Tematicas::guardarEjemplosTema($data);
+                    }
+                }
+
+                if ($respuesta) {
+                    $estado = "ok";
+                } else {
+                    $estado = "fail";
+                }
+            } else if ($data['accion'] == "editar") {
+                $respuesta = Tematicas::editar($data);
+
 
                 if (request()->has('repeater-list')) {
                     $img = [];
                     $tipo = [];
-                    $nomb = [];
                     $repeaterList = $data['repeater-list'];
 
 
@@ -214,6 +302,7 @@ class AdministracionController extends Controller
                     }
                 }
 
+
                 if (isset($data['img'])) {
                     $respuestaMult = Tematicas::guardarMultimediaTema($data);
                 }
@@ -223,262 +312,219 @@ class AdministracionController extends Controller
                         $prefijo = substr(md5(uniqid(rand())), 0, 6);
                         $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
                         $file->move(public_path() . '/app-assets/contenidoMultimedia/audios/', $name);
-
+                        $archOr[] = $file->getClientOriginalName();
                         $arch[] = $name;
                     }
+                    $data['AudioOr'] = $archOr;
                     $data['Audio'] = $arch;
                 }
 
                 if (isset($data['contEjemplo'])) {
                     $respuestaMult = Tematicas::guardarEjemplosTema($data);
                 }
+                $estado = "ok";
             }
+
+
+
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function GuardarMedicina()
+    {
+
+        if (Auth::check()) {
+            $data = request()->all();
+
+            if ($data['accion'] == "agregar") {
+                if (request()->hasfile('vidPrepa')) {
+                    foreach (request()->file('vidPrepa') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/PreparacionMedicinaTradicional/', $name);
+                        $data['VideoOr'] =  $file->getClientOriginalName();
+                        $data['Video'] = $name;
+                    }
+                } else {
+                    $data['VideoOr'] = "";
+                    $data['Video'] = "";
+                }
+
+
+
+                $respuesta = MedicinaTradicional::guardar($data);
+            } else if ($data['accion'] == "editar") {
+
+
+                if (request()->hasfile('vidPrepa')) {
+                    foreach (request()->file('vidPrepa') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/PreparacionMedicinaTradicional/', $name);
+                        $data['VideoOr'] =  $file->getClientOriginalName();
+                        $data['Video'] = $name;
+                    }
+                } else {
+                    $data['VideoOr'] =  $data['nVideoPrepa'];
+                    $data['Video'] = $data['VideoPrepa'];
+                }
+
+                $respuesta = MedicinaTradicional::modificar($data);
+            }
+
 
             if ($respuesta) {
                 $estado = "ok";
             } else {
                 $estado = "fail";
             }
-        } else if ($data['accion'] == "editar") {
-            $respuesta = Tematicas::editar($data);
 
-
-            if (request()->has('repeater-list')) {
-                $img = [];
-                $tipo = [];
-                $repeaterList = $data['repeater-list'];
-
-
-                foreach ($repeaterList as $archivoMultimedia) {
-                    if (isset($archivoMultimedia['multimedia'])) {
-
-                        $archivo = $archivoMultimedia['multimedia'];
-                        $nombreOriginal = $archivo->getClientOriginalName();
-                        $tipoMime = $archivo->getClientMimeType();
-                        // Accede a otros atributos del archivo según sea necesario
-
-                        // Realiza acciones con el archivo, como moverlo a una ubicación deseada
-                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                        $nombreArchivo = self::sanear_string($prefijo . '_' . $nombreOriginal);
-                        $archivo->move(public_path() . '/app-assets/contenidoMultimedia/tematicas/', $nombreArchivo);
-                        $img[] = $nombreArchivo;
-                        $nomb[] = $nombreOriginal;
-                        $tipo[] = $tipoMime;
-                        // Aquí puedes trabajar con los datos del archivo, como almacenarlos en una base de datos
-                        $data['img'] = $img;
-                        $data['tipo'] = $tipo;
-                        $data['nomb'] = $nomb;
-                    }
-                }
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                ]);
             }
-
-
-            if (isset($data['img'])) {
-                $respuestaMult = Tematicas::guardarMultimediaTema($data);
-            }
-
-            if (request()->hasfile('ejemplos')) {
-                foreach (request()->file('ejemplos') as $file) {
-                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
-                    $file->move(public_path() . '/app-assets/contenidoMultimedia/audios/', $name);
-                    $archOr[] = $file->getClientOriginalName();
-                    $arch[] = $name;
-                }
-                $data['AudioOr'] = $archOr;
-                $data['Audio'] = $arch;
-            }
-
-            if (isset($data['contEjemplo'])) {
-                $respuestaMult = Tematicas::guardarEjemplosTema($data);
-            }
-            $estado = "ok";
-        }
-
-
-
-
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => $estado,
-            ]);
-        }
-    }
-    public function GuardarMedicina()
-    {
-        $data = request()->all();
-
-        if ($data['accion'] == "agregar") {
-
-
-            if (request()->hasfile('vidPrepa')) {
-                foreach (request()->file('vidPrepa') as $file) {
-                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
-                    $file->move(public_path() . '/app-assets/contenidoMultimedia/PreparacionMedicinaTradicional/', $name);
-                    $data['VideoOr'] =  $file->getClientOriginalName();
-                    $data['Video'] = $name;
-                }
-            } else {
-                $data['VideoOr'] = "";
-                $data['Video'] = "";
-            }
-
-
-
-            $respuesta = MedicinaTradicional::guardar($data);
-        } else if ($data['accion'] == "editar") {
-
-
-            if (request()->hasfile('vidPrepa')) {
-                foreach (request()->file('vidPrepa') as $file) {
-                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
-                    $file->move(public_path() . '/app-assets/contenidoMultimedia/PreparacionMedicinaTradicional/', $name);
-                    $data['VideoOr'] =  $file->getClientOriginalName();
-                    $data['Video'] = $name;
-                }
-            } else {
-                $data['VideoOr'] =  $data['nVideoPrepa'];
-                $data['Video'] = $data['VideoPrepa'];
-            }
-
-            $respuesta = MedicinaTradicional::modificar($data);
-        }
-
-
-        if ($respuesta) {
-            $estado = "ok";
         } else {
-            $estado = "fail";
-        }
-
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => $estado,
-            ]);
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
     public function GuardarUso()
     {
-        $data = request()->all();
+        if (Auth::check()) {
+            $data = request()->all();
 
-        if ($data['accion'] == "agregar") {
+            if ($data['accion'] == "agregar") {
 
-            if (request()->hasfile('vidUso')) {
-                foreach (request()->file('vidUso') as $file) {
-                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
-                    $file->move(public_path() . '/app-assets/contenidoMultimedia/UsosCostumbres/', $name);
-                    $data['Video'] = $name;
+                if (request()->hasfile('vidUso')) {
+                    foreach (request()->file('vidUso') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/UsosCostumbres/', $name);
+                        $data['Video'] = $name;
+                    }
+                } else {
+                    $data['Video'] = "";
                 }
-            } else {
-                $data['Video'] = "";
+
+                $respuesta = UsosCostumbres::guardar($data);
+            } else if ($data['accion'] == "editar") {
+
+                if (request()->hasfile('vidUso')) {
+                    foreach (request()->file('vidUso') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/UsosCostumbres/', $name);
+                        $data['Video'] = $name;
+                    }
+                } else {
+                    $data['Video'] = $data['VideoUso'];
+                }
+
+                $respuesta = UsosCostumbres::modificar($data);
             }
 
-            $respuesta = UsosCostumbres::guardar($data);
-        } else if ($data['accion'] == "editar") {
 
-            if (request()->hasfile('vidUso')) {
-                foreach (request()->file('vidUso') as $file) {
-                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
-                    $file->move(public_path() . '/app-assets/contenidoMultimedia/UsosCostumbres/', $name);
-                    $data['Video'] = $name;
-                }
+            if ($respuesta) {
+                $estado = "ok";
             } else {
-                $data['Video'] = $data['VideoUso'];
+                $estado = "fail";
             }
 
-            $respuesta = UsosCostumbres::modificar($data);
-        }
-
-
-        if ($respuesta) {
-            $estado = "ok";
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                ]);
+            }
         } else {
-            $estado = "fail";
-        }
-
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => $estado,
-            ]);
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function GuardarDiccionario()
     {
-        $data = request()->all();
+        if (Auth::check()) {
+            $data = request()->all();
 
-        if ($data['accion'] == "agregar") {
+            if ($data['accion'] == "agregar") {
 
 
-            if (request()->hasfile('imgDicc')) {
-                foreach (request()->file('imgDicc') as $file) {
-                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
-                    $file->move(public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/', $name);
-                    $data['Img'] = $name;
+                if (request()->hasfile('imgDicc')) {
+                    foreach (request()->file('imgDicc') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/', $name);
+                        $data['Img'] = $name;
+                    }
+                } else {
+
+                    $data['Img'] = "";
                 }
-            } else {
 
-                $data['Img'] = "";
+                if (request()->hasfile('audDicc')) {
+                    foreach (request()->file('audDicc') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/', $name);
+                        $data['Audio'] = $name;
+                    }
+                } else {
+
+                    $data['Audio'] = "";
+                }
+
+                $respuesta = Diccionario::guardar($data);
+            } else if ($data['accion'] == "editar") {
+
+
+                if (request()->hasfile('imgDicc')) {
+                    foreach (request()->file('imgDicc') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/', $name);
+                        $data['Img'] = $name;
+                    }
+                } else {
+                    $data['Img'] = $data['imgDicc'];
+                }
+
+                if (request()->hasfile('audDicc')) {
+                    foreach (request()->file('audDicc') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/', $name);
+                        $data['Audio'] = $name;
+                    }
+                } else {
+
+                    $data['Audio'] = $data['audDicc'];
+                }
+
+                $respuesta = Diccionario::modificar($data);
             }
 
-            if (request()->hasfile('audDicc')) {
-                foreach (request()->file('audDicc') as $file) {
-                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
-                    $file->move(public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/', $name);
-                    $data['Audio'] = $name;
-                }
-            } else {
 
-                $data['Audio'] = "";
+            if ($respuesta) {
+                $estado = "ok";
+            } else {
+                $estado = "fail";
             }
 
-            $respuesta = Diccionario::guardar($data);
-        } else if ($data['accion'] == "editar") {
-
-
-            if (request()->hasfile('imgDicc')) {
-                foreach (request()->file('imgDicc') as $file) {
-                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
-                    $file->move(public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/', $name);
-                    $data['Img'] = $name;
-                }
-            } else {
-                $data['Img'] = $data['imgDicc'];
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                ]);
             }
-
-            if (request()->hasfile('audDicc')) {
-                foreach (request()->file('audDicc') as $file) {
-                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
-                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
-                    $file->move(public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/', $name);
-                    $data['Audio'] = $name;
-                }
-            } else {
-
-                $data['Audio'] = $data['audDicc'];
-            }
-
-            $respuesta = Diccionario::modificar($data);
-        }
-
-
-        if ($respuesta) {
-            $estado = "ok";
         } else {
-            $estado = "fail";
-        }
-
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => $estado,
-            ]);
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
@@ -487,524 +533,628 @@ class AdministracionController extends Controller
         $idUndad = request()->get('idUnidad');
         $unidades = UnidadesTematicas::EliminarUnidad($idUndad);
     }
-    
+
     public function EliminarTema()
     {
-        $idTema = request()->get('idTema');
-        $unidades = Tematicas::EliminarTematica($idTema);
+        if (Auth::check()) {
+            $idTema = request()->get('idTema');
+            $unidades = Tematicas::EliminarTematica($idTema);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
     }
 
-    public function cargarPersonajes(){
-        $personajes = Personajes::allPersonajes();
+    public function cargarPersonajes()
+    {
+        if (Auth::check()) {
+            $personajes = Personajes::allPersonajes();
 
-        if (request()->ajax()) {
-            return response()->json([
-                'personajes' => $personajes,
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'personajes' => $personajes,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function EliminarMedicina()
     {
-        $idMedicina = request()->get('idMedicina');
-        $unidades = MedicinaTradicional::Eliminar($idMedicina);
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => "ok",
-            ]);
+        if (Auth::check()) {
+            $idMedicina = request()->get('idMedicina');
+            $unidades = MedicinaTradicional::Eliminar($idMedicina);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
     public function EliminarUsos()
     {
-        $idUso = request()->get('idUso');
-        $unidades = UsosCostumbres::Eliminar($idUso);
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => "ok",
-            ]);
+        if (Auth::check()) {
+            $idUso = request()->get('idUso');
+            $unidades = UsosCostumbres::Eliminar($idUso);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
     public function EliminarDiccionario()
     {
-        $idDicc = request()->get('idDicc');
-        $diccionario = Diccionario::BuscarDicc($idDicc);
+        if (Auth::check()) {
+            $idDicc = request()->get('idDicc');
+            $diccionario = Diccionario::BuscarDicc($idDicc);
 
-        $audio = $diccionario->audio;
-        $img = $diccionario->imagen;
+            $audio = $diccionario->audio;
+            $img = $diccionario->imagen;
 
-        if ($audio != "") {
-            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/' . $audio; // Ruta completa al archivo que deseas eliminar
-            if (file_exists($fileToDelete)) {
-                unlink($fileToDelete);
+            if ($audio != "") {
+                $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audioDiccionario/' . $audio; // Ruta completa al archivo que deseas eliminar
+                if (file_exists($fileToDelete)) {
+                    unlink($fileToDelete);
+                }
             }
-        }
 
-        if ($img != "") {
-            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/' . $img; // Ruta completa al archivo que deseas eliminar
-            if (file_exists($fileToDelete)) {
-                unlink($fileToDelete);
+            if ($img != "") {
+                $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/imgDiccionario/' . $img; // Ruta completa al archivo que deseas eliminar
+                if (file_exists($fileToDelete)) {
+                    unlink($fileToDelete);
+                }
             }
-        }
 
-        $diccionario = Diccionario::Eliminar($idDicc);
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => "ok",
-            ]);
+            $diccionario = Diccionario::Eliminar($idDicc);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function eliminarMultimedia()
     {
-        $idMult = request()->get('idmultimedia');
-        $archivo = request()->get('rutaMultimedia');
-        $Multmedia = Tematicas::EliminarRegistomultimedia($idMult);
+        if (Auth::check()) {
+            $idMult = request()->get('idmultimedia');
+            $archivo = request()->get('rutaMultimedia');
+            $Multmedia = Tematicas::EliminarRegistomultimedia($idMult);
 
-        $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/tematicas/' . $archivo; // Ruta completa al archivo que deseas eliminar
+            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/tematicas/' . $archivo; // Ruta completa al archivo que deseas eliminar
 
-        if (file_exists($fileToDelete)) {
-            unlink($fileToDelete);
-        }
+            if (file_exists($fileToDelete)) {
+                unlink($fileToDelete);
+            }
 
 
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => "ok",
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function eliminarEjemplo()
     {
-        $idEjemplo = request()->get('idejemplo');
-        $rutaEjemplo = request()->get('rutaEjemplo');
-        $Multmedia = Tematicas::EliminarEjemplo($idEjemplo);
+        if (Auth::check()) {
+            $idEjemplo = request()->get('idejemplo');
+            $rutaEjemplo = request()->get('rutaEjemplo');
+            $Multmedia = Tematicas::EliminarEjemplo($idEjemplo);
 
-        $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audios/' . $rutaEjemplo; // Ruta completa al archivo que deseas eliminar
+            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audios/' . $rutaEjemplo; // Ruta completa al archivo que deseas eliminar
 
-        if (file_exists($fileToDelete)) {
-            unlink($fileToDelete);
-        }
-
-
+            if (file_exists($fileToDelete)) {
+                unlink($fileToDelete);
+            }
 
 
-        if (request()->ajax()) {
-            return response()->json([
-                'estado' => "ok",
-            ]);
+
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function CargarUnidades()
     {
-        $perPage = 5; // Número de posts por página
-        $page = request()->get('page', 1);
-        $searchTerm = request()->get('search');
-        if (!is_numeric($page)) {
-            $page = 1; // Establecer un valor predeterminado si no es numérico
-        }
-
-        $unidades = DB::connection('mysql')
-            ->table('etno_ped.unidades_tematicas')
-            ->where('estado', 'ACTIVO');
-        if ($searchTerm) {
-            $unidades->where('nombre', 'LIKE', '%' . $searchTerm . '%');
-        }
-        $Listunidades = $unidades->paginate($perPage, ['*'], 'page', $page);
-
-        $tdTable = '';
-        $x = ($page - 1) * $perPage + 1;
-
-        foreach ($Listunidades as $i => $item) {
-            if (!is_null($item)) {
-                $descripcionCortada = $item->descripcion ?
-                    (strlen($item->descripcion) > 100 ? substr($item->descripcion, 0, 100) . '...' : $item->descripcion) :
-                    "Sin descripción";
-
-                $tdTable .= '<tr>' .
-                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
-                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
-                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
-                    '    </div>' .
-                    '</td>' .
-                    '<th scope="row">' . $x . '</th>' .
-                    '<td>' . $item->nombre . '</td>' .
-                    '<td>' . $descripcionCortada . '</td>' .
-                    '</tr>';
-
-                $x++;
+        if (Auth::check()) {
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $searchTerm = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
             }
+
+            $unidades = DB::connection('mysql')
+                ->table('etno_ped.unidades_tematicas')
+                ->where('estado', 'ACTIVO');
+            if ($searchTerm) {
+                $unidades->where('nombre', 'LIKE', '%' . $searchTerm . '%');
+            }
+            $Listunidades = $unidades->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($Listunidades as $i => $item) {
+                if (!is_null($item)) {
+                    $descripcionCortada = $item->descripcion ?
+                        (strlen($item->descripcion) > 100 ? substr($item->descripcion, 0, 100) . '...' : $item->descripcion) :
+                        "Sin descripción";
+
+                    $tdTable .= '<tr>' .
+                        '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                        '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                        '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                        '    </div>' .
+                        '</td>' .
+                        '<th scope="row">' . $x . '</th>' .
+                        '<td>' . $item->nombre . '</td>' .
+                        '<td>' . $descripcionCortada . '</td>' .
+                        '</tr>';
+
+                    $x++;
+                }
+            }
+
+            $pagination = $Listunidades->links('Administracion.Paginacion')->render();
+
+            return response()->json([
+                'unidades' => $tdTable,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        $pagination = $Listunidades->links('Administracion.Paginacion')->render();
-
-        return response()->json([
-            'unidades' => $tdTable,
-            'links' => $pagination,
-        ]);
     }
     public function CargarUsosCostumbres()
     {
-        $perPage = 5; // Número de posts por página
-        $page = request()->get('page', 1);
-        $searchUso = request()->get('search');
-        if (!is_numeric($page)) {
-            $page = 1; // Establecer un valor predeterminado si no es numérico
-        }
-
-        $usos = DB::connection('mysql')
-            ->table('etno_ped.usos_costumbres')
-            ->where('estado', 'ACTIVO');
-        if ($searchUso) {
-            $usos->where('nombre', 'LIKE', '%' . $searchUso . '%');
-        }
-        $Listusos = $usos->paginate($perPage, ['*'], 'page', $page);
-
-        $tdTable = '';
-        $x = ($page - 1) * $perPage + 1;
-
-        foreach ($Listusos as $i => $item) {
-            if (!is_null($item)) {
-                $tdTable .= '<tr>' .
-                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
-                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
-                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
-                    '    </div>' .
-                    '</td>' .
-                    '<th scope="row">' . $x . '</th>' .
-                    '<td>' . $item->nombre . '</td>' .
-                    '</tr>';
-
-                $x++;
+        if (Auth::check()) {
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $searchUso = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
             }
+
+            $usos = DB::connection('mysql')
+                ->table('etno_ped.usos_costumbres')
+                ->where('estado', 'ACTIVO');
+            if ($searchUso) {
+                $usos->where('nombre', 'LIKE', '%' . $searchUso . '%');
+            }
+            $Listusos = $usos->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($Listusos as $i => $item) {
+                if (!is_null($item)) {
+                    $tdTable .= '<tr>' .
+                        '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                        '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                        '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                        '    <button title="Evaluaciones" type="button" onclick="$.evaluaciones(' . $item->id . ');" class="btn btn-icon btn-pure secondary  "><i class="fa fa-check-square-o"></i> </button>' .
+                        '    </div>' .
+                        '</td>' .
+                        '<th scope="row">' . $x . '</th>' .
+                        '<td>' . $item->nombre . '</td>' .
+                        '</tr>';
+
+                    $x++;
+                }
+            }
+
+            $pagination = $Listusos->links('Administracion.Paginacion')->render();
+
+            return response()->json([
+                'usoCostumbre' => $tdTable,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        $pagination = $Listusos->links('Administracion.Paginacion')->render();
-
-        return response()->json([
-            'usoCostumbre' => $tdTable,
-            'links' => $pagination,
-        ]);
     }
+
     public function CargarDiccionario()
     {
-        $perPage = 5; // Número de posts por página
-        $page = request()->get('page', 1);
-        $searchDicc = request()->get('search');
-        if (!is_numeric($page)) {
-            $page = 1; // Establecer un valor predeterminado si no es numérico
-        }
-
-        $diccionario = DB::connection('mysql')
-            ->table('etno_ped.diccionario')
-            ->where('estado', 'ACTIVO');
-        if ($searchDicc) {
-            $diccionario->where('palabra_espanol', 'LIKE', '%' . $searchDicc . '%');
-        }
-        $ListDiccionario = $diccionario->paginate($perPage, ['*'], 'page', $page);
-
-        $tdTable = '';
-        $x = ($page - 1) * $perPage + 1;
-
-        foreach ($ListDiccionario as $i => $item) {
-            if (!is_null($item)) {
-                $tdTable .= '<tr>' .
-                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
-                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
-                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
-                    '    </div>' .
-                    '</td>' .
-                    '<th scope="row">' . $x . '</th>' .
-                    '<td>' . $item->palabra_espanol . '</td>' .
-                    '<td>' . $item->palabra_wuayuunaiki . '</td>' .
-                    '</tr>';
-
-                $x++;
+        if (Auth::check()) {
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $searchDicc = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
             }
+
+            $diccionario = DB::connection('mysql')
+                ->table('etno_ped.diccionario')
+                ->where('estado', 'ACTIVO');
+            if ($searchDicc) {
+                $diccionario->where('palabra_espanol', 'LIKE', '%' . $searchDicc . '%');
+            }
+            $ListDiccionario = $diccionario->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($ListDiccionario as $i => $item) {
+                if (!is_null($item)) {
+                    $tdTable .= '<tr>' .
+                        '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                        '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                        '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                        '    </div>' .
+                        '</td>' .
+                        '<th scope="row">' . $x . '</th>' .
+                        '<td>' . $item->palabra_espanol . '</td>' .
+                        '<td>' . $item->palabra_wuayuunaiki . '</td>' .
+                        '</tr>';
+
+                    $x++;
+                }
+            }
+
+            $pagination = $ListDiccionario->links('Administracion.Paginacion')->render();
+
+            return response()->json([
+                'diccionario' => $tdTable,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        $pagination = $ListDiccionario->links('Administracion.Paginacion')->render();
-
-        return response()->json([
-            'diccionario' => $tdTable,
-            'links' => $pagination,
-        ]);
     }
 
     public function BuscarUnidad()
     {
-        $idUndad = request()->get('idUnidad');
-        $unidades = UnidadesTematicas::BuscarUnidad($idUndad);
+        if (Auth::check()) {
+            $idUndad = request()->get('idUnidad');
+            $unidades = UnidadesTematicas::BuscarUnidad($idUndad);
 
-        if (request()->ajax()) {
-            return response()->json([
-                'unidades' => $unidades,
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'unidades' => $unidades,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
     public function BuscarDiccionario()
     {
-        $idDicc = request()->get('idDicc');
-        $diccionario = Diccionario::BuscarDicc($idDicc);
+        if (Auth::check()) {
+            $idDicc = request()->get('idDicc');
+            $diccionario = Diccionario::BuscarDicc($idDicc);
 
-        if (request()->ajax()) {
-            return response()->json([
-                'diccionario' => $diccionario,
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'diccionario' => $diccionario,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function BuscarTema()
     {
-        $idTema = request()->get('idTema');
-        $tematica = Tematicas::BuscarTema($idTema);
-        $mulTematica = Tematicas::BuscarMultimedia($idTema);
-        $ejemplos = Tematicas::BuscarEjemplos($idTema);
+        if (Auth::check()) {
+            $idTema = request()->get('idTema');
+            $tematica = Tematicas::BuscarTema($idTema);
+            $mulTematica = Tematicas::BuscarMultimedia($idTema);
+            $ejemplos = Tematicas::BuscarEjemplos($idTema);
 
-        if (request()->ajax()) {
-            return response()->json([
-                'tematica' => $tematica,
-                'mulTematica' => $mulTematica,
-                'ejemplos' => $ejemplos,
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'tematica' => $tematica,
+                    'mulTematica' => $mulTematica,
+                    'ejemplos' => $ejemplos,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function BuscarMedicina()
     {
-        $idMedicina = request()->get('idMedicina');
-        $medicina = MedicinaTradicional::BuscarMedi($idMedicina);
+        if (Auth::check()) {
+            $idMedicina = request()->get('idMedicina');
+            $medicina = MedicinaTradicional::BuscarMedi($idMedicina);
 
-        if (request()->ajax()) {
-            return response()->json([
-                'medicina' => $medicina
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'medicina' => $medicina
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
     public function BuscarUso()
     {
-        $idUso = request()->get('idUso');
-        $usoCostumbre = UsosCostumbres::BuscarUso($idUso);
+        if (Auth::check()) {
+            $idUso = request()->get('idUso');
+            $usoCostumbre = UsosCostumbres::BuscarUso($idUso);
 
-        if (request()->ajax()) {
-            return response()->json([
-                'usoCostumbre' => $usoCostumbre
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'usoCostumbre' => $usoCostumbre
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function CargarUnidadesSelect()
     {
 
-        $unidades = UnidadesTematicas::AllUnidades();
+        if (Auth::check()) {
+            $unidades = UnidadesTematicas::AllUnidades();
 
-        if (request()->ajax()) {
-            return response()->json([
-                'unidades' => $unidades,
-            ]);
+            if (request()->ajax()) {
+                return response()->json([
+                    'unidades' => $unidades,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
     public function CargarTemas()
     {
-        $perPage = 5; // Número de posts por página
-        $page = request()->get('page', 1);
-        $searchTerm = request()->get('search');
-        if (!is_numeric($page)) {
-            $page = 1; // Establecer un valor predeterminado si no es numérico
-        }
-
-        $temas = DB::connection('mysql')
-            ->table('etno_ped.tematicas')
-            ->leftJoin('etno_ped.unidades_tematicas', 'etno_ped.tematicas.unidad', '=', 'etno_ped.unidades_tematicas.id')
-            ->select('etno_ped.tematicas.id', 'etno_ped.tematicas.titulo', 'etno_ped.unidades_tematicas.nombre AS unidad')
-            ->where('etno_ped.tematicas.estado', 'ACTIVO');
-        if ($searchTerm) {
-            $temas->where('titulo', 'LIKE', '%' . $searchTerm . '%');
-        }
-
-        $ListTemas = $temas->paginate($perPage, ['*'], 'page', $page);
-
-        $tdTable = '';
-        $x = ($page - 1) * $perPage + 1;
-
-        foreach ($ListTemas as $i => $item) {
-            if (!is_null($item)) {
-                $tdTable .= '<tr>' .
-                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
-                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
-                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
-                    '<button title="Evaluaciones" type="button" onclick="$.evaluaciones(' . $item->id . ');" class="btn btn-icon btn-pure secondary  "><i class="fa fa-check-square-o"></i> </button>' .
-                    '<button title="Practicas" type="button" onclick="$.practicas(' . $item->id . ');" class="btn btn-icon btn-pure warning  "><i class="fa fa-users"></i> </button>' .
-                    '</div>' .
-                    '</td>' .
-                    '<th style="vertical-align: middle" scope="row">' . $x . '</th>' .
-                    '<td style="vertical-align: middle">' . $item->titulo . '</td>' .
-                    '<td style="vertical-align: middle">' . $item->unidad . '</td>' .
-                    '</tr>';
-
-                $x++;
+        if (Auth::check()) {
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $searchTerm = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
             }
+
+            $temas = DB::connection('mysql')
+                ->table('etno_ped.tematicas')
+                ->leftJoin('etno_ped.unidades_tematicas', 'etno_ped.tematicas.unidad', '=', 'etno_ped.unidades_tematicas.id')
+                ->select('etno_ped.tematicas.id', 'etno_ped.tematicas.titulo', 'etno_ped.unidades_tematicas.nombre AS unidad')
+                ->where('etno_ped.tematicas.estado', 'ACTIVO');
+            if ($searchTerm) {
+                $temas->where('titulo', 'LIKE', '%' . $searchTerm . '%');
+            }
+
+            $ListTemas = $temas->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($ListTemas as $i => $item) {
+                if (!is_null($item)) {
+                    $tdTable .= '<tr>' .
+                        '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                        '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                        '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                        '<button title="Evaluaciones" type="button" onclick="$.evaluaciones(' . $item->id . ');" class="btn btn-icon btn-pure secondary  "><i class="fa fa-check-square-o"></i> </button>' .
+                        '<button title="Practicas" type="button" onclick="$.practicas(' . $item->id . ');" class="btn btn-icon btn-pure warning  "><i class="fa fa-users"></i> </button>' .
+                        '</div>' .
+                        '</td>' .
+                        '<th style="vertical-align: middle" scope="row">' . $x . '</th>' .
+                        '<td style="vertical-align: middle">' . $item->titulo . '</td>' .
+                        '<td style="vertical-align: middle">' . $item->unidad . '</td>' .
+                        '</tr>';
+
+                    $x++;
+                }
+            }
+
+            $pagination = $ListTemas->links('Administracion.Paginacion')->render();
+
+            return response()->json([
+                'temas' => $tdTable,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        $pagination = $ListTemas->links('Administracion.Paginacion')->render();
-
-        return response()->json([
-            'temas' => $tdTable,
-            'links' => $pagination,
-        ]);
     }
     public function CargarMedicinaTradicional()
     {
-        $perPage = 5; // Número de posts por página
-        $page = request()->get('page', 1);
-        $searchMedicina = request()->get('search');
-        if (!is_numeric($page)) {
-            $page = 1; // Establecer un valor predeterminado si no es numérico
-        }
-
-        $medicina = DB::connection('mysql')
-            ->table('etno_ped.medicina_tradicional')
-            ->where('etno_ped.medicina_tradicional.estado', 'ACTIVO');
-        if ($searchMedicina) {
-            $medicina->where('nombre', 'LIKE', '%' . $searchMedicina . '%');
-        }
-
-        $ListMedicina = $medicina->paginate($perPage, ['*'], 'page', $page);
-
-        $tdTable = '';
-        $x = ($page - 1) * $perPage + 1;
-
-        foreach ($ListMedicina as $i => $item) {
-            if (!is_null($item)) {
-                $tdTable .= '<tr>' .
-                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
-                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
-                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
-                    '</div>' .
-                    '</td>' .
-                    '<th style="vertical-align: middle" scope="row">' . $x . '</th>' .
-                    '<td style="vertical-align: middle">' . $item->nombre . '</td>' .
-                    '</tr>';
-
-                $x++;
+        if (Auth::check()) {
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $searchMedicina = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
             }
+
+            $medicina = DB::connection('mysql')
+                ->table('etno_ped.medicina_tradicional')
+                ->where('etno_ped.medicina_tradicional.estado', 'ACTIVO');
+            if ($searchMedicina) {
+                $medicina->where('nombre', 'LIKE', '%' . $searchMedicina . '%');
+            }
+
+            $ListMedicina = $medicina->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($ListMedicina as $i => $item) {
+                if (!is_null($item)) {
+                    $tdTable .= '<tr>' .
+                        '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                        '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                        '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                        '<button title="Evaluaciones" type="button" onclick="$.evaluaciones(' . $item->id . ');" class="btn btn-icon btn-pure secondary  "><i class="fa fa-check-square-o"></i> </button>' .
+                        '</div>' .
+                        '</td>' .
+                        '<th style="vertical-align: middle" scope="row">' . $x . '</th>' .
+                        '<td style="vertical-align: middle">' . $item->nombre . '</td>' .
+                        '</tr>';
+
+                    $x++;
+                }
+            }
+
+            $pagination = $ListMedicina->links('Administracion.Paginacion')->render();
+
+            return response()->json([
+                'temas' => $tdTable,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        $pagination = $ListMedicina->links('Administracion.Paginacion')->render();
-
-        return response()->json([
-            'temas' => $tdTable,
-            'links' => $pagination,
-        ]);
     }
 
     public function CargarEvaluaciones()
     {
 
-        $idTema = request()->get('idTema');
+        if (Auth::check()) {
+            $idTema = request()->get('idTema');
+            $origen = request()->get('origen');
 
-        $perPage = 5; // Número de posts por página
-        $page = request()->get('page', 1);
-        $searchTerm = request()->get('search');
-        if (!is_numeric($page)) {
-            $page = 1; // Establecer un valor predeterminado si no es numérico
-        }
-
-        $evaluaciones = DB::connection('mysql')
-            ->table('etno_ped.evaluaciones')
-            ->where('estado', 'ACTIVO')
-            ->where('tematica', $idTema);
-        if ($searchTerm) {
-            $evaluaciones->where('titulo', 'LIKE', '%' . $searchTerm . '%');
-        }
-        $ListEvaluaciones = $evaluaciones->paginate($perPage, ['*'], 'page', $page);
-
-        $tdTable = '';
-        $x = ($page - 1) * $perPage + 1;
-
-        foreach ($ListEvaluaciones as $i => $item) {
-            if (!is_null($item)) {
-                $descripcionCortada = $item->titulo ?
-                    (strlen($item->titulo) > 100 ? substr($item->titulo, 0, 100) . '...' : $item->titulo) :
-                    "Sin descripción";
-
-                $tdTable .= '<tr>' .
-                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
-                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
-                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
-                    '    <button type="button" title="Calificar" onclick="$.calificar(' . $item->id . ');" class="btn btn-icon btn-pure success "><i class="fa fa-check-square-o"></i></button>';
-                if (Auth::user()->tipo_usuario == "Profesor") {
-                    $tdTable .=  '    <button type="button" title="Calificar Evaluación" onclick="$.Calificar(' . $item->id . ');" class="btn btn-icon btn-pure success "><i class="fa fa-check-square-o"></i></button>';
-                }
-                $tdTable .= '    </div>' .
-                    '</td>' .
-                    '<th scope="row">' . $x . '</th>' .
-                    '<td>' . $descripcionCortada . '</td>' .
-                    '</tr>';
-
-                $x++;
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $searchTerm = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
             }
+
+            //consultar descripcion de la tematica
+            
+            if ($origen == '-') {
+                $detaTematica = Tematicas::BuscarTema($idTema);
+                $titulo = $detaTematica->titulo;
+            } else if ($origen == 'GestionarMedicinaTradicional') {
+                $detaTematica = MedicinaTradicional::BuscarMedi($idTema);
+                $titulo = $detaTematica->nombre;
+            } else {
+                $detaTematica = UsosCostumbres::BuscarUso($idTema);
+                $titulo = $detaTematica->nombre;
+            }
+
+            $evaluaciones = DB::connection('mysql')
+                ->table('etno_ped.evaluaciones')
+                ->where('estado', 'ACTIVO')
+                ->where('tematica', $idTema)
+                ->where('origen', $origen);
+
+            if ($searchTerm) {
+                $evaluaciones->where('titulo', 'LIKE', '%' . $searchTerm . '%');
+            }
+
+            $ListEvaluaciones = $evaluaciones->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($ListEvaluaciones as $i => $item) {
+                if (!is_null($item)) {
+                    $descripcionCortada = $item->titulo ?
+                        (strlen($item->titulo) > 100 ? substr($item->titulo, 0, 100) . '...' : $item->titulo) :
+                        "Sin descripción";
+
+                    $tdTable .= '<tr>' .
+                        '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                        '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                        '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                        '    <button type="button" title="Calificar" onclick="$.calificar(' . $item->id . ');" class="btn btn-icon btn-pure success "><i class="fa fa-check-square-o"></i></button>';
+                    if (Auth::user()->tipo_usuario == "Profesor") {
+                        $tdTable .=  '    <button type="button" title="Calificar Evaluación" onclick="$.Calificar(' . $item->id . ');" class="btn btn-icon btn-pure success "><i class="fa fa-check-square-o"></i></button>';
+                    }
+                    $tdTable .= '    </div>' .
+                        '</td>' .
+                        '<th scope="row">' . $x . '</th>' .
+                        '<td>' . $descripcionCortada . '</td>' .
+                        '</tr>';
+
+                    $x++;
+                }
+            }
+
+            $pagination = $ListEvaluaciones->links('Administracion.Paginacion')->render();
+
+            return response()->json([
+                'evaluaciones' => $tdTable,
+                'links' => $pagination,
+                'titulo' => $titulo
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        $pagination = $ListEvaluaciones->links('Administracion.Paginacion')->render();
-
-        return response()->json([
-            'unidades' => $tdTable,
-            'links' => $pagination,
-        ]);
     }
 
     public function CargarPracticas()
     {
-        $idTema = request()->get('idTema');
+        if (Auth::check()) {
+            $idTema = request()->get('idTema');
 
-        $perPage = 5; // Número de posts por página
-        $page = request()->get('page', 1);
-        $searchTerm = request()->get('search');
-        if (!is_numeric($page)) {
-            $page = 1; // Establecer un valor predeterminado si no es numérico
-        }
-
-        $practicas = DB::connection('mysql')
-            ->table('etno_ped.practicas_tematica')
-            ->where('estado', 'ACTIVO')
-            ->where('tematica', $idTema);
-        if ($searchTerm) {
-            $practicas->where('titulo', 'LIKE', '%' . $searchTerm . '%');
-        }
-        $ListPracticas = $practicas->paginate($perPage, ['*'], 'page', $page);
-
-        $tdTable = '';
-        $x = ($page - 1) * $perPage + 1;
-
-        foreach ($ListPracticas as $i => $item) {
-            if (!is_null($item)) {
-                $descripcionCortada = $item->titulo ?
-                    (strlen($item->titulo) > 100 ? substr($item->titulo, 0, 100) . '...' : $item->titulo) :
-                    "Sin descripción";
-
-                $tdTable .= '<tr>' .
-                    '<td><div class="btn-group" role="group" aria-label="First Group">' .
-                    '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
-                    '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>';
-                $tdTable .= '    </div>' .
-                    '</td>' .
-                    '<th scope="row">' . $x . '</th>' .
-                    '<td>' . $descripcionCortada . '</td>' .
-                    '</tr>';
-
-                $x++;
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $searchTerm = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
             }
+
+            $practicas = DB::connection('mysql')
+                ->table('etno_ped.practicas_tematica')
+                ->where('estado', 'ACTIVO')
+                ->where('tematica', $idTema);
+            if ($searchTerm) {
+                $practicas->where('titulo', 'LIKE', '%' . $searchTerm . '%');
+            }
+            $ListPracticas = $practicas->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($ListPracticas as $i => $item) {
+                if (!is_null($item)) {
+                    $descripcionCortada = $item->titulo ?
+                        (strlen($item->titulo) > 100 ? substr($item->titulo, 0, 100) . '...' : $item->titulo) :
+                        "Sin descripción";
+
+                    $tdTable .= '<tr>' .
+                        '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                        '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                        '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>';
+                    $tdTable .= '    </div>' .
+                        '</td>' .
+                        '<th scope="row">' . $x . '</th>' .
+                        '<td>' . $descripcionCortada . '</td>' .
+                        '</tr>';
+
+                    $x++;
+                }
+            }
+
+            $pagination = $ListPracticas->links('Administracion.Paginacion')->render();
+
+            return response()->json([
+                'unidades' => $tdTable,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
-
-        $pagination = $ListPracticas->links('Administracion.Paginacion')->render();
-
-        return response()->json([
-            'unidades' => $tdTable,
-            'links' => $pagination,
-        ]);
     }
 
     ///////////////////GUARDAR EVALUACIÓN
