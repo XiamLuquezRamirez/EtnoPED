@@ -25,14 +25,14 @@ class RespMultPreg extends Model
         foreach ($data["Opciones"] as $key => $val) {
             if ($data["OpcionSel"][$key] == "si") {
 
-                $grupPre =  DB::connection('mysql')->table('etno_ped.resp_evalpregcomp')->insertGetId([
+                $grupPre =  DB::connection('mysql')->table('etno_ped.resp_pregmultiple')->insertGetId([
                     'alumno' => Auth::user()->id,
                     'evaluacion' => $data["IdEvaluacion"],
                     'pregunta' => $data["PreguntaOpc"],
                     'respuesta' => $data["Opciones"][$key],
                     'fecha' => $fecha,
                 ]);
-                $grupPre = DB::connection('mysql')->table('etno_ped.resp_evalpregcomp')->find($grupPre);
+                $grupPre = DB::connection('mysql')->table('etno_ped.resp_pregmultiple')->find($grupPre);
             }
         }
 

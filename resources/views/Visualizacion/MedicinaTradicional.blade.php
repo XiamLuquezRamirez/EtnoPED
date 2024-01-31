@@ -2,13 +2,26 @@
 @section('title', 'Medicina Tradicional')
 @section('Contenido')
     <input type="hidden" id="urlMult" data-ruta="{{ asset('/app-assets/') }}" />
+    <input type="hidden" class="form-control" id="IdEval" value="" />
+    <input type="hidden" class="form-control" id="Tip_Usu" value="{{ Auth::user()->tipo_usuario }}" />
+    <input type="hidden" class="form-control" id="Id_Doce" value="{{ Session::get('DOCENTE') }}" />
+    <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+    <input type="hidden" data-id='id-dat' id="dattaller"
+        data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
+    <input type="hidden" class="form-control" id="h" value="" />
+    <input type="hidden" class="form-control" id="m" value="" />
+    <input type="hidden" class="form-control" id="s" value="" />
+    <input type="hidden" class="form-control" id="tiempEvaluacion" value="" />
+    <input type="hidden" data-id='id-dat' id="Respdattaller"
+    data-ruta="{{ asset('/app-assets/Archivos_EvalTaller_Resp') }}" />
+    <input type="hidden" class="form-control" name="CargArchi" id="CargArchi" value="" />
 
     <div class="content-header row">
         <div class="content-header-left col-md-12 col-12 mb-2">
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/Principal ">Inicio</a>
+                        <li class="breadcrumb-item"><a href="{{ url('/Principal') }}">Inicio</a>
                         </li>
                         <li class="breadcrumb-item"><a href="#">Medicina Tradicional</a>
                         </li>
@@ -16,21 +29,15 @@
                     </ol>
                 </div>
             </div>
-            <h3 class="content-header-title mb-0" id="titulo">Medicina Tradicional</h3>
+            <h3 class="content-header-title mb-0" >Medicina Tradicional</h3>
         </div>
 
     </div>
     <div class="content-body">
         <div class="card p-1" style="border-radius:10px;background-color: rgba(0,0,0,0);">
             <div class="card-header" style="background-color: rgba(0,0,0,0);">
-                <h4 class="card-title">Medicinas Tradicionales</h4>
+                <h4 class="card-title" id="titulo">Medicinas Tradicionales</h4>
                 <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
-                <div class="heading-elements">
-                    <ul class="list-inline mb-0">
-                        <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
-
-                    </ul>
-                </div>
             </div>
             <div class="card-content collapse show">
                 <div class="row">
@@ -42,8 +49,9 @@
                     <div class="row match-height" style="width: 100%;">
                         <!-- Description lists horizontal -->
                         <div class="col-sm-12 col-md-8" style="">
-                            <div class="card" style="height: 432.517px; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
-                                <div class="card-header" >
+                            <div class="card"
+                                style="height: 432.517px; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
+                                <div class="card-header">
                                     <h4 id="titulo-medicina" class="card-title"></h4>
                                     <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
@@ -65,7 +73,8 @@
 
                         <!-- Description lists vertical-->
                         <div class="col-sm-12 col-md-4" style="">
-                            <div class="card" style="background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
+                            <div class="card"
+                                style="background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                                 <div class="card-header">
                                     <h4 class="card-title">Preparación</h4>
                                     <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
@@ -86,9 +95,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card" style="; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
+                            <div class="card"
+                                style="; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                                 <div class="card-header">
-                                    <h4 class="card-title">Evaluaciónes</h4>
+                                    <h4 class="card-title">Evaluaciones</h4>
                                     <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
@@ -98,14 +108,9 @@
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
-
                                         <ul class="list-group" id="listEvalMedicina">
-                                           
-                                          
-                                         
-                                        </ul>
 
-                                      
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -156,6 +161,88 @@
         </div>
     </div>
 
+    <div class="modal fade text-left" id="ModEval" tabindex="-1" role="dialog" aria-labelledby="myModalLabel15"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-xl" role="document">
+            <div class="modal-content"
+                style="background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
+                <div class="modal-body">
+
+                    <article id='DetEval' style="text-transform: capitalize;" class="wrapper">
+                        <header></header>
+                        <main style="height: 400px; overflow: auto; overflow-x: hidden;"></main>
+                    </article>
+
+                    <article id='DetEvalFin' style="display: none;text-transform: capitalize;" class="wrapper">
+                        <header></header>
+                        <main style="height: 400px; overflow: auto;"></main>
+                    </article>
+
+                </div>
+                <div class="modal-footer">
+                    <div id="contTiempo" style="text-align: left; font-size: 25px;display: none; padding-right: 20px;">
+                        <div class="content-header row">
+
+                            <div class="content-header-left col-md-12 col-12" style="pointer-events:none;">
+                                <div class="btn-group float-md-right" role="group"
+                                    aria-label="Button group with nested dropdown">
+
+                                    <a class="btn btn-outline-primary"><i class="ft-clock"> Tiempo para
+                                            Terminar</i></a>
+                                    <a class="btn btn-outline-primary" style="color: #CE2605;" id="cuenta"></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row" id="Dat_Cal" style="display: none;">
+                        <div class="col-md-5" style="text-align: center;">
+                            <labe>Intentos Permitidos:</labe><br>
+                            <labe id="label_IntPerm" style="color:  #CE2605;"></labe>
+                        </div>
+                        <div class="col-md-5" style="text-align: center;">
+                            <labe>Intentos Realizados:</labe><br>
+                            <labe id="label_IntReal"></labe>
+                        </div>
+                    </div>
+                    <button type="button" id="VidDidac" onclick="$.MostVid();" style="display: none;"
+                        class="btn btn-success"><i class="fa fa-video-camera"></i> Ver Contenido
+                        Didactico</button>
+
+                    <button type="button" id="btn_salirModEv" class="btn grey btn-outline-secondary"
+                        onclick="$.CloseModActIni();" data-dismiss="modal"><i
+                            class="ft-corner-up-left position-right"></i> Salir</button>
+                    <button type="button" id="btn_atrasModEv" style="display: none;"
+                        class="btn grey btn-outline-secondary" onclick="$.AtrasModActIni();"><i class="fa fa-reply"></i>
+                        Atras</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade text-left" id="ModVidelo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel15"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success white">
+                    <h4 class="modal-title" style="text-transform: capitalize;" id="titu_temaEva">Contenido
+                        Didactico Cargado</h4>
+                </div>
+                <div class="modal-body">
+                    <div id='ListEvalVid' style="height: 400px; overflow: auto;text-align: center;">
+                        <video width="640" height="360" id="datruta" controls
+                            data-ruta="{{ asset('/app-assets/Evaluacion_PregDidact') }}">
+                        </video>
+                    </div>
+
+                    <button type="button" id="btn_salir" onclick="$.SalirAnim();"
+                        class="btn grey btn-outline-secondary" data-dismiss="modal"><i
+                            class="ft-corner-up-left position-right"></i> Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form action="{{ url('/MedicinaTradicional/CargarMedicina') }}" id="formCargarMedicina" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
@@ -164,7 +251,12 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
-    <form action="{{ url('/GramaticaLenguaje/CargarDetPractica') }}" id="formCargarContPractica" method="POST">
+
+    <form action="{{ url('/GramaticaLenguaje/CargarDetEvaluacion') }}" id="formCargaContenidoEvaluacion" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/GramaticaLenguaje/CargarPreguntaEvaluacion') }}" id="formCargaPreguntas" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -173,9 +265,73 @@
 @endsection
 @section('scripts')
     <script>
+        CKEDITOR.editorConfig = function(config) {
+            config.toolbarGroups = [{
+                    name: 'document',
+                    groups: ['mode', 'document', 'doctools']
+                },
+                {
+                    name: 'clipboard',
+                    groups: ['clipboard', 'undo']
+                },
+                {
+                    name: 'styles',
+                    groups: ['styles']
+                },
+                {
+                    name: 'editing',
+                    groups: ['find', 'selection', 'spellchecker', 'editing']
+                },
+                {
+                    name: 'forms',
+                    groups: ['forms']
+                },
+                {
+                    name: 'basicstyles',
+                    groups: ['basicstyles', 'cleanup']
+                },
+                {
+                    name: 'paragraph',
+                    groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']
+                },
+                {
+                    name: 'links',
+                    groups: ['links']
+                },
+                {
+                    name: 'insert',
+                    groups: ['insert']
+                },
+                {
+                    name: 'colors',
+                    groups: ['colors']
+                },
+                {
+                    name: 'tools',
+                    groups: ['tools']
+                },
+                {
+                    name: 'others',
+                    groups: ['others']
+                },
+                {
+                    name: 'about',
+                    groups: ['about']
+                }
+            ];
+            config.removeButtons =
+                'Source,Save,NewPage,ExportPdf,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Undo,Redo,Replace,Find,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,SelectAll,Button,ImageButton,HiddenField,Strike,CopyFormatting,RemoveFormat,Indent,Blockquote,Outdent,CreateDiv,JustifyLeft,JustifyCenter,JustifyRight,JustifyBlock,BidiLtr,BidiRtl,Language,Link,Unlink,Anchor,Flash,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Format,BGColor,ShowBlocks,About,Underline,Italic';
+        };
+
         $(document).ready(function() {
 
             $("#MedicinaTradicional").addClass("active");
+
+            var flagGlobal = "n";
+            var flagTimExt = "n";
+            var flagTimFin = "n";
+            var flagIntent = "ok";
+            var xtiempo;
 
             $.extend({
                 cargarMedicina: function() {
@@ -244,7 +400,7 @@
                                 response.Medicina.video_prepa;
                             if (response.Medicina.video_prepa = !"") {
 
-                                console.log(url);
+                             
                                 $("#cont-vidPre").show();
                                 ContentVidPreparacion.innerHTML =
                                     '<video id="vidPrepa"  style="width: 100%;"  controls><source  src="' +
@@ -259,13 +415,14 @@
 
                             //Listar evaluaciones
                             let listEval = "";
-                            $.each(response.evaluaciones, function(i, item){
-                                listEval+=' <li onclick="$.MostEval('+item.id+');" class="list-group-item hvr-grow-shadow" style="text-transform: capitalize; cursor: pointer;">'
-                                    +'<span class="float-left">'
-                                    +'<i class="fa fa-check-square-o mr-1"></i>'
-                                    +'</span>'
-                                    + item.titulo
-                                +'</li>';
+                            $.each(response.evaluaciones, function(i, item) {
+                                listEval += ' <li onclick="$.MostEval(' + item.id +
+                                    ');" class="list-group-item hvr-grow-shadow" style="text-transform: capitalize; cursor: pointer;">' +
+                                    '<span class="float-left">' +
+                                    '<i class="fa fa-check-square-o mr-1"></i>' +
+                                    '</span>' +
+                                    item.titulo +
+                                    '</li>';
                             });
 
                             $("#listEvalMedicina").html(listEval);
@@ -274,8 +431,8 @@
                     });
 
                 },
-                 ///////MOSTRAR EVALUACIÓN
-                 MostEval: function(id) {
+                ///////MOSTRAR EVALUACIÓN
+                MostEval: function(id) {
 
                     $("#ModEval").modal({
                         backdrop: 'static',
@@ -358,8 +515,11 @@
                             //////CARGAR INFORMACIÓN DE INTENTOS
 
                             $("#Dat_Cal").show();
-                            var int_real = respuesta.int_realizados;
+                            var int_real = (respuesta && respuesta.int_realizados) ?
+                                respuesta.int_realizados : 0;
                             var int_perm = respuesta.int_perm;
+
+
 
                             $("#label_IntPerm").html(int_perm);
                             $("#label_IntReal").html(int_real);
@@ -1011,14 +1171,15 @@
                                         ' </div>';
 
                                     $("#divarchi").html(archivo);
+                                    $("#CargArchi").val(respuesta.RespPregTaller.archivo);
                                 }
-
                             }
-
                         }
-
                     });
-
+                },
+                VerArchResp: function(id) {
+                    window.open($('#Respdattaller').data("ruta") + "/" + $('#' + id).data("archivo"),
+                        '_blank');
                 },
                 GuarPreg: function(id, npreg) {
 
@@ -1119,8 +1280,6 @@
                                 });
                                 return;
                             }
-
-
                         }
 
                         if (flagIntent === "fail" && $("#Tip_Usu").val() === "Estudiante") {
@@ -1136,7 +1295,6 @@
                             });
                             return;
                         }
-
                     } else {
                         if (npreg === "Ultima") {
                             mensaje = "Solo los Estudiantes pueden Responder las Evaluaciones";
@@ -1154,8 +1312,6 @@
                             $("#Pregunta" + id).html("");
                         }
                         return;
-
-
                     }
 
                     $("#Pregunta").remove();
@@ -1186,9 +1342,6 @@
                         Id_Doce + "'>");
                     form.append("<input type='hidden' id='Tiempo' name='Tiempo'  value='" +
                         tiempo + "'>");
-
-
-
 
                     if (tipo === "TALLER") {
                         $.ajax({
@@ -1225,7 +1378,6 @@
                             dataType: "json",
                             async: false,
                             success: function(respuesta) {
-
                                 if (npreg === "Ultima") {
                                     $.MostrResulEval(respuesta);
 
@@ -1244,15 +1396,13 @@
                                 });
                             }
                         });
-
                     }
-
                 },
-
                 atrasMedicina: function() {
                     $("#btn-atrasMedi").hide();
                     $("#div-medicina").show();
                     $("#div-detmedicina").hide();
+                    $("#titulo").html('Medicinas Tradicionales');
                 },
                 MostVid: function() {
                     $("#ModVidelo").modal({
@@ -1269,6 +1419,217 @@
                     });
                     var videoID = 'datruta';
                     $('#' + videoID).get(0).pause();
+                },
+                hab_ediContPregEnsayo: function() {
+                    CKEDITOR.replace('RespPregEns', {
+                        width: '100%',
+                        height: 100
+                    });
+                },
+                hab_ediContComplete: function() {
+                    CKEDITOR.replace('RespPregComplete', {
+                        width: '100%',
+                        height: 100
+                    });
+                },
+                RespMulPreg: function(id) {
+
+                    $('.OpcionSel').val("no");
+
+                    if ($('#' + id).prop('checked')) {
+                        $('.checksel').prop("checked", "");
+                        $('#' + id).prop("checked", "checked");
+                        $('#OpcionSel_' + id).val("si");
+                    }
+
+                },
+                selopc: function(id, cons) {
+                    $("#RespSelect" + cons).val($("#" + id).data("id"));
+                    $("#ConsPreg" + cons).val(id);
+
+                },
+                MostArc: function(id) {
+                    window.open($('#dattaller').data("ruta") + "/" + $('#' + id).data("archivo"),
+                        '_blank');
+                },
+                CambArchivo: function() {
+                    $("#id_file").show();
+                    $("#id_verf").hide();
+                    $("#CargArchi").val("");
+                },
+                AtrasModActIni: function(opc) {
+                    if (opc == "F") {
+                        $('#ModEval').modal('toggle');
+                        $("#contTiempo").hide();
+                        $("#VidDidac").hide();
+                        $("#DetEval").hide();
+                        $("#DetEvalFin").hide();
+                        $("#btn_eval").hide();
+                        $("#Dat_Cal").hide();
+                        $("#btn_atrasModEv").show();
+                        $("#btn_salirModEv").hide();
+                        $("#titu_Eva").hide();
+                        $("#titu_temaEva").show();
+                    } else {
+
+                        var mensaje = "¿Esta seguro de Cerrar La Evaluación?";
+                        Swal.fire({
+                            title: "Notificación de evaluación",
+                            text: mensaje,
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Si, Cerrar!",
+                            cancelButtonText: "Cancelar",
+                            confirmButtonClass: "btn btn-warning",
+                            cancelButtonClass: "btn btn-danger ml-1",
+                            buttonsStyling: false,
+                        }).then(function(result) {
+                            if (result.value) {
+                                $('#ModEval').modal('toggle');
+                                $("#contTiempo").hide();
+                                $("#DetEval").hide();
+                                $("#DetEvalFin").hide();
+                                $("#btn_eval").hide();
+                                $("#VidDidac").hide();
+                                $("#Dat_Cal").hide();
+                                $("#btn_salirModEv").show();
+                                $("#btn_atrasModEv").hide();
+                                $("#titu_Eva").hide();
+                                $("#titu_temaEva").show();
+
+                                $.ReiniciarCont();
+
+                            }
+                        });
+                    }
+
+                },
+                ReiniciarCont: function() {
+                    $("#contTiempo").hide();
+                    $('#cuenta').timer('remove');
+                    clearInterval(xtiempo);
+                    xtiempo = null;
+                },
+                MostrResulEval: function(respuesta) {
+
+                    Swal.fire({
+                        type: "success",
+                        title: "Notificación de Evaluación",
+                        text: "Operación realizada exitosamente",
+                        confirmButtonClass: "btn btn-primary",
+                        timer: 1500,
+                        buttonsStyling: false
+                    });
+                    let idTema = $("#idTema").val();
+
+                    // $.verTemas(idTema);
+
+                    var IntReal = respuesta.InfEval.int_realizados;
+                    var IntPerm = respuesta.InfEval.intentos_perm;
+                    var puntMax = parseInt(respuesta.InfEval.punt_max);
+                    var puntTotal = parseInt(respuesta.Libro.puntuacion);
+                    var TipCali = respuesta.InfEval.calif_usando;
+
+                    $("#DetEval").hide();
+                    $("#contTiempo").hide();
+                    $("#Dat_Cal").hide();
+                    $("#VidDidac").hide();
+                    $("#btn_ConversaEval").hide();
+
+                    $("#DetEvalFin").show();
+
+                    var $wrapper = $('#DetEvalFin');
+                    $wrapper.avnSkeleton('display');
+
+                    $wrapper.avnSkeleton('remove');
+
+                    $wrapper.find('> header').append("Resultado de Evaluación");
+                    var tiempoEval = "";
+                    var tiempoUsad = "";
+
+                    if (respuesta.InfEval.hab_tiempo === "NO") {
+                        tiempoEval = "Esta Evaluación no Cuenta con un tiempo para su Desarrollo";
+                        tiempoUsad = "No Aplica";
+                    } else {
+                        tiempoEval = respuesta.InfEval.tiempo;
+                        tiempoUsad = respuesta.Libro.tiempo_usado;
+                    }
+
+
+                    var contenido = '<div class="card">' +
+                        '<div class="card-content">' +
+                        '  <ul class="list-group list-group-flush">' +
+                        '    <li class="list-group-item">' +
+                        '      <span class="badge badge-default badge-pill bg-info float-right">' +
+                        tiempoEval + '</span> <b>Tiempo de la Evaluación:</b>' +
+                        '    </li>' +
+                        '     <li class="list-group-item">' +
+                        '       <span class="badge badge-default badge-pill bg-danger float-right">' +
+                        tiempoUsad + '</span> <b>Tiempo Utilizado:</b>' +
+                        '</li>' +
+                        '<li class="list-group-item">' +
+                        '<span class="badge badge-default badge-pill bg-warning float-right">' +
+                        respuesta.InfEval.int_realizados + '/' + respuesta.InfEval.intentos_perm +
+                        '</span> <b>Intentos</b>' +
+                        '</li>' +
+                        '<li class="list-group-item">' +
+                        '<span id="txt_califVis" class="badge badge-default badge-pill  float-right">30/60</span> <b>Calificación:</b> ' +
+                        '</li>' +
+                        '</ul>' +
+                        '</div>' +
+                        '</div>';
+
+                    $wrapper.find('> main').append(contenido);
+
+
+                    if (respuesta.InfEval.calxdoc == "SI") {
+                        $("#txt_califVis").css('background-color', '#2DCEE3');
+                        $("#txt_califVis").html("PENDIENTE POR CALIFICAR.");
+
+                    } else {
+
+                        var porcentaje = (puntTotal / puntMax) * 100;
+                        if (porcentaje <= 50) {
+                            $("#txt_califVis").css('background-color', '#f20d00');
+                        } else if (porcentaje > 50 && porcentaje <= 60) {
+                            $("#txt_califVis").css('background-color', '#F08D0E');
+                        } else if (porcentaje > 60 && porcentaje <= 70) {
+                            $("#txt_califVis").css('background-color', '#F5DA00');
+                        } else if (porcentaje > 70 && porcentaje <= 80) {
+                            $("#txt_califVis").css('background-color', '#C0EA1C');
+                        } else if (porcentaje > 80 && porcentaje <= 100) {
+                            $("#txt_califVis").css('background-color', '#1ECD60');
+                        }
+                        $("#txt_califVis").css('color', '#ffffff');
+
+                        if (TipCali == "Puntos") {
+                            $("#txt_califVis").html(puntTotal + "/" + puntMax);
+                        } else if (TipCali == "Porcentaje") {
+                            $("#txt_califVis").html(porcentaje + "%");
+                        } else {
+                            switch (true) {
+                                case (porcentaje < 35):
+                                    $("#txt_califVis").html("Super Bajo");
+                                    break;
+                                case (porcentaje >= 35 && porcentaje < 60):
+                                    $("#txt_califVis").html("Bajo");
+                                    break;
+                                case (porcentaje >= 60 && porcentaje < 80):
+                                    $("#txt_califVis").html("Basico");
+                                    break;
+                                case (porcentaje >= 80 && porcentaje < 95):
+                                    $("#txt_califVis").html("Alto");
+                                    break;
+                                case (porcentaje >= 95):
+                                    $("#txt_califVis").html("Superior");
+                                    break;
+                            }
+                        }
+
+                    }
+
                 },
 
 

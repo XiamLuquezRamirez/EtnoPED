@@ -7,7 +7,7 @@
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Inicio</a>
+                        <li class="breadcrumb-item"><a href="{{ url('/Principal') }}">Inicio</a>
                         </li>
                         <li class="breadcrumb-item"><a href="#">Lista de Evaluaciones</a>
                         </li>
@@ -28,7 +28,6 @@
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
-                                <li><a data-action="reload"><i class="feather icon-rotate-cw"></i></a></li>
                                 <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
 
                             </ul>
@@ -272,6 +271,8 @@
             <input type="hidden" class="form-control" name="id-taller" id="id-taller" value="" />
             <input type="hidden" class="form-control" id="RutEvalVideo" value="{{ url('/') }}/" />
             <input type="hidden" class="form-control" name="OrigenEval" id="OrigenEval" value="" />
+            <input type="hidden" data-id='id-dat' id="Respdattaller"
+            data-ruta="{{ asset('/app-assets/Archivos_EvalTaller_Resp') }}"/>
 
             <input type="hidden" data-id='id-dat' id="dattaller"
                 data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
@@ -548,12 +549,13 @@
                                                     style="height: 400px; overflow: auto;text-align: center;">
                                                     <video width="640" height="360" id="datruta" controls
                                                         data-ruta="{{ asset('/app-assets/Evaluacion_PregDidact') }}">
+                                                        <source src="" id="sour_video" type="video/mp4">
                                                     </video>
                                                 </div>
 
                                                 <button type="button" id="btn_salir" onclick="$.SalirVideo();"
                                                     class="btn grey btn-outline-secondary"><i
-                                                        class="ft-corner-up-left position-right"></i> Salir</button>
+                                                        class="fa fa-reply"></i> Salir</button>
                                             </div>
                                         </div>
                                     </div>
@@ -593,6 +595,10 @@
         <!-- Tus campos del formulario aquí -->
     </form>
     <form action="{{ url('/AdminGramaticaLenguaje/ElimnarPreg') }}" id="formAuxiliar" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
+    <form action="{{ url('/AdminGramaticaLenguaje/ElimnarVideo') }}" id="formAuxiliarDelVideo" method="POST">
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
@@ -738,7 +744,8 @@
                         dataType: "json",
                         success: function(response) {
                             $('#tdTable').html(response
-                                .evaluaciones); // Rellenamos la tabla con las filas generadas
+                                .evaluaciones
+                                ); // Rellenamos la tabla con las filas generadas
                             $('#pagination-links').html(response
                                 .links); // Colocamos los enlaces de paginación
                             $("#ntema").html(response.titulo); //
@@ -863,6 +870,65 @@
                             $("#titulo").val(respuesta.Evaluacion.titulo);
                             $("#Punt_Max").val(respuesta.Evaluacion.punt_max);
                             editorEnun.setData(respuesta.Evaluacion.enunciado);
+
+                            if (respuesta.VideoEval !== "no") {
+                                var Preguntas =
+                                    '<div id="Video" style="padding-bottom: 10px;">' +
+                                    ' <div class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1 videos">' +
+                                    '         <div class="row">' +
+                                    '            <div class="col-md-8">' +
+                                    '             <div class="form-group row">' +
+                                    '             <div class="col-md-12">' +
+                                    '<input type="hidden" id="id-video" name="id-video" value="" />' +
+                                    '     <h4 class="primary">Video Adjunto</h4>' +
+                                    '            </div>' +
+                                    '           </div>' +
+                                    '         </div>' +
+                                    '      </div>' +
+                                    '  <div class="col-md-12"> ' +
+                                    '     <div class="form-group">' +
+                                    '<div id="Det_video">' +
+                                    '             <label>Seleccionar Archivo:  </label>' +
+                                    '<label id="projectinput7" class="file center-block"><br>' +
+                                    '    <input id="archiVideo" accept="video/*" name="archiVideo" type="file">' +
+                                    '    <span class="file-custom"></span>' +
+                                    ' </label>' +
+                                    '         <br>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '      </div>' +
+                                    '<div class="form-group"  style="margin-bottom: 0px;">' +
+                                    '    <button type="button" onclick="$.GuardarEvalVideo();" id="Btn-guardarVideo"   class="btn mr-1 mb-1 btn-success"><i class="fa fa-save"></i> Guardar</button>' +
+                                    '    <button type="button" id="Btn-Editvideo"  style="display:none;" onclick="$.EditEvalVideo()" class="btn mr-1 mb-1 btn-primary"><i class="fa fa-edit"></i> Editar</button>' +
+                                    '    <button type="button" id="Btn-EliVideo" onclick="$.DelEvalVideo(' +
+                                    respuesta.idvideo +
+                                    ')" class="btn mr-1 mb-1 btn-danger"><i class="fa fa-trash-o"></i> Eliminar</button>' +
+                                    '</div>' +
+                                    '   </div>' +
+                                    '</div>';
+
+                                $("#vid-adjunto").append(Preguntas);
+
+                                $("#id-video").val(respuesta.idvideo);
+                                $("#Btn-guardarVideo").hide();
+                                $("#Btn-Editvideo").show();
+                                $("#div-addpreg").show();
+                                $('#Btn-guardarVideo').prop('disabled', false);
+
+
+                                $("#Det_video").html(
+                                    '<div class="form-group" id="id_verf">' +
+                                    ' <label class="form-label " for="imagen">Ver Archivo Cargado:</label>' +
+                                    ' <div class="btn-group" role="group" aria-label="Basic example">' +
+                                    '   <button id="idvide" type="button" data-archivo="' +
+                                    respuesta.VideoEval +
+                                    '" onclick="$.Mostvideo(this.id);" class="btn btn-success"><i' +
+                                    '             class="fa fa-search"></i> Ver Archivo</button>' +
+                                    '      </div>' +
+                                    '       </div>');
+
+
+                            }
 
 
                             $.each(respuesta.PregEval, function(i, item) {
@@ -1761,10 +1827,10 @@
                                         '"  style="display:none;" onclick="$.EditPreguntasTaller(' +
                                         cons +
                                         ')" class="btn mr-1 mb-1 btn-primary"><i class="fa fa-edit"></i> Editar</button>' +
-                                        '    <button type="button" id="Btn-ElimPreg' +
-                                        cons +
-                                        '" onclick="$.DelPreguntasTaller(' + cons +
-                                        ')" class="btn mr-1 mb-1 btn-danger"><i class="fa fa-trash-o"></i> Eliminar</button>' +
+                                        '    <button type="button" id="btnDel' +
+                                        cons + '" data-id="' + cons +
+                                        '" data-nombre="id-taller' + cons +
+                                        '"  onclick="$.DelPregunta(this.id)"  class="btn mr-1 mb-1 btn-danger"><i class="fa fa-trash-o"></i> Eliminar</button>' +
                                         '</div>' +
                                         '   </div>' +
                                         '</div>';
@@ -4135,43 +4201,58 @@
                 AddVideo: function() {
                     edit = "no";
                     $("#MensInf").hide();
+                    var elementosVideos = document.getElementsByClassName('videos');
 
-                    var Preguntas = '<div id="Video" style="padding-bottom: 10px;">' +
-                        ' <div class="bs-callout-primary callout-bordered callout-transparent p-1">' +
-                        '         <div class="row">' +
-                        '            <div class="col-md-8">' +
-                        '             <div class="form-group row">' +
-                        '             <div class="col-md-12">' +
-                        '<input type="hidden" id="id-video" name="id-video" value="" />' +
-                        '     <h4 class="primary">Video Adjunto</h4>' +
-                        '            </div>' +
-                        '           </div>' +
-                        '         </div>' +
-                        '      </div>' +
-                        '  <div class="col-md-12"> ' +
-                        '     <div class="form-group">' +
-                        '<div id="Det_video">' +
-                        '<label>Seleccionar Archivo:  </label>' +
-                        '<label id="projectinput7" class="file center-block"><br>' +
-                        '    <input id="archiVideo" accept="video/*" name="archiVideo" type="file">' +
-                        '    <span class="file-custom"></span>' +
-                        ' </label>' +
-                        '         <br>' +
-                        '</div>' +
-                        '</div>' +
-                        '      </div>' +
-                        '<div class="form-group"  style="margin-bottom: 0px;">' +
-                        '    <button type="button" onclick="$.GuardarEvalVideo();" id="Btn-guardarVideo"   class="btn mr-1 mb-1 btn-success"><i class="fa fa-save"></i> Guardar</button>' +
-                        '    <button type="button" id="Btn-Editvideo"  style="display:none;" onclick="$.EditEvalVideo()" class="btn mr-1 mb-1 btn-primary"><i class="fa fa-edit"></i> Editar</button>' +
-                        '    <button type="button" id="Btn-EliVideo" onclick="$.DelEvalVideo()" class="btn mr-1 mb-1 btn-danger"><i class="fa fa-trash-o"></i> Eliminar</button>' +
-                        '</div>' +
-                        '   </div>' +
-                        '</div>';
+                    if(elementosVideos.length > 0) {
+                        Swal.fire({
+                            type: "warning",
+                            title: "Oops...",
+                            text: "ya existe un video relacionado a la evaluación.",
+                            confirmButtonClass: "btn btn-primary",
+                            timer: 2000,
+                            buttonsStyling: false
+                        });
+                    }else{
+                        var Preguntas = '<div id="Video" style="padding-bottom: 10px;">' +
+                            ' <div class="bs-callout-primary callout-bordered callout-transparent p-1 videos">' +
+                            '         <div class="row">' +
+                            '            <div class="col-md-8">' +
+                            '             <div class="form-group row">' +
+                            '             <div class="col-md-12">' +
+                            '<input type="hidden" id="id-video" name="id-video" value="" />' +
+                            '     <h4 class="primary">Video Adjunto</h4>' +
+                            '            </div>' +
+                            '           </div>' +
+                            '         </div>' +
+                            '      </div>' +
+                            '  <div class="col-md-12"> ' +
+                            '     <div class="form-group">' +
+                            '<div id="Det_video">' +
+                            '<label>Seleccionar Archivo:  </label>' +
+                            '<label id="projectinput7" class="file center-block"><br>' +
+                            '    <input id="archiVideo" accept="video/*" name="archiVideo" type="file">' +
+                            '    <span class="file-custom"></span>' +
+                            ' </label>' +
+                            '         <br>' +
+                            '</div>' +
+                            '</div>' +
+                            '      </div>' +
+                            '<div class="form-group"  style="margin-bottom: 0px;">' +
+                            '    <button type="button" onclick="$.GuardarEvalVideo();" id="Btn-guardarVideo"   class="btn mr-1 mb-1 btn-success"><i class="fa fa-save"></i> Guardar</button>' +
+                            '    <button type="button" id="Btn-Editvideo"  style="display:none;" onclick="$.EditEvalVideo()" class="btn mr-1 mb-1 btn-primary"><i class="fa fa-edit"></i> Editar</button>' +
+                            '    <button type="button" id="Btn-EliVideo" onclick="$.DelEvalVideo()" class="btn mr-1 mb-1 btn-danger"><i class="fa fa-trash-o"></i> Eliminar</button>' +
+                            '</div>' +
+                            '   </div>' +
+                            '</div>';
+    
+                        $("#vid-adjunto").append(Preguntas);
+    
+                        $("#div-addpreg").hide();
+                        $("#btns_guardar").show();
+                    }
 
-                    $("#vid-adjunto").append(Preguntas);
 
-                    $("#div-addpreg").hide();
-                    $("#btns_guardar").show();
+                
 
                 },
 
@@ -4234,7 +4315,7 @@
                                 $("#Btn-guardarVideo").html(
                                     '<i  class="fa fa-save"></i> Guardar');
 
-
+                                console.log(respuesta.EvPDidact.cont_didactico);
                                 $("#Det_video").html(
                                     '<div class="form-group" id="id_verf">' +
                                     ' <label class="form-label " for="imagen">Ver Archivo Cargado:</label>' +
@@ -4276,7 +4357,7 @@
                         var id = $("#id-video").val();
 
                         var Preguntas = '<div id="Video" style="padding-bottom: 10px;">' +
-                            ' <div class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1">' +
+                            ' <div class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1 videos">' +
                             '         <div class="row">' +
                             '            <div class="col-md-8">' +
                             '             <div class="form-group row">' +
@@ -4320,88 +4401,33 @@
                         });
                     }
                 },
-                //ELIMINAR VIDEO
-                DelEvalVideo: function(id_fila) {
-                    edit = "si";
-                    if ($("#id-video").val() !== "") {
-                        var preg = $("#Id_Eval").val();
-                        var form = $("#formAuxiliar");
-                        $("#idAuxiliar").remove();
-                        $("#idtippreg").remove();
-                        form.append("<input type='hidden' name='id' id='idAuxiliar' value='" + preg +
-                            "'>");
-                        form.append("<input type='hidden' name='tip' id='idtippreg' value='VIDEO'>");
-                        var url = form.attr("action");
-                        var datos = form.serialize();
-                        var mensaje = "";
-                        mensaje = "¿Desea Eliminar este Video?";
-                        Swal.fire({
-                            title: 'Gestionar Evaluaciones',
-                            text: mensaje,
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Si, Eliminar!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    type: "post",
-                                    url: url,
-                                    data: datos,
-                                    success: function(respuesta) {
-                                        Swal.fire({
-                                            title: "Gestionar Evaluaciones",
-                                            text: respuesta.mensaje,
-                                            icon: "success",
-                                            button: "Aceptar"
-                                        });
-
-                                        $('#Video').remove();
-                                        $("#div-addpreg").show();
-                                        $("#btns_guardar").hide();
-
-
-                                    },
-                                    error: function() {
-
-                                        mensaje =
-                                            "La Pregunta no pudo ser Eliminada";
-
-                                        Swal.fire(
-                                            'Gestionar Evaluaciones',
-                                            mensaje,
-                                            'warning'
-                                        )
-                                    }
-                                });
-
-                            }
-                        });
-
-                    } else {
-                        $('#Video').remove();
-                        $("#div-addpreg").show();
-                        $("#btns_guardar").hide();
-                    }
-
-                },
                 Mostvideo: function(id) {
-
                     $("#ModVidelo").modal({
                         backdrop: 'static',
                         keyboard: false
                     });
 
-                    $("#datruta").html(
-                        '<source src="" id="sour_video" type="video/mp4">'
-                    );
-                    jQuery('#sour_video').attr('src', $('#datruta').data(
-                        "ruta") + "/" + $('#' + id).data("archivo"));
-                    $('#' + id).data("archivo")
+                    var miElement = document.getElementById('datruta');
+                    var miVideo = document.getElementById('idvide');
+                    let rutaVid = miElement.getAttribute('data-ruta');
+                    let rutaVidRuta = miVideo.getAttribute('data-archivo');
+
+                    miElement.src = rutaVid+'/'+rutaVidRuta;
+                    miElement.load();
+              
                 },
                 SalirVideo: function() {
+
+                    $("#modalEvaluacion").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
                     $('#ModVidelo').modal('toggle');
+                    var miDiv = document.getElementById("modalEvaluacion");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+
+
                 },
                 //ELIMINAR PREGUNTA
                 DelPregunta: function(id_fila) {
@@ -4428,6 +4454,73 @@
                                 type: "error",
                                 confirmButtonClass: "btn btn-success"
                             });
+                        }
+                    });
+                },
+                //ELIMINAR VIDEO
+                DelEvalVideo: function(id_fila) {
+                    Swal.fire({
+                        title: "Esta seguro de Eliminar este video?",
+                        text: "¡No podrás revertir esto!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Si, eliminar!",
+                        cancelButtonText: "Cancelar",
+                        confirmButtonClass: "btn btn-warning",
+                        cancelButtonClass: "btn btn-danger ml-1",
+                        buttonsStyling: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            $.procederEliminarVideo(id_fila);                         
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: "Cancelado",
+                                text: "Tu registro está a salvo ;)",
+                                type: "error",
+                                confirmButtonClass: "btn btn-success"
+                            });
+                        }
+                    });
+                },
+                procederEliminarVideo: function(id_fila){
+                    var eval = $("#Id_Eval").val();
+                    var form = $("#formAuxiliarDelVideo");
+                    $("#idEval").remove();
+                    form.append("<input type='hidden' name='idEval' id='idEval' value='" + eval + "'>");
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: datos,
+                        success: function(respuesta) {
+
+                            Swal.fire({
+                                type: "success",
+                                title: "",
+                                text: "Operación realizada exitosamente",
+                                confirmButtonClass: "btn btn-primary",
+                                timer: 1500,
+                                buttonsStyling: false
+                            });
+
+                            $('#Video').remove();
+                            $("#div-addpreg").show();
+                            $("#btns_guardar").hide();
+                        },
+                        error: function() {
+
+                            mensaje =
+                                "La Pregunta no pudo ser Eliminada";
+
+                            Swal.fire(
+                                'Gestionar Evaluaciones',
+                                mensaje,
+                                'warning'
+                            )
                         }
                     });
                 },
@@ -5369,7 +5462,7 @@
                                     for (var i = 0; i < sel.length; i++) {
                                         var item2 = sel[i];
                                         let optioSel = item2.getAttribute(
-                                        'data-id');
+                                            'data-id');
                                         if (item.respuesta_alumno == optioSel) {
 
                                             contenidoSelect.innerHTML = sel[i]
@@ -5460,6 +5553,15 @@
 
                     });
 
+                },
+                selopc: function(id, cons) {
+                    $("#RespSelect" + cons).val($("#" + id).data("id"));
+                    $("#ConsPreg" + cons).val(id);
+
+                },
+                VerArchResp: function(id) {
+                    window.open($('#Respdattaller').data("ruta") + "/" + $('#' + id).data("archivo"),
+                        '_blank');
                 },
                 GuarPunt: function(id, npreg) {
 

@@ -8,7 +8,7 @@
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"x><a href="/Principal ">Inicio</a>
+                        <li class="breadcrumb-item"x><a href="{{ url('/Principal') }}">Inicio</a>
                         </li>
                         <li class="breadcrumb-item"><a href="#">Diccionario</a>
                         </li>

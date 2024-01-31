@@ -17,7 +17,12 @@ class UsuariosController extends Controller
     {
         $respuesta = Usuarios::login(request()->all());
         if ($respuesta) {
-            $rutaUrl = 'http://localhost/PEDIGITAL/public/app-assets/images/';
+
+
+            $UrlReal = Usuarios::ConsulUrl("PED");
+            $rutaUrl = $UrlReal->url;
+
+            $rutaUrl =  $UrlReal->url.'/public/app-assets/images/';
             if ($respuesta->tipo_usuario == "Profesor") {
                 $FotoUsu = Profesores::Buscar($respuesta->id);
                 Session::put('ImgUsu', $rutaUrl . 'Img_Docentes/' . $FotoUsu->foto);

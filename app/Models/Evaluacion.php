@@ -29,9 +29,17 @@ class Evaluacion extends Model
         return $respuesta;
     }
 
+    public static function editarvideo($id, $video)
+    {
+        $Respuesta = DB::connection('mysql')->table('etno_ped.evaluaciones')
+            ->where('id', $id)->update([
+            'animacion' => $video,
+        ]);
+        return $Respuesta;
+    }
+
     public static function ModifEval($datos, $id, $calxdoc)
     {
-
         $respuesta = DB::connection('mysql')->table('etno_ped.evaluaciones')->where('id', $id)->update([
             'tematica' => $datos['tema_id'],
             'titulo' => $datos['titulo'],

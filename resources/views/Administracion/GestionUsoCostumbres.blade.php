@@ -11,7 +11,7 @@
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Inicio</a>
+                        <li class="breadcrumb-item"><a href="{{ url('/Principal') }}">Inicio</a>
                         </li>
                         <li class="breadcrumb-item"><a href="#">Lista de Usos y Costumbres</a>
                         </li>
@@ -32,7 +32,6 @@
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
-                                <li><a data-action="reload"><i class="feather icon-rotate-cw"></i></a></li>
                                 <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
 
                             </ul>
@@ -113,7 +112,7 @@
                                         <br>
                                     </div>
                                     <div class="form-group" id="cargVideo">
-                                        <label for="userinput5">Cargar Video de Preparación: </label>
+                                        <label for="userinput5">Cargar Video: </label>
                                         <input type="file" name="vidUso[]" accept=".mp4, .avi, .mov"
                                             id="vidUso">
                                     </div>
@@ -476,8 +475,7 @@
                     $("#modalUso").modal().show();
 
                     $("#accion").val("editar");
-
-                    $("#tituloTematica").html("Editar Usos y Costumbres");
+                    $("#tituloMedicina").html("Editar Usos y Costumbres");
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
                     $("#btnCancelar").show();

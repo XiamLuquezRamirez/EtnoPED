@@ -11,7 +11,7 @@
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Inicio</a>
+                        <li class="breadcrumb-item"><a href="{{ url('/Principal') }}">Inicio</a>
                         </li>
                         <li class="breadcrumb-item"><a href="#">Lista de palabras </a>
                         </li>
@@ -32,9 +32,7 @@
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
-                                <li><a data-action="reload"><i class="feather icon-rotate-cw"></i></a></li>
                                 <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
-
                             </ul>
                         </div>
                     </div>
@@ -429,7 +427,7 @@
                         backdrop: 'static',
                         keyboard: false
                     }).show();
-                    $("#tituloDiccionario").html("Gestionar Palabra Diccionario");
+                    $("#tituloDiccionario").html("Agregar palabra");
                     $("#accion").val("agregar");
                     document.getElementById("formGuardar").reset();
                     $("#btnGuardar").show();
@@ -581,7 +579,7 @@
                     $("#modalDiccionario").modal().show();
                     $("#accion").val("editar");
 
-                    $("#tituloTematica").html("Editar Medicina Tradicional");
+                    $("#tituloDiccionario").html("Editar palabra");
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
                     $("#btnCancelar").show();

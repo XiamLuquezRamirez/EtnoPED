@@ -194,16 +194,19 @@ class VisualizacionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
+
     public function CargarDetUsos()
     {
         if (Auth::check()) {
             $idUso = request()->get('idUso');
 
             $detUsos = UsosCostumbres::BuscarUso($idUso);
+            $evaluaciones = Evaluacion::BusEvalOrigen($idUso,'GestionarUsosCostumbres');
 
             if (request()->ajax()) {
                 return response()->json([
-                    'detUsos' => $detUsos
+                    'detUsos' => $detUsos,
+                    'evaluaciones' => $evaluaciones
                 ]);
             }
         } else {
@@ -333,6 +336,7 @@ class VisualizacionController extends Controller
             } else if ($TipPreg == "OPCMULT") {
                 $PregMult = PregOpcMul::ConsulPreg($IdPreg);
                 $OpciMult = OpcPregMul::ConsulGrupOpcPreg($IdPreg);
+           
                 $RespPregMul = OpcPregMul::BuscOpcResp($IdPreg, Auth::user()->id);
 
                 if (request()->ajax()) {

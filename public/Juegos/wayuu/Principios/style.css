@@ -400,8 +400,8 @@ body {
     background-repeat: no-repeat;
     transition: all 5s ease;
     position: absolute;
-    left: 623px;
-    top: -73px;
+    left: 57%;
+    top: -13%;
     transform: scaleX(1);
 }
 
@@ -568,66 +568,66 @@ body {
 }
 
 #puntoIsla0 {
-    top: -33px;
-  left: 634px;
+    top: -6%;
+    left: 58%;
 
 }
 
 #puntoIsla1 {
-    top: 6px;
-  left: 702px;
+    top: 1%;
+    left: 64%;
 }
 #puntoIsla2 {
-    top: 0px;
-  left: 612px;
+    top: -1%;
+    left: 55%;
 }
 #puntoIsla3 {
-    top: 140px;
-    left: 671px;
+    top: 27%;
+    left: 62%;
 }
 #puntoIsla4 {
-    top: 48px;
-    left: 493px;
+    top: 7%;
+    left: 44%;
 }
 #puntoIsla5 {
-    top: 194px;
-    left: 353px;
+    top: 37%;
+    left: 32%;
 }
 #puntoIsla6 {
-    top: 174px;
-    left: 472px;
+    top: 33%;
+    left: 42%;
 }
 #puntoIsla7 {
-    top: 257px;
-    left: 402px;
+    top: 49%;
+    left: 35.8%;
 }
 #puntoIsla8 {
-    top: 289px;
-    left: 288px;
+    top: 53%;
+    left: 26%;
 }
 #puntoIsla9 {
-    top: 349px;
-    left: 369px;
+    top: 64%;
+    left: 34%;
 }
 #puntoIsla10 {
-    top: 459px;
-    left: 284px;
+    top: 70%;
+    left: 22%;
 }
 #puntoIsla11 {
-    top: 459px;
-    left: 284px;
+    top: 87%;
+    left: 25%;
 }
 #puntoIsla12 {
-    top: 346px;
-    left: 100px;
+    top: 64%;
+    left: 9%;
 }
 #puntoIsla13 {
-    top: 532px;
-    left: 231px;
+    top: 100%;
+    left: 22%;
 }
 #puntoIsla14 {
-    top: 558px;
-    left: 63px;
+    top: 104%;
+    left: 4%;
 }
 
 #divCalvas {

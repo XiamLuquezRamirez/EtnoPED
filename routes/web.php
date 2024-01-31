@@ -62,6 +62,7 @@ Route::post('/AdminGramaticaLenguaje/EliminarPregPract', [AdministracionControll
 Route::post('/AdminGramaticaLenguaje/CargarPractica', [AdministracionController::class,'CargarPractica']);
 Route::post('/AdminGramaticaLenguaje/EliminarPractica', [AdministracionController::class,'EliminarPractica']);
 Route::post('/AdminGramaticaLenguaje/cargarPersonajes', [AdministracionController::class,'cargarPersonajes']);
+Route::post('/AdminGramaticaLenguaje/ElimnarVideo', [AdministracionController::class,'ElimnarVideo']);
 ///ADMINISTRAR MEDICINA TRADICIONAL
 Route::get('/AdminMedicinaTradicional/GestionarMedicinaTradicional/', [AdministracionController::class,'GestionarMedicinaTradicional']);
 Route::post('/AdminMedicinaTradicional/CargarMedicinaTradicional/', [AdministracionController::class,'CargarMedicinaTradicional']);

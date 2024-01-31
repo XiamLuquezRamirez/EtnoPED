@@ -61,7 +61,7 @@ class EvalVerFal extends Model
     public static function VerFalResp($id,$Est)
     {
         $DesVerFal = DB::connection('mysql')->table('etno_ped.eval_verfal')
-            ->join('resp_pregverfal', 'resp_pregverfal.pregunta', 'eval_verfal.id')
+            ->leftJoin('etno_ped.resp_pregverfal', 'resp_pregverfal.pregunta', 'eval_verfal.id')
             ->select('resp_pregverfal.pregunta', 'resp_pregverfal.respuesta_alumno', 'eval_verfal.respuesta', 'eval_verfal.puntaje')
             ->where('resp_pregverfal.pregunta', $id)
             ->where('resp_pregverfal.alumno', $Est)

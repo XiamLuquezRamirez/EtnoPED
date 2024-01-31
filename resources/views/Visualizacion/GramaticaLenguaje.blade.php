@@ -12,13 +12,15 @@
     <input type="hidden" class="form-control" id="m" value="" />
     <input type="hidden" class="form-control" id="s" value="" />
     <input type="hidden" class="form-control" id="tiempEvaluacion" value="" />
+    <input type="hidden" data-id='id-dat' id="Respdattaller"
+    data-ruta="{{ asset('/app-assets/Archivos_EvalTaller_Resp') }}" />
 
     <div class="content-header row">
         <div class="content-header-left col-md-12 col-12 mb-2">
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/Principal ">Inicio</a>
+                        <li class="breadcrumb-item"><a href="{{ url('/Principal') }}">Inicio</a>
                         </li>
                         <li class="breadcrumb-item"><a href="#">Gramatica y Lenguaje</a>
                         </li>
@@ -281,7 +283,7 @@
 
                     <button type="button" id="btn_salir" onclick="$.SalirAnim();"
                         class="btn grey btn-outline-secondary" data-dismiss="modal"><i
-                            class="ft-corner-up-left position-right"></i> Salir</button>
+                            class="fa fa-reply"></i> Salir</button>
                 </div>
             </div>
         </div>
@@ -496,7 +498,7 @@
                     $("#btn-atrasModulos").hide();
                     $("#div-unidades").hide();
                     $("#div-temas").show();
-                    $("#tit-gram").html("Tematicas Gramatica y Lenguaje");
+                    $("#titulo").html("Tematicas Gramatica y Lenguaje");
 
                     var form = $("#formCargarTemas");
                     var url = form.attr("action");
@@ -517,8 +519,8 @@
                             tempDivTitu.innerHTML = response.Unidad.nombre;
                             var textoTitu = tempDivTitu.firstChild.textContent ||
                                 tempDivTitu.firstChild.innerText;
-
-                            $("#titulo").html("Gramatica y Lenguaje - " + textoTitu);
+                            
+                            $("#tit-gram").html("Gramatica y Lenguaje - " + textoTitu);
 
                             $.each(response.Temas, function(i, item) {
                                 objetivo = item.objetivo !== null ? item
@@ -789,6 +791,10 @@
                         keyboard: false
                     });
 
+                    $('#parrafo1').html("");
+                    $('#parrafo2').html("");
+                    actual = 0;
+                    ok = false;
                     let paisajes = [{
                             fondo: "fondo1.png",
                         },
@@ -879,7 +885,7 @@
                         actual = 0;
                         Swal.fire({
                             type: "success",
-                            title: "Felixtaciones...",
+                            title: "Felicitaciones...",
                             text: "La Practica fue realizada con exito",
                             confirmButtonClass: "btn btn-primary",
                             timer: 2500,
@@ -928,6 +934,10 @@
 
                     if (document.getElementById("dialogo2").style.display == "") {
                         $('#dialogo2').fadeToggle(2000);
+                    }else{
+                        document.getElementById("dialogo2").style.display = "flex";
+                        document.getElementById("dialogo2").style.alignItems = "center";
+                        document.getElementById("dialogo2").style.justifyContent = "center";
                     }
 
                     setTimeout(() => {
@@ -1013,7 +1023,6 @@
                         backdrop: 'static',
                         keyboard: false
                     });
-
 
                     $("#DetEval").show();
                     $("#IdEval").val(id);
@@ -1992,6 +2001,10 @@
                         height: 100
                     });
                 },
+                VerArchResp: function(id) {
+                    window.open($('#Respdattaller').data("ruta") + "/" + $('#' + id).data("archivo"),
+                        '_blank');
+                },
                 AtrasModActIni: function(opc) {
                     if (opc == "F") {
                         $('#ModEval').modal('toggle');
@@ -2200,6 +2213,11 @@
                     });
                     var videoID = 'datruta';
                     $('#' + videoID).get(0).pause();
+                },
+                CambArchivo: function() {
+                    $("#id_file").show();
+                    $("#id_verf").hide();
+                    $("#CargArchi").val("");
                 },
 
 

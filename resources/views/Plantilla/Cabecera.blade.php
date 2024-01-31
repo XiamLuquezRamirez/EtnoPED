@@ -28,7 +28,7 @@
 
                     <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link"
                             href="#" data-toggle="dropdown">
-                            <div class="avatar avatar-online"><img src="{{ Session::get('ImgUsu') }}"
+                            <div class="avatar avatar-online"><img src="{{ asset(Session::get('ImgUsu')) }}"
                                     alt="avatar"><i></i></div><span
                                 class="user-name">{{ Auth::user()->nombre_usuario }}</span>
                         </a>

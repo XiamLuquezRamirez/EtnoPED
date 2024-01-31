@@ -77,8 +77,8 @@ class OpcPregMul extends Model
     public static function BuscOpcResp($id, $Est)
     {
         $DesOpcPreg = DB::connection('mysql')->table('etno_ped.opc_mult_eval')
-            ->join('resp_pregmultiple', 'resp_pregmultiple.respuesta', 'opc_mult_eval.id')
-            ->join('preg_mult_eval', 'preg_mult_eval.id', 'opc_mult_eval.pregunta')
+            ->leftJoin('etno_ped.resp_pregmultiple', 'resp_pregmultiple.respuesta', 'opc_mult_eval.id')
+            ->leftJoin('etno_ped.preg_mult_eval', 'preg_mult_eval.id', 'opc_mult_eval.pregunta')
             ->select('opc_mult_eval.pregunta', 'opc_mult_eval.correcta', 'preg_mult_eval.puntuacion', 'resp_pregmultiple.respuesta')
             ->where('resp_pregmultiple.pregunta', $id)
             ->where('resp_pregmultiple.alumno', $Est)

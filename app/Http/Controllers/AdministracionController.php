@@ -43,7 +43,7 @@ class AdministracionController extends Controller
     public function GestionarGramatica($ori, $id)
     {
 
-       
+
         if (Auth::check()) {
             $bandera = "";
             if ($ori == "unidades") {
@@ -59,7 +59,6 @@ class AdministracionController extends Controller
                 $crawlerUnidad = new Crawler($detTemas->nombre);
                 $unidad = $crawlerUnidad->filter('p')->text();
                 return view('Administracion.GestionEvaluaciones', compact('id', 'tema', 'unidad'));
-            
             } else if ($ori == "evaluacionesM") {
 
                 $detTemas = MedicinaTradicional::BuscarMedi($id);
@@ -69,7 +68,6 @@ class AdministracionController extends Controller
                 $crawlerUnidad = new Crawler($detTemas->nombre);
                 $unidad = $crawlerUnidad->filter('p')->text();
                 return view('Administracion.GestionEvaluaciones', compact('id', 'tema', 'unidad'));
-            
             } else if ($ori == "evaluacionesC") {
 
                 $detTemas = UsosCostumbres::BuscarUso($id);
@@ -79,7 +77,6 @@ class AdministracionController extends Controller
                 $crawlerUnidad = new Crawler($detTemas->nombre);
                 $unidad = $crawlerUnidad->filter('p')->text();
                 return view('Administracion.GestionEvaluaciones', compact('id', 'tema', 'unidad'));
-            
             } else if ($ori == "practicas") {
                 $detTemas = Tematicas::BuscarDetTema($id);
                 $crawlerTema = new Crawler($detTemas->titulo);
@@ -114,19 +111,31 @@ class AdministracionController extends Controller
 
     public function GestionarMedicinaTradicional()
     {
-        $bandera = "";
-        return view('Administracion.GestionMedicinaTradicional', compact('bandera'));
+        if (Auth::check()) {
+            $bandera = "";
+            return view('Administracion.GestionMedicinaTradicional', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
     }
 
     public function GestionarUsosCostumbres()
     {
-        $bandera = "";
-        return view('Administracion.GestionUsoCostumbres', compact('bandera'));
+        if (Auth::check()) {
+            $bandera = "";
+            return view('Administracion.GestionUsoCostumbres', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
     }
     public function GestionarDiccionario()
     {
-        $bandera = "";
-        return view('Administracion.GestionDiccionario', compact('bandera'));
+        if (Auth::check()) {
+            $bandera = "";
+            return view('Administracion.GestionDiccionario', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
     }
 
     public function CargarPractica()
@@ -1039,7 +1048,7 @@ class AdministracionController extends Controller
             }
 
             //consultar descripcion de la tematica
-            
+
             if ($origen == '-') {
                 $detaTematica = Tematicas::BuscarTema($idTema);
                 $titulo = $detaTematica->titulo;
@@ -1514,8 +1523,7 @@ class AdministracionController extends Controller
                 ]);
             }
 
-
-            $Log = Log::Guardar('Evaluación Modificada', $idEval);
+         $Log = Log::Guardar('Evaluación Modificada', $idEval);
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
@@ -1640,6 +1648,15 @@ class AdministracionController extends Controller
             /////////CONSULTAR TALLER
             $PregTaller = EvalTaller::PregTallerAll($ideva);
 
+            /////CONSULTAR VIDEO
+            $VideoEval = EvalPregDidact::PregDida($ideva);
+            $video = "no";
+            $id = "no";
+            if ($VideoEval) {
+                $video = $VideoEval->cont_didactico;
+                $id = $VideoEval->id;
+            }
+
 
             if (request()->ajax()) {
                 return response()->json([
@@ -1655,6 +1672,8 @@ class AdministracionController extends Controller
                     'PregRelResp' => $PregRelResp,
                     'PregRelRespAdd' => $PregRelRespAdd,
                     'PregTaller' => $PregTaller,
+                    'VideoEval' => $video,
+                    'idvideo' => $id,
                 ]);
             }
         } else {
@@ -1692,9 +1711,10 @@ class AdministracionController extends Controller
                 $name = self::sanear_string($prefijo . '_' . request()->file('archiVideo')->getClientOriginalName());
                 request()->file('archiVideo')->move(public_path() . '/app-assets/Evaluacion_PregDidact/', $name);
                 $datos['archivo'] = $name;
+
                 if ($datos['id-video'] === null) {
                     $EvPDidact = EvalPregDidact::Guardar($datos, $idEval);
-                    $EvPDidact = EvalPregDidact::PregDida($EvPDidact);
+                    $EvPDidact = EvalPregDidact::PregDida($idEval);
                 } else {
                     $EvPDidact = EvalPregDidact::Modificar($datos, $idEval);
                     $EvPDidact = EvalPregDidact::PregDida($idEval);
@@ -1707,6 +1727,32 @@ class AdministracionController extends Controller
                     'EvPDidact' => $EvPDidact,
                 ]);
             }
+        }
+    }
+
+    public function ElimnarVideo()
+    {
+        if (Auth::check()) {
+            $idEval = request()->get('idEval');
+            $respuesta = EvalPregDidact::EliminarVideo($idEval);
+
+
+
+            if ($respuesta) {
+                $Log = Log::Guardar('Video  Eliminado', $idEval);
+                $mensaje = 'Operación Realizada de Manera Exitosa';
+            } else {
+                $mensaje = 'La Operación no pudo ser Realizada';
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'mensaje' => $mensaje,
+                    'id' => $idEval,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
 
@@ -1740,7 +1786,6 @@ class AdministracionController extends Controller
                 $respuesta = EvalTaller::EliminarArch($id);
                 $delcons = CosEval::DelPreg($id);
             }
-
             $calxdoc = "NO";
 
             $ConsEval = CosEval::GrupPreg($idEval);

@@ -30,6 +30,10 @@ class Usuarios extends Model
             ->where('pedigital.users.id', $id)->first();
     }
 
+public static function ConsulUrl($plat){
+    return DB::connection('mysql')->table('para_generales')->where('plataf', $plat)->first();
+}
+
     public static function guardar($request)
     {
        if($request['password']){
