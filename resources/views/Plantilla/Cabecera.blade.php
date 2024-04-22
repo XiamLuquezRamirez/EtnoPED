@@ -18,11 +18,10 @@
                 <ul class="nav navbar-nav mr-auto float-left">
                     <li class="nav-item d-none d-md-block"><a class="nav-link nav-link-expand" href="#"><i
                                 class="ficon feather icon-maximize"></i></a></li>
-
                 </ul>
                 <ul class="nav navbar-nav float-right">
 
-                    {{--  NOTIFICACION 
+                    {{--  NOTIFICACION
                     Aqui codigo
                      NOTIFICACION  --}}
 

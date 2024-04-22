@@ -3,7 +3,10 @@ let cateSel1 = "";
 let cateSel2 = "";
 let letraSel1 = "";
 let letraSel2 = "";
+
+
 $(document).ready(function () {
+
     const elementosSeleccionados = seleccionarElementosAleatorios(clasifig, 2);
     const texto = `Selecciona "${elementosSeleccionados[0].letra}" (Adverbios de ${elementosSeleccionados[0].advervio}) o "${elementosSeleccionados[1].letra}" (Adverbios de  ${elementosSeleccionados[1].advervio}), según corresponda.`;
     cateSel1 = elementosSeleccionados[0].advervio;
@@ -53,7 +56,56 @@ $(document).ready(function () {
     desordenarArray(adverbiosSeleccionados);
 
     preguntar();
+
+    abrirModal();
+
+    
 });
+
+function abrirModal() { 
+   
+    Swal.fire({
+        title: "<strong>Juego de Adverbios</strong>",
+        type: "info",
+        html: "En este juego deberás enviar la flecha al grupo que corresponda cada adverbio mostrado",
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: '<i class="fa fa-thumbs-up"></i> Vamos!',
+        confirmButtonAriaLabel: "Thumbs up, great!",
+        cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+        cancelButtonAriaLabel: "Thumbs down",
+        confirmButtonClass: "btn btn-primary",
+        buttonsStyling: false,
+        cancelButtonClass: "btn btn-danger ml-1"
+      }).then((result) => {
+        if (result.value) {
+          // Se ha hecho clic en el botón "Aceptar"
+          // Llama a la función que deseas ejecutar
+          activarPantallaCompleta();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          // Se ha hecho clic en el botón "Cancelar"
+          // Regresa a la página anterior
+          window.history.back();
+        }
+      });
+}
+
+
+
+
+function activarPantallaCompleta() {
+    if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+    } else if (document.documentElement.mozRequestFullScreen) {
+        document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen();
+    } else if (document.documentElement.msRequestFullscreen) {
+        document.documentElement.msRequestFullscreen();
+    }
+}
+
 
 function seleccionarElementosAleatorios(array, cantidad) {
     const elementosAleatorios = [];

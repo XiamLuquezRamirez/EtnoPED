@@ -465,7 +465,6 @@ class AdministracionController extends Controller
 
             if ($data['accion'] == "agregar") {
 
-
                 if (request()->hasfile('imgDicc')) {
                     foreach (request()->file('imgDicc') as $file) {
                         $prefijo = substr(md5(uniqid(rand())), 0, 6);

@@ -29,7 +29,6 @@
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
-                                <li><a data-action="reload"><i class="feather icon-rotate-cw"></i></a></li>
                                 <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
 
                             </ul>
@@ -112,29 +111,26 @@
                                         placeholder="Descripcion"></textarea>
                                 </div>
 
+                                <div class="form-actions right">
+                                    <button type="button" onclick="$.salir();" class="btn btn-warning mr-1">
+                                        <i class="feather icon-corner-up-left"></i> Salir
+                                    </button>
+                                    <button type="button" id="btnGuardar" onclick="$.guardar()"
+                                        class="btn btn-success">
+                                        <i class="fa fa-check-square-o"></i> Guardar
+                                    </button>
+                                    <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
+                                        class="btn btn-primary">
+                                        <i class="feather icon-plus"></i> Nuevo
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-
-                        <div class="form-actions right">
-                            <button type="button"  onclick="$.salir();" class="btn btn-warning mr-1">
-                                <i class="feather icon-corner-up-left"></i> Salir
-                            </button>
-                            <button type="button" id="btnGuardar" onclick="$.guardar()" class="btn btn-success">
-                                <i class="fa fa-check-square-o"></i> Guardar
-                            </button>
-                            <button type="button" id="btnNuevo" style="display: none;" onclick="$.nuevo()"
-                                class="btn btn-primary">
-                                <i class="feather icon-plus"></i> Nuevo
-                            </button>
-                        </div>
-                        </form>
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
     </div>
 
     <form action="{{ url('/AdminGramaticaLenguaje/CargarUnidades') }}" id="formCargarUnidad" method="POST">
@@ -267,7 +263,7 @@
 
                     editorNombre.setData('');
                     editorDescripcion.setData('');
-                  
+
                     $("#btnGuardar").show();
                     $("#btnNuevo").hide();
 

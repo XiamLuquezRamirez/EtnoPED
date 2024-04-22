@@ -6,9 +6,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title></title>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
-    <script src="../bootstrap/jquery.min.js"></script>
-	<script src="../../bootstrap/sweetalert.js"></script>  
+	<link rel="stylesheet" href="../../bootstrap/bootstrap.min.css">
+	<script src="../bootstrap/jquery.min.js"></script>
+	<script src="../../bootstrap/sweetalert.js"></script>
 	<link rel="stylesheet" href="style.css">
 	<script src="jquery-3.6.3.js"></script>
 	<link rel="stylesheet" href="../../fontawesome/css/all.min.css">
@@ -20,8 +20,10 @@
 			<p class="borde2" id="bienvenida"></p>
 		</div>
 		<div style="z-index: 1003;position: absolute;top: 20pt;left: 20pt;">
-            <button onclick="cerrar_anuncio()" id="btnomitir"  class="btn btn-warning" style="width: auto; padding: 4pt; border-radius: 8pt; font-size: 30px; color: black;">Omitir <i style="color: black" class="fa fa-forward" aria-hidden="true"></i></button>
-        </div>
+			<button onclick="cerrar_anuncio()" id="btnomitir" class="btn btn-warning"
+				style="width: auto; padding: 4pt; border-radius: 8pt; font-size: 30px; color: black;">Omitir <i
+					style="color: black" class="fa fa-forward" aria-hidden="true"></i></button>
+		</div>
 	</div>
 
 	<div style="display: none; background-color: rgba(255, 255, 255, 0.664); width: 100%; height: 100%; position: fixed; z-index: 100;"
@@ -38,26 +40,33 @@
 			</div>
 			<div class="col-3"></div>
 			<div class="col-3 text-center">
-				<button style="width: 80%; height: 50px !important; border-radius: 20pt; font-size: 23px;" onclick="window.location.reload(1)"
-					class="btn btn-success">Si, jugar</button>
+				<button style="width: 80%; height: 50px !important; border-radius: 20pt; font-size: 23px;"
+					onclick="window.location.reload(1)" class="btn btn-success">Si, jugar</button>
 			</div>
 			<div class="col-3 text-center">
-				<button style="width: 80%; height: 50px !important; border-radius: 20pt; font-size: 23px;" onclick="history.back()" class="btn btn-danger">No,
+				<button style="width: 80%; height: 50px !important; border-radius: 20pt; font-size: 23px;"
+					onclick="history.back()" class="btn btn-danger">No,
 					salir</button>
 			</div>
 			<div class="col-3"></div>
 		</div>
 	</div>
+
+	<button style="display: none;" id="abrirPantalla" onclick="activarPantallaCompleta();">Aqui</button>
 	<div style="padding-top: 20pt; height: 100%;" id="principal">
 		<div class="row">
-            <div class="col-10" style="display: flex; justify-content: center; align-items: start"><h4 style="text-align: center" id="tit-juego" class="borde"> </h4></div>
-            
-			<div class="col-1"><button onclick="location.reload()" class="btn btn-warning"><i class="fa-solid fa-rotate"></i></button></div>
-			<div class="col-1"><button onclick="history.back()" class="btn btn-danger"><i class="fa-solid fa-arrow-left"></i></button></div>
-        </div>
+			<div class="col-10" style="display: flex; justify-content: center; align-items: start">
+				<h4 style="text-align: center" id="tit-juego" class="borde"> </h4>
+			</div>
+
+			<div class="col-1"><button onclick="location.reload()" class="btn btn-warning"><i
+						class="fa-solid fa-rotate"></i></button></div>
+			<div class="col-1"><button onclick="history.back()" class="btn btn-danger"><i
+						class="fa-solid fa-arrow-left"></i></button></div>
+		</div>
 		<hr>
 		<div class="globos">
-			<div id="div-glob1"  data-id="globo_1" class="globo_1">
+			<div id="div-glob1" data-id="globo_1" class="globo_1">
 				<h1 id="glob1" class="borde"></h1>
 			</div>
 			<div id="div-glob2" onclick="romper(this, 'activa', 'A')" data-id="globo_2" class="globo_2">
@@ -67,9 +76,9 @@
 		<div class="div_texto text-center">
 			<h2 class="borde" id="texto"></h2>
 		</div>
-		<img class="flecha1"  id="flecha1" src="flecha1.png" alt="">
-		<img class="flecha2"  id="flecha2" src="flecha2.png" alt="">
-		
+		<img class="flecha1" id="flecha1" src="flecha1.png" alt="">
+		<img class="flecha2" id="flecha2" src="flecha2.png" alt="">
+
 	</div>
 
 	<script src="data.js"></script>

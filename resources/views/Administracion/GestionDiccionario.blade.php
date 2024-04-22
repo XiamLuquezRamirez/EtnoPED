@@ -83,9 +83,9 @@
             </div>
         </div>
 
-        {{--  Modal nueva unidad  --}}
-        <div class="modal fade text-left" id="modalDiccionario" style="height: 550px; overflow-y: auto;"  tabindex="-1" role="dialog"
-            aria-labelledby="myModalLabel1" aria-hidden="true">
+        {{--  Modal nueva palabra  --}}
+        <div class="modal fade text-left" id="modalDiccionario" style="height: 550px; overflow-y: auto;" tabindex="-1"
+            role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -107,7 +107,7 @@
                                             href="#infBasica" aria-controls="infBasica" role="tab"
                                             aria-selected="true"><i class="fa fa-sort-alpha-asc"></i> Palabra </a>
                                     </li>
-                                    <li class="nav-item">
+                                    <li class="nav-item" style="display: none;">
                                         <a class="nav-link " id="ejemplo-tab1" data-toggle="tab" href="#ejemplo"
                                             aria-controls="multimedia" role="tab" aria-selected="false"><i
                                                 class="fa fa-child"></i> Ejemplo</a>
@@ -118,6 +118,13 @@
                                         role="tabpanel">
                                         <div class="form-body">
                                             <div class="row">
+
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="userinput5">Palabra en Wayuunaiki:</label>
+                                                        <textarea cols="80" id="wayuu" name="wayuu" rows="10"></textarea>
+                                                    </div>
+                                                </div>
                                                 <div class="col-4">
                                                     <div class="form-group">
                                                         <label for="userinput5">Palabra en español:</label>
@@ -127,17 +134,11 @@
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="form-group">
-                                                        <label for="userinput5">Palabra en Wayuunaiki:</label>
-                                                        <textarea cols="80" id="wayuu" name="wayuu" rows="10"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
                                                         <label for="userinput5">Lectura:</label>
                                                         <textarea cols="80" id="lectura" name="lectura" rows="10"></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="col-12">
+                                                <div class="col-12" style="display: none;">
                                                     <div class="form-group">
                                                         <label for="userinput8">Definición:</label>
                                                         <textarea cols="80" id="definicion" name="definicion" rows="10"></textarea>
@@ -152,8 +153,7 @@
                                                             accept=".jpg, .jpeg, .png, .gif" id="imgDicc">
                                                     </div>
                                                     <div class="form-group" id="verImg" style="display: none;">
-                                                        <div class="btn-group" role="group"
-                                                            aria-label="Basic example">
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
                                                             <button type="button" onclick="$.verCont(1);"
                                                                 class="btn btn-success"><i class="fa fa-search"></i>
                                                                 Ver</button>
@@ -166,14 +166,12 @@
                                                 <div class="col-6">
                                                     <div class="form-group" id="cargAudio">
                                                         <label for="userinput5">Cargar Audio: </label>
-                                                        <input type="file" name="audDicc[]"
-                                                            accept=".mp3"
+                                                        <input type="file" name="audDicc[]" accept=".mp3"
                                                             id="audDicc">
                                                     </div>
 
                                                     <div class="form-group" id="verAudio" style="display: none;">
-                                                        <div class="btn-group" role="group"
-                                                            aria-label="Basic example">
+                                                        <div class="btn-group" role="group" aria-label="Basic example">
                                                             <button type="button" onclick="$.verCont(2);"
                                                                 class="btn btn-success"><i class="fa fa-search"></i>
                                                                 Escuchar</button>
@@ -193,11 +191,11 @@
                                                 <div class="row mb-1 border-bottom-cyan">
                                                     <div class="col-12 col-xl-12 pb-1">
                                                         <div class="form-group">
-                                                           
+
                                                             <textarea cols="80" id="ejemploEdit" name="ejemploEdit" rows="10"></textarea>
                                                         </div>
-                                                        
-                                                        
+
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -416,7 +414,8 @@
                         dataType: "json",
                         success: function(response) {
                             $('#tdTable').html(response
-                                .diccionario); // Rellenamos la tabla con las filas generadas
+                                .diccionario
+                                ); // Rellenamos la tabla con las filas generadas
                             $('#pagination-links').html(response
                                 .links); // Colocamos los enlaces de paginación
                         }
@@ -427,13 +426,13 @@
                         backdrop: 'static',
                         keyboard: false
                     }).show();
-                    $("#tituloDiccionario").html("Agregar palabra");
+                    $("#tituloDiccionario").html("Agregar palabra al diccionario");
                     $("#accion").val("agregar");
                     document.getElementById("formGuardar").reset();
                     $("#btnGuardar").show();
                     $("#btnCancelar").show();
                     $("#btnNuevo").hide();
-                                     
+
                     $.limpiar();
                 },
                 salir: function() {
@@ -461,6 +460,7 @@
 
                     $("#verAudio").hide();
                     $("#cargAudio").show();
+                    $("#accion").val("agregar");
                 },
                 guardar: function() {
 
@@ -490,7 +490,7 @@
                         });
                         return;
                     }
-                    if (editorDefinic.getData() === "") {
+                    {{--  if (editorDefinic.getData() === "") {
                         Swal.fire({
                             type: "warning",
                             title: "Oops...",
@@ -500,7 +500,7 @@
                             buttonsStyling: false
                         });
                         return;
-                    }
+                    }  --}}
 
                     var loader = document.getElementById('loader');
                     loader.style.display = 'block';
@@ -613,10 +613,10 @@
                             editorLectura.setData(respuesta.diccionario.palabra_lectura);
                             editorDefinic.setData(respuesta.diccionario.definicion);
                             editorEjemplo.setData(respuesta.diccionario.ejemplo);
-                       
+
                             $("#imgDicc").val(respuesta.diccionario.imagen);
                             $("#audDicc").val(respuesta.diccionario.audio);
-                          
+
                             if (respuesta.diccionario.imagen != "") {
                                 $("#verImg").show();
                                 $("#cargImg").hide();
@@ -654,18 +654,18 @@
                     }).show();
 
                     $('#modalDiccionario').modal('hide');
-                    let url ="";
+                    let url = "";
                     var modalContent = document.getElementById('modalContent');
 
-                    if(op==1){
-                         url = $('#urlMult').data("ruta") + "/contenidoMultimedia/imgDiccionario/" + $(
+                    if (op == 1) {
+                        url = $('#urlMult').data("ruta") + "/contenidoMultimedia/imgDiccionario/" + $(
                             "#imgDicc").val();
-                            modalContent.innerHTML = '<img width="100%" src="' + url + '" alt="Imagen">';
+                        modalContent.innerHTML = '<img width="100%" src="' + url + '" alt="Imagen">';
 
-                    }else{
+                    } else {
                         url = $('#urlMult').data("ruta") + "/contenidoMultimedia/audioDiccionario/" + $(
                             "#audDicc").val();
-                            modalContent.innerHTML = '<audio  id="audioDicc" style="width:100%" controls>' +
+                        modalContent.innerHTML = '<audio  id="audioDicc" style="width:100%" controls>' +
                             '    <source src="" type="audio/mp3" />' +
                             '    <source src="" type="audio/ogg" />' +
                             '</audio>';

@@ -164,7 +164,7 @@ class VisualizacionController extends Controller
 
             $Medicina = MedicinaTradicional::BuscarMedi($idMedicina);
 
-            $evaluaciones = Evaluacion::BusEvalOrigen($idMedicina,'GestionarMedicinaTradicional');
+            $evaluaciones = Evaluacion::BusEvalOrigen($idMedicina, 'GestionarMedicinaTradicional');
 
 
 
@@ -201,7 +201,7 @@ class VisualizacionController extends Controller
             $idUso = request()->get('idUso');
 
             $detUsos = UsosCostumbres::BuscarUso($idUso);
-            $evaluaciones = Evaluacion::BusEvalOrigen($idUso,'GestionarUsosCostumbres');
+            $evaluaciones = Evaluacion::BusEvalOrigen($idUso, 'GestionarUsosCostumbres');
 
             if (request()->ajax()) {
                 return response()->json([
@@ -336,7 +336,7 @@ class VisualizacionController extends Controller
             } else if ($TipPreg == "OPCMULT") {
                 $PregMult = PregOpcMul::ConsulPreg($IdPreg);
                 $OpciMult = OpcPregMul::ConsulGrupOpcPreg($IdPreg);
-           
+
                 $RespPregMul = OpcPregMul::BuscOpcResp($IdPreg, Auth::user()->id);
 
                 if (request()->ajax()) {
@@ -477,23 +477,35 @@ class VisualizacionController extends Controller
             if (!is_numeric($page)) {
                 $page = 1; // Establecer un valor predeterminado si no es numérico
             }
-
+            // $searchTerm = self::convertirCaracteresEspeciales($searchTerm);
+           
             $palabras = DB::connection('mysql')
                 ->table('etno_ped.diccionario')
                 ->where('estado', 'ACTIVO');
-            if ($searchTerm) {
-                $palabras->where('palabra_espanol', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchTerm . '%');
-            }
+
+              
+                $palabras->where(function($query) use ($searchTerm) {
+                    $query->where('palabra_espanol', 'LIKE', '%' . $searchTerm . '%')
+                          ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchTerm . '%');
+                });
+                
+
+            $palabras = $palabras->orderByRaw("SUBSTRING_INDEX(SUBSTRING_INDEX(palabra_espanol, '<p>', -1), '</p>', 1)");
             $Listpalabras = $palabras->paginate($perPage, ['*'], 'page', $page);
 
             $div_palabra = '';
             $x = ($page - 1) * $perPage + 1;
-
+            
             foreach ($Listpalabras as $i => $item) {
                 if (!is_null($item)) {
 
-                    $crawlerDef = new Crawler($item->definicion);
+                    if ($item->definicion !== null) {
+                        $crawlerDef = new Crawler($item->definicion);
+                    } else {
+                        // Si $item->definicion es null, reemplazarlo con una etiqueta HTML predeterminada
+                        $item->definicion = "<p>No hay definición disponible</p>";
+                        $crawlerDef = new Crawler($item->definicion);
+                    }
                     $textoDef = $crawlerDef->filter('p')->text();
 
                     $definicion = $textoDef ?
@@ -510,7 +522,15 @@ class VisualizacionController extends Controller
                     $textoEsp = $crawlerEsp->filter('p')->text();
                     $crawlerWayu = new Crawler($item->palabra_wuayuunaiki);
                     $textoWayu = $crawlerWayu->filter('p')->text();
-                    $crawlerPron = new Crawler($item->palabra_lectura);
+                    if ($item->palabra_lectura !== null) {
+                        $crawlerPron = new Crawler($item->palabra_lectura);
+                    } else {
+                        $item->palabra_lectura = "<p></p>";
+                        $crawlerPron = new Crawler($item->palabra_lectura);
+                    }
+
+
+
                     $prononciacion = $crawlerPron->filter('p')->text();
 
                     if ($item->ejemplo != "") {
@@ -520,14 +540,14 @@ class VisualizacionController extends Controller
                     }
 
                     $div_palabra .= ' <ul class="media-list p-0 border-blue" style="cursor: pointer;" >
-                <li class="media row justify-content-center align-items-center" >
-                    <div class="col-2 media-left">
+                <li class="media row justify-content-center align-items-center" style="padding: 1rem !important;" >
+                    <div class="col-2 media-left" style="display: contents !important">
                         <a href="#">
                             <img class="media-object width-150" src="' . asset('app-assets/contenidoMultimedia/imgDiccionario/' . $imagen) . '" alt="Generic placeholder image">
                         </a>
                     </div>
                     <div class="media-body media-search col-10" >
-                        <p style="font-size:20px;" class="lead mb-0"><a href="#"><span class="text-bold-700" style="font-size:20px;">' . $textoEsp . '</span> - ' . $textoWayu . '</a></p>';
+                        <p style="font-size:20px; text-transform: capitalize;" class="lead mb-0"><a href="#"><span class="text-bold-700" style="font-size:20px;">' . $textoEsp . '</span></a></p>';
 
                     if ($item->audio != "") {
                         $div_palabra .= '<audio  class="audioEjemplo" id="audioEjemplo' . $x . '" style="max-width:40% !important;" controls>
@@ -536,10 +556,14 @@ class VisualizacionController extends Controller
                   </audio>';
                     }
 
-                    $div_palabra .= '<p style="margin-bottom: 0px;font-size: 14px;"><span class="text-bold-600">Pronunciación: </span> ' . $prononciacion . '</p>
-                        <p style="margin-bottom: 0px;font-size: 14px;"><span class="text-bold-600">Definición: </span> ' . $definicion . ' <code style="display: ' . $display . '; background-color: transparent;" class="highlighter-rouge" onclick="$.abrirEjemplo(' . $x . ')"> - Ejemplo</code></p>
-                   
-                        </div>
+                    $div_palabra .= '<p style="margin-bottom: 0px;font-size: 14px;text-transform: capitalize;"><span class="text-bold-600"><i class="fa fa-refresh"></i> En Wayuunaiki: </span> ' . $textoWayu  . '</p>';
+                    if ($prononciacion != "") {
+                        $div_palabra .= '<p style="margin-bottom: 0px;font-size: 14px;text-transform: capitalize;"><span class="text-bold-600"><i class="fa fa-commenting-o"></i> Pronunciación: </span> ' . $prononciacion . '</p>';
+                    }
+
+                    $div_palabra .= '<p></p><code style="display: ' . $display . '; background-color: transparent;" class="highlighter-rouge" onclick="$.abrirEjemplo(' . $x . ')"> - Ejemplo</code></p>.';
+
+                    $div_palabra .= '</div>
                         <div id="contEjemplo' . $x . '" style="display:none; ">' . $item->ejemplo . '</div>
                 </li>
             </ul>';
@@ -559,6 +583,12 @@ class VisualizacionController extends Controller
         }
     }
 
+
+    function convertirCaracteresEspeciales($term) {
+        return str_replace(['ü'], ['&uuml;'], $term);
+    }
+    
+    
 
     public function sanear_string($string)
     {

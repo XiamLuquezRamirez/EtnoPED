@@ -22,7 +22,7 @@ class UsuariosController extends Controller
             $UrlReal = Usuarios::ConsulUrl("PED");
             $rutaUrl = $UrlReal->url;
 
-            $rutaUrl =  $UrlReal->url.'/public/app-assets/images/';
+            $rutaUrl =  $UrlReal->url.'/app-assets/images/';
             if ($respuesta->tipo_usuario == "Profesor") {
                 $FotoUsu = Profesores::Buscar($respuesta->id);
                 Session::put('ImgUsu', $rutaUrl . 'Img_Docentes/' . $FotoUsu->foto);

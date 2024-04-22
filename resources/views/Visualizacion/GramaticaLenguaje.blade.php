@@ -1,19 +1,18 @@
 @extends('Plantilla.Principal')
 @section('title', 'Gramatica y Lenguaje')
 @section('Contenido')
+
     <input type="hidden" id="urlMult" data-ruta="{{ asset('/app-assets/') }}" />
     <input type="hidden" class="form-control" id="IdEval" value="" />
     <input type="hidden" class="form-control" id="Tip_Usu" value="{{ Auth::user()->tipo_usuario }}" />
     <input type="hidden" class="form-control" id="Id_Doce" value="{{ Session::get('DOCENTE') }}" />
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-    <input type="hidden" data-id='id-dat' id="dattaller"
-        data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
+    <input type="hidden" data-id='id-dat' id="dattaller" data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
     <input type="hidden" class="form-control" id="h" value="" />
     <input type="hidden" class="form-control" id="m" value="" />
     <input type="hidden" class="form-control" id="s" value="" />
     <input type="hidden" class="form-control" id="tiempEvaluacion" value="" />
-    <input type="hidden" data-id='id-dat' id="Respdattaller"
-    data-ruta="{{ asset('/app-assets/Archivos_EvalTaller_Resp') }}" />
+    <input type="hidden" data-id='id-dat' id="Respdattaller" data-ruta="{{ asset('/app-assets/Archivos_EvalTaller_Resp') }}" />
 
     <div class="content-header row">
         <div class="content-header-left col-md-12 col-12 mb-2">
@@ -482,7 +481,7 @@
                                 tdTable +=
                                     '  <div class="col-12 pb-1 justify-content-center " ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;height: 100px; width:100%;display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="$.verTemasUnidad(' +
                                     item.id +
-                                    ');" class="bs-callout-primary p-1 pl-2 align-items-stretch hvr-grow-shadow">' +
+                                    ');" class="bs-callout-primary p-1 pl-2 align-items-stretch hvr-wobble-horizontal">' +
                                     '<h4 class="primary ">' + textoTitu + '</h4>' +
                                     ' ' + descripcion + '' +
                                     '</div></div>';
@@ -528,7 +527,7 @@
                                 tdTable +=
                                     '  <div class="col-12 pb-1 justify-content-center " ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;height: 100px; width:100%;display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="$.verTemas(' +
                                     item.id +
-                                    ');" class="bs-callout-primary p-1 pl-2 align-items-stretch hvr-grow-shadow">' +
+                                    ');" class="bs-callout-primary p-1 pl-2 align-items-stretch hvr-wobble-horizontal">' +
                                     '<h4 class="primary ">' + textoTitu + '</h4>' +
                                     ' ' + objetivo + '' +
                                     '</div></div>';
@@ -610,7 +609,7 @@
                                     .tipo_multimedia + '" class="bs-callout-' +
                                     claseCallout + ' callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
-                                    '<div class="media-body p-1 pl-2 hvr-grow-shadow" style="background-image: url(' +
+                                    '<div class="media-body p-1 pl-2 hvr-wobble-horizontal" style="background-image: url(' +
                                     urlMul +
                                     '); background-size: 100% 100%;  border-radius:7px;">' +
                                     '<strong>' + item.nombre.slice(0, -4) +
@@ -641,7 +640,7 @@
                                     '" class="bs-callout-danger callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
 
-                                    '<div class="media-body p-1 pl-2 hvr-grow-shadow" style="background-image: url(' +
+                                    '<div class="media-body p-1 pl-2 hvr-wobble-horizontal" style="background-image: url(' +
                                     urlEjemplo +
                                     '); background-size: 100% 100%;  border-radius:7px;">' +
                                     '<strong>' + item.nombre + '</strong>' +
@@ -667,7 +666,7 @@
                                     ');"  class="bs-callout-danger callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
 
-                                    '<div class="media-body p-1 pl-2 hvr-grow-shadow" style="background-image: url(' +
+                                    '<div class="media-body p-1 pl-2 hvr-wobble-horizontal" style="background-image: url(' +
                                     urlPractica +
                                     '); background-size: 100% 100%;  border-radius:7px; ">' +
                                     '<strong>' + item.titulo + '</strong>' +
@@ -703,7 +702,7 @@
                                     '" onclick="$.MostEval(' + item.id +
                                     ');"  class="callout-bordered mb-1">' +
                                     '<div class="media align-items-stretch">' +
-                                    '<div class="media-body p-1 pl-2 hvr-grow-shadow" style="background-image: url(' +
+                                    '<div class="media-body p-1 pl-2 hvr-wobble-horizontal" style="background-image: url(' +
                                     urlEvaluacion +
                                     '); background-size: 100% 100%; border-radius:7px;">' +
                                     '<strong>' + item.titulo + '</strong>' +

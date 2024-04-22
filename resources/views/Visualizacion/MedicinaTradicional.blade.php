@@ -352,7 +352,7 @@
                                 tdTable +=
                                     '  <div class="col-12 pb-1" style="cursor:pointer;" ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;" onclick="$.verDetMedicina(' +
                                     item.id +
-                                    ');" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1 pl-2 hvr-grow-shadow">' +
+                                    ');" class="bs-callout-primary callout-border-right callout-bordered callout-transparent p-1 pl-2 hvr-wobble-horizontal">' +
                                     '<h4 class="primary">' + item.nombre + '</h4>' +
                                     '</div></div>';
                             });
@@ -417,7 +417,7 @@
                             let listEval = "";
                             $.each(response.evaluaciones, function(i, item) {
                                 listEval += ' <li onclick="$.MostEval(' + item.id +
-                                    ');" class="list-group-item hvr-grow-shadow" style="text-transform: capitalize; cursor: pointer;">' +
+                                    ');" class="list-group-item hvr-wobble-horizontal" style="text-transform: capitalize; cursor: pointer;">' +
                                     '<span class="float-left">' +
                                     '<i class="fa fa-check-square-o mr-1"></i>' +
                                     '</span>' +

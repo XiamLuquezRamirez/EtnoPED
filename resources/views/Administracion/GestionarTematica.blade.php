@@ -32,7 +32,6 @@
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
-                                <li><a data-action="reload"><i class="feather icon-rotate-cw"></i></a></li>
                                 <li><a data-action="expand"><i class="feather icon-maximize"></i></a></li>
 
                             </ul>
@@ -87,7 +86,7 @@
             </div>
         </div>
 
-        {{--  Modal nueva unidad  --}}
+        {{--  Modal nuevo tema   --}}
         <div class="modal fade text-left" id="modalTematica" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
             aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">

@@ -39,6 +39,8 @@ let numeroPregunta = 0;
 let preguntas = [];
 
 function startGame() {
+
+
   if (numeroPregunta < 10) {
     let moles_divs = [];
     for (let index = 0; index < moles.length; index++) {
@@ -56,7 +58,7 @@ function startGame() {
     for (let index = 0; index < 4; index++) {
       const element = moles_divs[index];
       element.setAttribute("data-id", opciones[index][1]);
-      element.innerHTML = "<h5 style='margin-top: 50%; width: 100%; height: fit-content;' class='respuesta'>" + opciones[index][0] + "</h5>"
+      element.innerHTML = "<h5 style='margin-top: 40%; width: 100%; height: fit-content;' class='respuesta'>" + opciones[index][0] + "</h5>"
     }
 
     moles.forEach((topo) => topo.addEventListener("click", wack));
@@ -83,6 +85,51 @@ function startGame() {
     
   }
 }
+
+
+function abrirModal() { 
+   
+  Swal.fire({
+      title: "<strong>Juego de Gramática</strong>",
+      type: "info",
+      html: "En este juego deberás enviar la flecha al topo que contenga la respuesta correcta a la pregunta realizada.",
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: '<i class="fa fa-thumbs-up"></i> Vamos!',
+      confirmButtonAriaLabel: "Thumbs up, great!",
+      cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+      cancelButtonAriaLabel: "Thumbs down",
+      confirmButtonClass: "btn btn-primary",
+      buttonsStyling: false,
+      cancelButtonClass: "btn btn-danger ml-1"
+    }).then((result) => {
+      if (result.value) {
+        // Se ha hecho clic en el botón "Aceptar"
+        // Llama a la función que deseas ejecutar
+        activarPantallaCompleta();
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // Se ha hecho clic en el botón "Cancelar"
+        // Regresa a la página anterior
+        window.history.back();
+      }
+    });
+}
+
+function activarPantallaCompleta() {
+  if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+  } else if (document.documentElement.mozRequestFullScreen) {
+      document.documentElement.mozRequestFullScreen();
+  } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+  } else if (document.documentElement.msRequestFullscreen) {
+      document.documentElement.msRequestFullscreen();
+  }
+}
+
+
+
 
 function wack(e) {
   moles.forEach((topo) => topo.setAttribute("onclick", ""));
@@ -152,6 +199,7 @@ setTimeout(() => {
         this.parentElement.classList.remove("over");
         numeroPregunta++;
         startGame();
+        
       }, 2000);
     }, 1500)
     inscore++;
@@ -165,6 +213,7 @@ $(document).ready(function () {
   preguntas = JSON.parse(base_preguntas);
   preguntas = randomValueGenerator(preguntas);
   startGame();
+  abrirModal();
 });
 
 

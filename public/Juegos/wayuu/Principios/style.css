@@ -570,76 +570,75 @@ body {
 #puntoIsla0 {
     top: -6%;
     left: 58%;
-
 }
 
 #puntoIsla1 {
-    top: 1%;
-    left: 64%;
+    top: 3%;
+    left: 66%;
 }
 #puntoIsla2 {
     top: -1%;
-    left: 55%;
+    left: 56%;
 }
 #puntoIsla3 {
-    top: 27%;
-    left: 62%;
+    top: 31%;
+    left: 64%;
 }
 #puntoIsla4 {
-    top: 7%;
+    top: 10%;
     left: 44%;
 }
 #puntoIsla5 {
-    top: 37%;
-    left: 32%;
+    top: 43%;
+    left: 30%;
 }
 #puntoIsla6 {
-    top: 33%;
+    top: 38%;
     left: 42%;
 }
 #puntoIsla7 {
-    top: 49%;
-    left: 35.8%;
+    top: 56%;
+    left: 34.8%;
 }
 #puntoIsla8 {
-    top: 53%;
-    left: 26%;
+    top: 62%;
+  left: 23%;
 }
 #puntoIsla9 {
-    top: 64%;
-    left: 34%;
+    top: 74%;
+  left: 31%;
 }
 #puntoIsla10 {
-    top: 70%;
-    left: 22%;
+    top: 80%;
+  left: 19%;
 }
 #puntoIsla11 {
-    top: 87%;
-    left: 25%;
-}
-#puntoIsla12 {
-    top: 64%;
-    left: 9%;
-}
-#puntoIsla13 {
-    top: 100%;
+    top: 99%;
     left: 22%;
 }
+#puntoIsla12 {
+    top: 74%;
+  left: 3%;
+}
+#puntoIsla13 {
+    top: 112%;
+    left: 17%;
+}
 #puntoIsla14 {
-    top: 104%;
-    left: 4%;
+    top: 119%;
+    left: -1%;
 }
 
 #divCalvas {
     width: 199px;
-    top: 241px;
-    left: 815px;
+    top: 56%;
+    left: 78%;
     position: absolute;
 }
 #divGirar {
     width: 109px;
-    top: 407px;
-    left: 806px;
+    top: 86%;
+    left: 77%;
     position: absolute;
     background-image: url('img/girar.png');
     background-size: 50% 50%;
@@ -649,8 +648,8 @@ body {
 }
 #divBase {
     width: 151px;
-    top: 376px;
-    left: 864px;
+    top: 81%;
+    left: 82%;
     position: absolute;
     background-image: url('img/base.png');
     background-size: 70% 70%;
