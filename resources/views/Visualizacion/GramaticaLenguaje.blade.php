@@ -210,8 +210,8 @@
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" id="div-practia"
                 style="background-image: url({{ asset('assets/css/img/fondo.png') }})">
-                <div class="modal-header">
-                    <h4 id="titPractica" style="color: #fff; font-weight: bold;" class="modal-title">Contenido Ejemplo
+                <div class="modal-header" style="background-color: white; opacity: 0.7">
+                    <h4 id="titPractica" style="color: #000000; font-weight: bold; text-transform: capitalize;" class="modal-title">Contenido Ejemplo
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
@@ -236,13 +236,13 @@
                                 id="dialogo">
                                 <div class="persona1"
                                     style="background-image: url(asset('app-assets/images/img_practicas/docente.png'));">
-                                    <div class="dialogo1" id="dialogo1">
+                                    <div class="dialogo1" style="border-radius: 10px;" id="dialogo1">
                                         <p id="parrafo1"></p>
                                     </div>
                                 </div>
                                 <div class="persona2"
                                     style="background-image: url(asset('app-assets/images/img_practicas/estudiante.png'));">
-                                    <div class="dialogo2" id="dialogo2">
+                                    <div class="dialogo2" style="border-radius: 10px;" id="dialogo2">
                                         <p id="parrafo2"></p>
                                     </div>
                                 </div>

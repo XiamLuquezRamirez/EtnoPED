@@ -99,11 +99,91 @@ class VisualizacionController extends Controller
         }
     }
 
+    public function Calificaciones()
+    {
+        if (Auth::check()) {
+            $bandera = "";
+            return view('Visualizacion.Calificaciones', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+
+    public function CargarCalificaciones()
+    {
+
+        $calificaciones = DB::connection("mysql")->select("SELECT eval.id, CASE WHEN origen='GestionarMedicinaTradicional' 
+        THEN 'Medicina tradicional' WHEN origen= 'GestionarUsosCostumbres'
+        THEN 'Usos y constumbres' ELSE 'Gramatica y lenguaje' END origen,
+        eval.titulo, eval.calif_usando, eval.punt_max, lc.calificacion, 
+        lc.puntuacion, lc.calf_prof
+        FROM etno_ped.libro_calificaciones lc
+        LEFT JOIN etno_ped.evaluaciones eval ON lc.evaluacion= eval.id
+        WHERE lc.alumno=" . Auth::user()->id);
+
+        $tdTable = '';
+        $x = 1;
+        foreach ($calificaciones as $i => $item) {
+            if (!is_null($item)) {
+                $color = '';
+                $Calificacion = "";
+                $porcentaje = ($item->puntuacion / $item->punt_max) * 100;
+
+                if ($porcentaje <= 50) {
+                    $color = '#f20d00';
+                } else if (
+                    $porcentaje > 50 && $porcentaje <=
+                    60
+                ) {
+                    $color = '#F08D0E';
+                } else if (
+                    $porcentaje > 60 && $porcentaje <=
+                    70
+                ) {
+                    $color = '#F5DA00';
+                } else if (
+                    $porcentaje > 70 && $porcentaje <=
+                    80
+                ) {
+                    $color = '#C0EA1C';
+                } else if (
+                    $porcentaje > 80 && $porcentaje <=
+                    100
+                ) {
+                    $color = '#1ECD60';
+                }
+
+                $colorFont = '#fff';
+                if ($item->calf_prof == "si") {
+                    $Calificacion =  $item->calificacion;
+                } else {
+                    $Calificacion =  "Por calificar";
+                    $color = '#fff';
+                    $colorFont = '#404e67';
+                }
+
+                $tdTable .= '<tr>
+                <td class="text-truncate">' . $x . '</td>
+                <td class="text-truncate">' . $item->origen . '</td>
+                <td class="text-truncate" style="text-transform: capitalize;">' . $item->titulo . '</td>
+                <td class="text-truncate text-center"
+                <a><span class="badge badge-success" style="color: ' . $colorFont . '; background-color: ' . $color . '">' . $Calificacion . '</span></a></td>
+                </tr>';
+                $x++;
+            }
+        }
+
+        return response()->json([
+            'calificaciones' => $tdTable
+        ]);
+    }
+
+
     public function CargarUsos()
     {
         if (Auth::check()) {
             $Usos = UsosCostumbres::AllUso();
-
             if (request()->ajax()) {
                 return response()->json([
                     'Usos' => $Usos,
@@ -214,19 +294,16 @@ class VisualizacionController extends Controller
         }
     }
 
-
     public function CargarDetTemas()
     {
         if (Auth::check()) {
             $idTema = request()->get('idTema');
             //cargar temas
             $Temas = Tematicas::BuscarTema($idTema);
-
             //cargar Multimedia
             $TemasMult = Tematicas::BuscarMultimedia($idTema);
             //cargar Ejemplos
             $TemasEjemplos = Tematicas::BuscarEjemplos($idTema);
-
             //cargar practicas
             $TemasPracticas = Practicas::allPracticas($idTema);
 
@@ -477,25 +554,26 @@ class VisualizacionController extends Controller
             if (!is_numeric($page)) {
                 $page = 1; // Establecer un valor predeterminado si no es numérico
             }
-            // $searchTerm = self::convertirCaracteresEspeciales($searchTerm);
-           
+
+            $searchTerm = self::convertirCaracteresEspeciales($searchTerm);
+
             $palabras = DB::connection('mysql')
                 ->table('etno_ped.diccionario')
                 ->where('estado', 'ACTIVO');
 
-              
-                $palabras->where(function($query) use ($searchTerm) {
-                    $query->where('palabra_espanol', 'LIKE', '%' . $searchTerm . '%')
-                          ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchTerm . '%');
-                });
-                
+
+            $palabras->where(function ($query) use ($searchTerm) {
+                $query->where('palabra_espanol', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchTerm . '%');
+            });
 
             $palabras = $palabras->orderByRaw("SUBSTRING_INDEX(SUBSTRING_INDEX(palabra_espanol, '<p>', -1), '</p>', 1)");
+
             $Listpalabras = $palabras->paginate($perPage, ['*'], 'page', $page);
 
             $div_palabra = '';
             $x = ($page - 1) * $perPage + 1;
-            
+
             foreach ($Listpalabras as $i => $item) {
                 if (!is_null($item)) {
 
@@ -529,8 +607,6 @@ class VisualizacionController extends Controller
                         $crawlerPron = new Crawler($item->palabra_lectura);
                     }
 
-
-
                     $prononciacion = $crawlerPron->filter('p')->text();
 
                     if ($item->ejemplo != "") {
@@ -539,11 +615,17 @@ class VisualizacionController extends Controller
                         $display = "none;";
                     }
 
+                    if($imagen == "noIMg.png") {   
+                        $opacity = "0.5";
+                    }else{
+                        $opacity = "1";
+                    }
+
                     $div_palabra .= ' <ul class="media-list p-0 border-blue" style="cursor: pointer;" >
-                <li class="media row justify-content-center align-items-center" style="padding: 1rem !important;" >
+                    <li class="media row justify-content-center align-items-center" style="padding: 1rem !important;" >
                     <div class="col-2 media-left" style="display: contents !important">
                         <a href="#">
-                            <img class="media-object width-150" src="' . asset('app-assets/contenidoMultimedia/imgDiccionario/' . $imagen) . '" alt="Generic placeholder image">
+                            <img class="media-object width-100" style="opacity: '.$opacity.';" src="' . asset('app-assets/contenidoMultimedia/imgDiccionario/' . $imagen) . '" alt="Generic placeholder image">
                         </a>
                     </div>
                     <div class="media-body media-search col-10" >
@@ -553,7 +635,7 @@ class VisualizacionController extends Controller
                         $div_palabra .= '<audio  class="audioEjemplo" id="audioEjemplo' . $x . '" style="max-width:40% !important;" controls>
                     <source src="' . asset('app-assets/contenidoMultimedia/audioDiccionario/' . $item->audio) . '" type="audio/mp3" />
                     <source src="' . asset('app-assets/contenidoMultimedia/audioDiccionario/' . $item->audio) . '" type="audio/ogg" />
-                  </audio>';
+                   </audio>';
                     }
 
                     $div_palabra .= '<p style="margin-bottom: 0px;font-size: 14px;text-transform: capitalize;"><span class="text-bold-600"><i class="fa fa-refresh"></i> En Wayuunaiki: </span> ' . $textoWayu  . '</p>';
@@ -561,12 +643,12 @@ class VisualizacionController extends Controller
                         $div_palabra .= '<p style="margin-bottom: 0px;font-size: 14px;text-transform: capitalize;"><span class="text-bold-600"><i class="fa fa-commenting-o"></i> Pronunciación: </span> ' . $prononciacion . '</p>';
                     }
 
-                    $div_palabra .= '<p></p><code style="display: ' . $display . '; background-color: transparent;" class="highlighter-rouge" onclick="$.abrirEjemplo(' . $x . ')"> - Ejemplo</code></p>.';
+                    $div_palabra .= '<p></p><code style="display: ' . $display . '; background-color: transparent;" class="highlighter-rouge" onclick="$.abrirEjemplo(' . $x . ')"> - Ejemplo</code></p>';
 
                     $div_palabra .= '</div>
                         <div id="contEjemplo' . $x . '" style="display:none; ">' . $item->ejemplo . '</div>
                 </li>
-            </ul>';
+                </ul>';
 
                     $x++;
                 }
@@ -584,11 +666,79 @@ class VisualizacionController extends Controller
     }
 
 
-    function convertirCaracteresEspeciales($term) {
-        return str_replace(['ü'], ['&uuml;'], $term);
+    function convertirCaracteresEspeciales($term)
+    {
+        // Array de caracteres especiales y sus representaciones HTML
+        $caracteres_especiales = array(
+            'á' => '&aacute;',
+            'à' => '&agrave;',
+            'â' => '&acirc;',
+            'ä' => '&auml;',
+            'ã' => '&atilde;',
+            'ç' => '&ccedil;',
+            'é' => '&eacute;',
+            'è' => '&egrave;',
+            'ê' => '&ecirc;',
+            'ë' => '&euml;',
+            'í' => '&iacute;',
+            'ì' => '&igrave;',
+            'î' => '&icirc;',
+            'ï' => '&iuml;',
+            'ñ' => '&ntilde;',
+            'ó' => '&oacute;',
+            'ò' => '&ograve;',
+            'ô' => '&ocirc;',
+            'ö' => '&ouml;',
+            'õ' => '&otilde;',
+            'ú' => '&uacute;',
+            'ù' => '&ugrave;',
+            'û' => '&ucirc;',
+            'ü' => '&uuml;',
+            'ý' => '&yacute;',
+            'ÿ' => '&yuml;',
+            'Á' => '&Aacute;',
+            'À' => '&Agrave;',
+            'Â' => '&Acirc;',
+            'Ä' => '&Auml;',
+            'Ã' => '&Atilde;',
+            'Ç' => '&Ccedil;',
+            'É' => '&Eacute;',
+            'È' => '&Egrave;',
+            'Ê' => '&Ecirc;',
+            'Ë' => '&Euml;',
+            'Í' => '&Iacute;',
+            'Ì' => '&Igrave;',
+            'Î' => '&Icirc;',
+            'Ï' => '&Iuml;',
+            'Ñ' => '&Ntilde;',
+            'Ó' => '&Oacute;',
+            'Ò' => '&Ograve;',
+            'Ô' => '&Ocirc;',
+            'Ö' => '&Ouml;',
+            'Õ' => '&Otilde;',
+            'Ú' => '&Uacute;',
+            'Ù' => '&Ugrave;',
+            'Û' => '&Ucirc;',
+            'Ü' => '&Uuml;',
+            'Ý' => '&Yacute;',
+            'Ÿ' => '&Yuml;',
+            '¿' => '&iquest;',
+            '"' => '&quot;',
+            '\'' => '&#039;',
+            '<' => '&lt;',
+            '>' => '&gt;',
+            '›' => '&rsaquo;',
+
+            // Agrega más caracteres especiales y sus representaciones HTML aquí según sea necesario
+        );
+
+        // Reemplazar los caracteres especiales en el término de búsqueda
+        foreach ($caracteres_especiales as $caracter => $html) {
+            $term = str_replace($caracter, $html, $term);
+        }
+
+        return $term;
     }
-    
-    
 
     public function sanear_string($string)
     {

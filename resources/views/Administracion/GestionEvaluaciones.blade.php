@@ -280,7 +280,7 @@
             {{--  Modal nueva evaluacion  --}}
             <div class="modal fade text-left" style="position: fixed;" id="modalEvaluacion" tabindex="-1"
                 role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="tituloEvaluacion">Crear Evaluación</h4>
@@ -442,7 +442,7 @@
                                                                     <div class="form-group">
                                                                         <label for="userinput5">Título:</label>
                                                                         <input class="form-control border-primary"
-                                                                            type="text" name="titulo"
+                                                                            type="text" name="titulo" style="color: #2e405c !important"
                                                                             placeholder="Título" id="titulo">
                                                                     </div>
 
@@ -2473,7 +2473,6 @@
                             '         <br>' +
                             '</div>' +
                             '</div>' +
-                            '      </div>' +
                             '<div class="form-group"  style="margin-bottom: 0px;">' +
                             '    <button type="button" onclick="$.GuardarEvalComplete(' + cons +
                             ');" id="Btn-guardarPreg' + cons +

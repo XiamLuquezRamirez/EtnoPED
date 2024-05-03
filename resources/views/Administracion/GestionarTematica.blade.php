@@ -89,7 +89,7 @@
         {{--  Modal nuevo tema   --}}
         <div class="modal fade text-left" id="modalTematica" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
             aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="tituloTematica"></h4>
@@ -158,8 +158,8 @@
                                                         <div class="col-9 col-xl-10">
                                                             <label class="file center-block">
                                                                 <input type="file"
-                                                                    accept=".jpg, .jpeg, .png, .gif, .mp4, .avi, .mov, .pdf"
-                                                                    name="multimedia" id="multimedia">
+                                                                accept="video/*"
+                                                                 name="multimedia" id="multimedia">
                                                                 <span class="file-custom"></span>
                                                             </label>
                                                         </div>
@@ -380,20 +380,12 @@
                     groups: ['clipboard', 'undo']
                 },
                 {
-                    name: 'styles',
-                    groups: ['styles']
-                },
-                {
                     name: 'editing',
                     groups: ['find', 'selection', 'spellchecker', 'editing']
                 },
                 {
                     name: 'forms',
                     groups: ['forms']
-                },
-                {
-                    name: 'basicstyles',
-                    groups: ['basicstyles', 'cleanup']
                 },
                 {
                     name: 'paragraph',
@@ -406,6 +398,16 @@
                 {
                     name: 'insert',
                     groups: ['insert']
+                },
+                '/',
+                '/',
+                {
+                    name: 'styles',
+                    groups: ['styles']
+                },
+                {
+                    name: 'basicstyles',
+                    groups: ['basicstyles', 'cleanup']
                 },
                 {
                     name: 'colors',
@@ -424,9 +426,10 @@
                     groups: ['about']
                 }
             ];
+            config.colorButton_enableAutomatic = true;
 
             config.removeButtons =
-                'Source,Save,NewPage,ExportPdf,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Undo,Redo,Replace,Find,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,SelectAll,Button,ImageButton,HiddenField,Strike,CopyFormatting,RemoveFormat,Indent,Blockquote,Outdent,CreateDiv,JustifyLeft,JustifyCenter,JustifyRight,JustifyBlock,BidiLtr,BidiRtl,Language,Link,Unlink,Anchor,Flash,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,Format,BGColor,ShowBlocks,About,Underline,Italic';
+                'Source,Save,NewPage,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Flash,Smiley,PageBreak,Iframe,ShowBlocks,About';
         };
 
         var audio_player = new Plyr("#plyr-audio-player");

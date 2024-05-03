@@ -67,7 +67,8 @@
                                         </div>
                                         <div class="card-content">
                                             <div class="card-body">
-                                                <div id="conte-usoCost" class="card-text">
+                                                <div id="conte-usoCost" style="overflow: auto;
+                                                height: 400px;" class="card-text">
 
                                                 </div>
                                             </div>

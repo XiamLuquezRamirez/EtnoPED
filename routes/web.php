@@ -106,6 +106,12 @@ Route::post('/AdminUsoCostumbres/EliminarUsos', [AdministracionController::class
 Route::post('/UsoCostumbres/CargarUsos', [VisualizacionController::class,'CargarUsos']);
 Route::post('/UsoCostumbres/CargarDetUsos', [VisualizacionController::class,'CargarDetUsos']);
 
+/////VISUALIZACION EVALUACIONES
+Route::get('/Visualizacion/Calificaciones/', [VisualizacionController::class,'Calificaciones']);
+Route::post('/Visualizacion/CargarCalificaciones', [VisualizacionController::class,'CargarCalificaciones']);
+
+
+
 ///ADMINISTRAR DICCIONARIO
 Route::get('/AdminDiccionario/GestionarDiccionario/', [AdministracionController::class,'GestionarDiccionario']);
 Route::post('/AdminDiccionario/CargarDiccionario', [AdministracionController::class,'CargarDiccionario']);

@@ -138,6 +138,8 @@ class AdministracionController extends Controller
         }
     }
 
+
+
     public function CargarPractica()
     {
         if (Auth::check()) {
@@ -162,6 +164,7 @@ class AdministracionController extends Controller
         }
     }
 
+   
 
     public function GuardarPractFin()
     {
@@ -791,12 +794,19 @@ class AdministracionController extends Controller
                 $page = 1; // Establecer un valor predeterminado si no es numérico
             }
 
+            $searchDicc = self::convertirCaracteresEspeciales($searchDicc);
+
             $diccionario = DB::connection('mysql')
                 ->table('etno_ped.diccionario')
                 ->where('estado', 'ACTIVO');
-            if ($searchDicc) {
-                $diccionario->where('palabra_espanol', 'LIKE', '%' . $searchDicc . '%');
-            }
+          
+            $diccionario->where(function ($query) use ($searchDicc) {
+                $query->where('palabra_espanol', 'LIKE', '%' . $searchDicc . '%')
+                    ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchDicc . '%');
+            });
+
+            $diccionario = $diccionario->orderByRaw("SUBSTRING_INDEX(SUBSTRING_INDEX(palabra_espanol, '<p>', -1), '</p>', 1)");
+
             $ListDiccionario = $diccionario->paginate($perPage, ['*'], 'page', $page);
 
             $tdTable = '';
@@ -1522,7 +1532,7 @@ class AdministracionController extends Controller
                 ]);
             }
 
-         $Log = Log::Guardar('Evaluación Modificada', $idEval);
+            $Log = Log::Guardar('Evaluación Modificada', $idEval);
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
@@ -2027,6 +2037,81 @@ class AdministracionController extends Controller
         } else {
             return redirect("/")->with("error", "Su sesion ha terminado");
         }
+    }
+
+
+    function convertirCaracteresEspeciales($term)
+    {
+        // Array de caracteres especiales y sus representaciones HTML
+        $caracteres_especiales = array(
+            'á' => '&aacute;',
+            'à' => '&agrave;',
+            'â' => '&acirc;',
+            'ä' => '&auml;',
+            'ã' => '&atilde;',
+            'ç' => '&ccedil;',
+            'é' => '&eacute;',
+            'è' => '&egrave;',
+            'ê' => '&ecirc;',
+            'ë' => '&euml;',
+            'í' => '&iacute;',
+            'ì' => '&igrave;',
+            'î' => '&icirc;',
+            'ï' => '&iuml;',
+            'ñ' => '&ntilde;',
+            'ó' => '&oacute;',
+            'ò' => '&ograve;',
+            'ô' => '&ocirc;',
+            'ö' => '&ouml;',
+            'õ' => '&otilde;',
+            'ú' => '&uacute;',
+            'ù' => '&ugrave;',
+            'û' => '&ucirc;',
+            'ü' => '&uuml;',
+            'ý' => '&yacute;',
+            'ÿ' => '&yuml;',
+            'Á' => '&Aacute;',
+            'À' => '&Agrave;',
+            'Â' => '&Acirc;',
+            'Ä' => '&Auml;',
+            'Ã' => '&Atilde;',
+            'Ç' => '&Ccedil;',
+            'É' => '&Eacute;',
+            'È' => '&Egrave;',
+            'Ê' => '&Ecirc;',
+            'Ë' => '&Euml;',
+            'Í' => '&Iacute;',
+            'Ì' => '&Igrave;',
+            'Î' => '&Icirc;',
+            'Ï' => '&Iuml;',
+            'Ñ' => '&Ntilde;',
+            'Ó' => '&Oacute;',
+            'Ò' => '&Ograve;',
+            'Ô' => '&Ocirc;',
+            'Ö' => '&Ouml;',
+            'Õ' => '&Otilde;',
+            'Ú' => '&Uacute;',
+            'Ù' => '&Ugrave;',
+            'Û' => '&Ucirc;',
+            'Ü' => '&Uuml;',
+            'Ý' => '&Yacute;',
+            'Ÿ' => '&Yuml;',
+            '¿' => '&iquest;',
+            '"' => '&quot;',
+            '\'' => '&#039;',
+            '<' => '&lt;',
+            '>' => '&gt;',
+            '›' => '&rsaquo;',
+
+            // Agrega más caracteres especiales y sus representaciones HTML aquí según sea necesario
+        );
+
+        // Reemplazar los caracteres especiales en el término de búsqueda
+        foreach ($caracteres_especiales as $caracter => $html) {
+            $term = str_replace($caracter, $html, $term);
+        }
+
+        return $term;
     }
 
 
