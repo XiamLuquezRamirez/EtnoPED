@@ -108,6 +108,7 @@ class Evaluacion extends Model
         return DB::connection('mysql')->table('etno_ped.evaluaciones')
             ->where('tematica', $id)
             ->where('origen', $origen)
+            ->where('estado', 'ACTIVO')
             ->get();
     }
 

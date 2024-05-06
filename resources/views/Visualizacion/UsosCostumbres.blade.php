@@ -67,8 +67,10 @@
                                         </div>
                                         <div class="card-content">
                                             <div class="card-body">
-                                                <div id="conte-usoCost" style="overflow: auto;
-                                                height: 400px;" class="card-text">
+                                                <div id="conte-usoCost"
+                                                    style="overflow: auto;
+                                                height: 400px;"
+                                                    class="card-text">
 
                                                 </div>
                                             </div>
@@ -267,7 +269,6 @@
 @endsection
 @section('scripts')
     <script>
-
         CKEDITOR.editorConfig = function(config) {
             config.toolbarGroups = [{
                     name: 'document',
@@ -392,8 +393,14 @@
                             $("#titulo-usos").html(response.detUsos.nombre);
                             $("#conte-usoCost").html(response.detUsos.descripcion);
 
-                            if (response.detUsos.url_video += "" && response.evaluaciones
-                                .length > 0) {
+                            let lateral = "si";
+
+                            if (response.detUsos.url_video == 'null' || response.detUsos
+                            .url_video == '' || response.detUsos.url_video == null) {
+                                lateral = "no";
+                            }
+
+                            if (lateral = "no" && response.evaluaciones.length > 0) {
                                 $("#div-lateral").show();
                             } else {
                                 $("#div-lateral").hide();
@@ -404,7 +411,14 @@
                             // Mostrar video
                             var ContentVidCostumbres = document.getElementById(
                                 'cont-vidCost');
-                            if (response.detUsos.url_video != "") {
+                            
+                               
+                            if (response.detUsos.url_video == 'null' || response.detUsos
+                                .url_video == '' || response.detUsos.url_video == null) {
+                                $("#card-costumbres").hide();
+                         
+                            } else {
+                              
                                 $("#card-costumbres").show();
                                 let url = $('#urlMult').data("ruta") +
                                     "/contenidoMultimedia/UsosCostumbres/" +
@@ -416,14 +430,15 @@
                                     '" type="video/mp4"></video>';
 
                                 var video_player = new Plyr("#vidCost");
-
-                            } else {
-                                $("#card-costumbres").hide();
                             }
+
+
 
                             // Mostrar evaluaciones
                             let listEval = "";
+                            console.log(response.evaluaciones);
                             if (response.evaluaciones.length > 0) {
+
                                 $("#card-evaluacione").show();
                                 $.each(response.evaluaciones, function(i, item) {
                                     listEval += ' <li onclick="$.MostEval(' + item
@@ -467,8 +482,8 @@
                     var videoID = 'datruta';
                     $('#' + videoID).get(0).pause();
                 },
-                 ///////MOSTRAR EVALUACIÓN
-                 MostEval: function(id) {
+                ///////MOSTRAR EVALUACIÓN
+                MostEval: function(id) {
 
                     $("#ModEval").modal({
                         backdrop: 'static',

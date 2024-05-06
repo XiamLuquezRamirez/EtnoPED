@@ -728,7 +728,7 @@
                             });
 
                             if (x > 1) {
-                                $("#divMultimediaLis").show();
+                                $("#divEjemplos").show();
 
                             }
 

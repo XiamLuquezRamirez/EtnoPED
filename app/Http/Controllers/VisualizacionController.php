@@ -281,8 +281,9 @@ class VisualizacionController extends Controller
             $idUso = request()->get('idUso');
 
             $detUsos = UsosCostumbres::BuscarUso($idUso);
+     
             $evaluaciones = Evaluacion::BusEvalOrigen($idUso, 'GestionarUsosCostumbres');
-
+      
             if (request()->ajax()) {
                 return response()->json([
                     'detUsos' => $detUsos,

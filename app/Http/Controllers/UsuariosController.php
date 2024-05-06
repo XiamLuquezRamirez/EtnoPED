@@ -20,6 +20,7 @@ class UsuariosController extends Controller
 
 
             $UrlReal = Usuarios::ConsulUrl("PED");
+           
             $rutaUrl = $UrlReal->url;
 
             $rutaUrl =  $UrlReal->url.'/app-assets/images/';

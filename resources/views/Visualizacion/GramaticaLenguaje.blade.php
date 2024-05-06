@@ -508,7 +508,7 @@
 
                     let tdTable = '';
                     $.ajax({
-                        type: "POST",
+                        type: "POST", 
                         url: url,
                         data: datos,
                         async: false,
@@ -528,7 +528,7 @@
                                     '  <div class="col-12 pb-1 justify-content-center " ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;height: 100px; width:100%;display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="$.verTemas(' +
                                     item.id +
                                     ');" class="bs-callout-primary p-1 pl-2 align-items-stretch hvr-wobble-horizontal">' +
-                                    '<h4 class="primary ">' + textoTitu + '</h4>' +
+                                    '<h4 class="primary ">' + item.titulo + '</h4>' +
                                     ' ' + objetivo + '' +
                                     '</div></div>';
 
