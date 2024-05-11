@@ -297,7 +297,7 @@
                                             <div class="card-text">
                                                 <dl class="row">
                                                     <dt class="col-sm-2">Tema:</dt>
-                                                    <dd class="col-sm-10">{{ $unidad }}</dd>
+                                                    <dd class="col-sm-10">{{ $tema }}</dd>
                                                 </dl>
                                             </div>
                                         </div>
@@ -305,7 +305,7 @@
                                             <div class="card-text">
                                                 <dl class="row">
                                                     <dt class="col-sm-3">Unidad:</dt>
-                                                    <dd class="col-sm-9">{{ $tema }}</dd>
+                                                    <dd class="col-sm-9">{{ $unidad }}</dd>
                                                 </dl>
                                             </div>
                                         </div>
@@ -2204,9 +2204,10 @@
                             '   </div>' +
                             '</div>';
 
+
                         $("#Preguntas" + cons).html(Preguntas);
                         $.inicialEditoPregEnsayo(cons);
-                        $('#PregEnsay' + cons).val(preg);
+                        $('#pregEditEnsayo' + cons).val(preg);
                         edit = "no"
                     } else {
                         mensaje = "Debe Guardar la Pregunta antes de editar otra.";

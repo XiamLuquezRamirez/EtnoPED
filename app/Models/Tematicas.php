@@ -86,6 +86,12 @@ class Tematicas extends Model
             ->where('tematica', $id)
             ->get();
     }
+    public static function BuscarEjemplosEdit($id)
+    {
+        return DB::connection('mysql')->table('etno_ped.ejemplos_tematicas')
+            ->where('id', $id)
+            ->first();
+    }
 
     public static function EliminarRegistomultimedia($id)
     {
@@ -117,4 +123,17 @@ class Tematicas extends Model
         ]);
         return  "ok";
     }
+    public static function EditarjemplosTema($request)
+    {
+        $respuesta = DB::connection('mysql')->table('etno_ped.ejemplos_tematicas')->where('id', $request['ejemploSel'])->update([
+            'nombre' => $request['tituloEjemploEdit'],
+            'contenido' => $request['contEjemploEdit'],
+            'url_audio' => $request["Audio"]
+        ]);
+
+        return  "ok";
+    }
+
+
+
 }

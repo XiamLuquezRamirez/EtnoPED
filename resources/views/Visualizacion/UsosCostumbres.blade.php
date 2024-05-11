@@ -402,6 +402,7 @@
 
                             if (lateral = "no" && response.evaluaciones.length > 0) {
                                 $("#div-lateral").show();
+                                divCentral.className = "col-sm-8 col-md-8";
                             } else {
                                 $("#div-lateral").hide();
                                 let divCentral = document.getElementById("div-central");

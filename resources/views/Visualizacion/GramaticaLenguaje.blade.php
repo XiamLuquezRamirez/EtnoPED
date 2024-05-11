@@ -7,12 +7,14 @@
     <input type="hidden" class="form-control" id="Tip_Usu" value="{{ Auth::user()->tipo_usuario }}" />
     <input type="hidden" class="form-control" id="Id_Doce" value="{{ Session::get('DOCENTE') }}" />
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-    <input type="hidden" data-id='id-dat' id="dattaller" data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
+    <input type="hidden" data-id='id-dat' id="dattaller"
+        data-ruta="{{ asset('/app-assets/Archivos_EvaluacionTaller') }}" />
     <input type="hidden" class="form-control" id="h" value="" />
     <input type="hidden" class="form-control" id="m" value="" />
     <input type="hidden" class="form-control" id="s" value="" />
     <input type="hidden" class="form-control" id="tiempEvaluacion" value="" />
-    <input type="hidden" data-id='id-dat' id="Respdattaller" data-ruta="{{ asset('/app-assets/Archivos_EvalTaller_Resp') }}" />
+    <input type="hidden" data-id='id-dat' id="Respdattaller"
+        data-ruta="{{ asset('/app-assets/Archivos_EvalTaller_Resp') }}" />
 
     <div class="content-header row">
         <div class="content-header-left col-md-12 col-12 mb-2">
@@ -56,26 +58,27 @@
                                         class="fa fa-indent"></i>
                                     Contenido</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="multimedia-tab1" data-toggle="tab" href="#multimedia"
-                                    aria-controls="multimedia" role="tab" aria-selected="false"><i
-                                        class="fa fa-file-video-o"></i>
-                                    Multimedia</a>
-                            </li>
-                            <li class="nav-item">
+                            <li  id="ejemplos-tab11" class="nav-item">
                                 <a class="nav-link" id="ejemplos-tab1" data-toggle="tab" href="#ejemplos"
                                     aria-controls="ejemplos" role="tab" aria-selected="false"><i
                                         class="fa fa-file-image-o"></i>
                                     Ejemplos</a>
                             </li>
+                            <li id="multimedia-tab11" class="nav-item">
+                                <a class="nav-link" id="multimedia-tab1" data-toggle="tab" href="#multimedia"
+                                    aria-controls="multimedia" role="tab" aria-selected="false"><i
+                                        class="fa fa-file-video-o"></i>
+                                    Multimedia</a>
+                            </li>
+                         
 
-                            <li class="nav-item">
+                            <li id="practicas-tab11" class="nav-item">
                                 <a class="nav-link" id="practicas-tab1" data-toggle="tab" href="#practicas"
                                     aria-controls="practicas" role="tab" aria-selected="false"><i
                                         class="fa fa-comments-o"></i>
-                                    Practicas</a>
+                                    Diálogos</a>
                             </li>
-                            <li class="nav-item">
+                            <li  id="evaluacion-tab11" class="nav-item">
                                 <a class="nav-link" id="evaluacion-tab1" data-toggle="tab" href="#evaluacion"
                                     aria-controls="evaluacion" role="tab" aria-selected="false"><i
                                         class="fa fa-check-square-o"></i>
@@ -94,7 +97,7 @@
                                                     <div class="media-body">
                                                         <p class="lead mb-0"><a href="#"><span id="titu"
                                                                     class="text-bold-600"></span> </a></p>
-                                                        <div class="vertical-scroll scroll-example height-300 ps ps--active-y"
+                                                        <div class="vertical-scroll scroll-example height-400"
                                                             id="conte">
 
                                                         </div>
@@ -184,7 +187,7 @@
     </div>
     <div class="modal fade text-left" id="modalEjemploTematica" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 id="titEjemplo" class="modal-title">Contenido Ejemplo</h4>
@@ -211,7 +214,8 @@
             <div class="modal-content" id="div-practia"
                 style="background-image: url({{ asset('assets/css/img/fondo.png') }})">
                 <div class="modal-header" style="background-color: white; opacity: 0.7">
-                    <h4 id="titPractica" style="color: #000000; font-weight: bold; text-transform: capitalize;" class="modal-title">Contenido Ejemplo
+                    <h4 id="titPractica" style="color: #000000; font-weight: bold; text-transform: capitalize;"
+                        class="modal-title">Contenido Ejemplo
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
@@ -281,8 +285,8 @@
                     </div>
 
                     <button type="button" id="btn_salir" onclick="$.SalirAnim();"
-                        class="btn grey btn-outline-secondary" data-dismiss="modal"><i
-                            class="fa fa-reply"></i> Salir</button>
+                        class="btn grey btn-outline-secondary" data-dismiss="modal"><i class="fa fa-reply"></i>
+                        Salir</button>
                 </div>
             </div>
         </div>
@@ -508,7 +512,7 @@
 
                     let tdTable = '';
                     $.ajax({
-                        type: "POST", 
+                        type: "POST",
                         url: url,
                         data: datos,
                         async: false,
@@ -518,7 +522,7 @@
                             tempDivTitu.innerHTML = response.Unidad.nombre;
                             var textoTitu = tempDivTitu.firstChild.textContent ||
                                 tempDivTitu.firstChild.innerText;
-                            
+
                             $("#tit-gram").html("Gramatica y Lenguaje - " + textoTitu);
 
                             $.each(response.Temas, function(i, item) {
@@ -528,7 +532,8 @@
                                     '  <div class="col-12 pb-1 justify-content-center " ><div style="border: 1px solid #F9C55A !important; cursor:pointer;background-image: url(\'{{ asset('/app-assets/images/backgrounds/bg_callout.png') }}\'); background-size: 100% 100%;height: 100px; width:100%;display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="$.verTemas(' +
                                     item.id +
                                     ');" class="bs-callout-primary p-1 pl-2 align-items-stretch hvr-wobble-horizontal">' +
-                                    '<h4 class="primary ">' + item.titulo + '</h4>' +
+                                    '<h4 class="primary ">' + item.titulo +
+                                    '</h4>' +
                                     ' ' + objetivo + '' +
                                     '</div></div>';
 
@@ -620,6 +625,12 @@
                                 x++;
                             });
 
+                             if(x == 1){
+                                $("#multimedia-tab11").hide();
+                             }else{
+                                $("#multimedia-tab11").show();
+                             }
+
                             $("#div-multimedia").html(multi);
 
                             x = 1;
@@ -650,6 +661,12 @@
                                 x++;
                             });
 
+                            if(x == 1){
+                                $("#ejemplos-tab11").hide();
+                             }else{
+                                $("#ejemplos-tab11").show();
+                             }
+
                             $("#div-ejemplos").html(ejemplos);
 
                             x = 1;
@@ -676,6 +693,13 @@
                                     '</div>';
                                 x++;
                             });
+
+                            if(x == 1){
+                                $("#practicas-tab11").hide();
+                             }else{
+                                $("#practicas-tab11").show();
+                             }
+
 
                             $("#div-practicas").html(practicas);
                             x = 1;
@@ -711,6 +735,13 @@
                                     '</div>';
                                 x++;
                             });
+
+                            if(x == 1){
+                                $("#evaluacion-tab11").hide();
+                             }else{
+                                $("#evaluacion-tab11").show();
+                             }
+
 
                             $("#div-evaluacion").html(evaluacion);
 
@@ -792,8 +823,11 @@
 
                     $('#parrafo1').html("");
                     $('#parrafo2').html("");
+                    $('#dialogo1').hide();
+                    $('#dialogo2').hide();
                     actual = 0;
                     ok = false;
+
                     let paisajes = [{
                             fondo: "fondo1.png",
                         },
@@ -848,6 +882,7 @@
 
                 },
                 mostrarPersonas: function() {
+
                     const divAnimado = document.querySelector('.persona1');
                     divAnimado.style.animationName = 'mover_persona_1';
                     const divAnimado2 = document.querySelector('.persona2');
@@ -877,21 +912,21 @@
                     document.getElementById("dialogo1").style.justifyContent = "center";
                     if (actual < pregPractica.length) {
                         pregAct = pregPractica[actual].id;
-                        $.maquina("parrafo1", pregPractica[actual].pregunta, 50, 1);
+                        console.log(pregPractica[actual].pregunta);
+                        $.maquina("parrafo1", pregPractica[actual].pregunta, 1, 1);
                     } else {
+                        
                         $('#dialogo1').fadeToggle(2000);
                         $('#dialogo2').fadeToggle(2000);
                         actual = 0;
                         Swal.fire({
                             type: "success",
                             title: "Felicitaciones...",
-                            text: "La Practica fue realizada con exito",
+                            text: "El diálogo fue realizado con exito",
                             confirmButtonClass: "btn btn-primary",
                             timer: 2500,
                             buttonsStyling: false
                         });
-
-
                     }
 
                 },
@@ -933,7 +968,7 @@
 
                     if (document.getElementById("dialogo2").style.display == "") {
                         $('#dialogo2').fadeToggle(2000);
-                    }else{
+                    } else {
                         document.getElementById("dialogo2").style.display = "flex";
                         document.getElementById("dialogo2").style.alignItems = "center";
                         document.getElementById("dialogo2").style.justifyContent = "center";
@@ -961,34 +996,25 @@
                     }, 3000)
                 },
                 maquina: function(contenedor, texto, intervalo) {
-                    var i = 0,
-                        // Creamos el timer
-                        timer = setInterval(function() {
-                            if (i < texto.length) {
-                                // Si NO hemos llegado al final del texto..
-                                // Vamos añadiendo letra por letra y la _ al final.
-                                $("#" + contenedor).html(texto.substr(0, i++) + "_");
-                            } else {
-                                // En caso contrario..
-                                // Salimos del Timer y quitamos la barra baja (_)
-                                clearInterval(timer);
-                                $("#" + contenedor).html(texto);
 
-                                if (ok) {
-                                    $('#parrafo1').text("");
-                                    setTimeout(() => {
-                                        $.dialogo_primario();
-                                    }, 2000)
-                                    ok = false;
-                                } else {
-                                    $('#parrafo2').text("")
-                                    setTimeout(() => {
-                                        $.dialogo_Secundario();
-                                    }, 3000)
-                                    ok = true;
-                                }
-                            }
-                        }, intervalo);
+
+                    $("#" + contenedor).html(texto);
+
+                    if (ok) {
+                       
+                        setTimeout(() => {
+                            $('#parrafo1').text("");
+                            $.dialogo_primario();
+                        }, 3000)
+                        ok = false;
+                    } else {
+                        $('#parrafo2').text("")
+                        setTimeout(() => {
+                            $.dialogo_Secundario();
+                        }, 4000)
+                        ok = true;
+                    }
+
                 },
 
                 cerrarMultimedia: function() {

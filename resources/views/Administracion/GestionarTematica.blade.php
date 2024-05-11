@@ -3,6 +3,7 @@
 @section('Contenido')
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <input type="hidden" name="accion" id="accion" value="">
+
     <input type="hidden" name="consEjemplo" id="consEjemplo" value="0">
     <input type="hidden" id="urlMult" data-ruta="{{ asset('/app-assets/') }}" />
     <input type="hidden" class="form-control" id="Ruta" value="{{ url('/') }}/" />
@@ -157,9 +158,8 @@
                                                     <div class="row mb-1">
                                                         <div class="col-9 col-xl-10">
                                                             <label class="file center-block">
-                                                                <input type="file"
-                                                                accept="video/*"
-                                                                 name="multimedia" id="multimedia">
+                                                                <input type="file" accept="video/*" name="multimedia"
+                                                                    id="multimedia">
                                                                 <span class="file-custom"></span>
                                                             </label>
                                                         </div>
@@ -177,8 +177,8 @@
                                             </button>
                                         </div>
 
-                                        <div class="card-body" id="divMultimedia" >
-                            
+                                        <div class="card-body" id="divMultimedia">
+
                                         </div>
                                         <div class="card-body" id="divMultimediaLis" style="display:none;">
                                             <h5>Listado de Contenido Multimedia existente</h5>
@@ -225,16 +225,6 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div id="verEjemplo">
-                                                <div id="contEjemplo"></div>
-                                                <div class="form-actions right">
-                                                    <button type="button" id="btnAtrasVideo" style="display:none;"
-                                                        onclick="$.atrasListejemplo()" class="btn btn-info">
-                                                        <i class="fa fa-reply"></i> Atras
-                                                    </button>
-                                                </div>
-
-                                            </div>
                                         </div>
                                     </div>
 
@@ -262,6 +252,103 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade text-left" id="modalMultimedia" style="overflow-y: auto;" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Contenido Multimedia</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <div id="modalContentEdit" style="align-items: center;"></div>
+                        </div>
+
+                        <div class="form-actions right">
+                            <button type="button" onclick="$.cerrarMultimediaEjemplo();" class="btn btn-warning mr-1">
+                                <i class="fa fa-reply"></i> Atras
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-left" id="modalejemplo" style="overflow-y: auto;" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="tituloEjemploModal">Editar Ejemplo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <div id="verEjemplo">
+                                <div id="contEjemplo"></div>
+                                <div class="form-actions right">
+                                    <button type="button" id="btnAtrasVideo" 
+                                        onclick="$.atrasListejemplo()" class="btn btn-info">
+                                        <i class="fa fa-reply"></i> Atras
+                                    </button>
+                                </div>
+
+                            </div>
+                            <div id="EditarEjemplo" style="display: none;">
+                                <div class="form-group col-12 mb-2 mt-2">
+                                    <div class="row mb-1 border-bottom-cyan" id="row">
+                                        <form class="form" method="post" id="formGuardarEjemploEdit"
+                                            action="{{ url('/') }}/AdminGramaticaLenguaje/actualizarEjemplo">
+                                            <input type="hidden" name="ejemploSel" id="ejemploSel" value="" />
+                                            <input type="hidden" name="audDicc" id="audDicc" value="">
+                                            <div class="col-12 col-xl-12 pb-1">
+                                                <div class="form-group">
+                                                    <label for="userinput5">Ejemplo:</label>
+                                                    <input class="form-control border-primary" type="text"
+                                                        name="tituloEjemploEdit" placeholder="Título"
+                                                        id="tituloEjemploEdit">
+                                                </div>
+                                                <div class="form-group">
+                                                    <textarea cols="80" id="contEjemploEdit" name="contEjemploEdit" rows="10"></textarea>
+                                                </div>
+
+                                                <div class="form-group" id="cargAudio">
+                                                    <label for="userinput5">Cargar Audio: </label>
+                                                    <input type="file" name="audEjemploEdit[]" accept=".mp3"
+                                                        id="audEjemploEdit">
+                                                </div>
+
+                                                <div class="form-group" id="verAudio" style="display: none;">
+                                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                                        <button type="button" onclick="$.verCont(2);"
+                                                            class="btn btn-success"><i class="fa fa-search"></i>
+                                                            Escuchar</button>
+                                                        <button type="button" onclick="$.cambiaAudio();"
+                                                            class="btn btn-warning"><i class="fa fa-refresh"></i>
+                                                            Cambiar Audio</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions right">
+                                    <button type="button" id="btnActEjemplo" onclick="$.actualizarEjemplo()"
+                                        class="btn btn-info">
+                                        <i class="fa fa-save"></i> Actualizar
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade text-left" id="modalMultimediaTematica" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel1" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -319,6 +406,10 @@
         @csrf
         <!-- Tus campos del formulario aquí -->
     </form>
+    <form action="{{ url('/AdminGramaticaLenguaje/editarEjemplo') }}" id="forEditarEjemplo" method="POST">
+        @csrf
+        <!-- Tus campos del formulario aquí -->
+    </form>
 
 
 @endsection
@@ -369,6 +460,7 @@
         })(window, document, jQuery);
 
         ///////////////////CONFIGURACION EDITOR
+
 
         CKEDITOR.editorConfig = function(config) {
             config.toolbarGroups = [{
@@ -556,8 +648,8 @@
 
                     if (contenido.length === 0) {
                         Swal.fire({
-                            title: " Alerta!",
-                            text: " Debe de ingresar el título!",
+                            title: "Alerta!",
+                            text: "Debe de ingresar el título!",
                             type: "warning",
                             confirmButtonClass: "btn btn-warning",
                             buttonsStyling: false
@@ -618,8 +710,6 @@
                             }
 
                             $.cargar();
-
-
                         },
                         error: function() {
                             mensaje = "La Evaluación no pudo ser Guardada";
@@ -650,7 +740,6 @@
 
                     $("#id").val(id);
                     var accion = $("#accion").val();
-
                     var form = $("#formBuscarTema");
 
                     $("#idTema").remove();
@@ -698,11 +787,10 @@
                             });
 
                             if (x >= 1) {
-                               
                                 $("#divMultimediaLis").show();
 
                             }
-                            //llenar ejemplos 
+                            //llenar ejemplos
                             x = 1;
 
 
@@ -717,28 +805,96 @@
                                     item.url_audio + '"><th>' + x + '</th>';
                                 ejemplos += '<td>' + item.nombre + '</td>';
                                 ejemplos +=
-                                    '<td><button type="button"   title="Ver" onclick="$.VerEjemplo(' +
+                                    '<td style="display: flex; flex-wrap: nowrap; align-content: center"><button type="button"   title="Ver" onclick="$.VerEjemplo(' +
                                     x +
                                     ');" class="btn btn-icon btn-pure info "><i class="fa fa-eye"></i></button>' +
+                                    '<button type="button" title="Editar" onclick="$.editarEjemplo(' +
+                                    x +
+                                    ');" class="btn btn-icon btn-pure success  "><i class="fa fa-edit"></i></button>' +
                                     '<button type="button" title="Eliminar" onclick="$.EliminarEjemplo(' +
                                     x +
                                     ');" class="btn btn-icon btn-pure danger  "><i class="fa fa-trash-o"></i></button>' +
+
+
                                     '</td></tr>';
                                 x++;
                             });
 
                             if (x > 1) {
                                 $("#divEjemplos").show();
-
+                                $("#verEjemplo").show();
+                                $("#tableEjemplos").show();
+                                $("#EditarEjemplo").hide();
                             }
-
                         }
                     });
 
                     $("#trMultimedia").html(multimedia);
                     $("#trEjemplos").html(ejemplos);
                 },
+                actualizarEjemplo: function() {
+                    for (var instanceName in CKEDITOR.instances) {
+                        CKEDITOR.instances[instanceName].updateElement();
+                    }
+                    var form = $("#formGuardarEjemploEdit");
+                    var loader = document.getElementById('loader');
+                    var token = $("#token").val();
+                    loader.style.display = 'block';
 
+                    $("#idtoken").remove();
+                    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token + "'>");
+
+                    var url = form.attr("action");
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: new FormData($('#formGuardarEjemploEdit')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(respuesta) {
+                            if (respuesta.estado == "ok") {
+                                Swal.fire({
+                                    type: "success",
+                                    title: "",
+                                    text: "Operación realizada exitosamente",
+                                    confirmButtonClass: "btn btn-primary",
+                                    timer: 1500,
+                                    buttonsStyling: false
+                                });
+
+                                var loader = document.getElementById('loader');
+                                loader.style.display = 'none';
+                                setTimeout(() => {
+                                    $.cerrarEditar();
+                                }, 1600)
+                            }
+
+
+                        },
+                        error: function() {
+                            mensaje = "El ejemplo no pudo ser actualizado";
+                            Swal.fire({
+                                title: "",
+                                text: mensaje,
+                                icon: "warning",
+                                button: "Aceptar",
+                            });
+                        }
+                    });
+
+                },
+
+                cerrarEditar: function(){
+                    $("#EditarEjemplo").hide();
+                    $("#modalTematica").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                    $('#modalejemplo').modal('toggle');
+                    var miDiv = document.getElementById("modalTematica");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+                },
                 EliminarMulti: function(id) {
 
                     Swal.fire({
@@ -803,7 +959,7 @@
                         id).data("url");
                     let tipMuil = $("#tr_" + id).data("tipo");
 
-                    
+
                     $("#modalMultimediaTematica").modal({
                         backdrop: 'static',
                         keyboard: false
@@ -829,8 +985,14 @@
 
                 VerEjemplo: function(id) {
                     let ejemplo = '';
-                    $("#verEjemplo").show();
-                    $("#tableEjemplos").hide();
+                    $("#tituloEjemploModal").html("Ver Ejemplo");
+
+                    $("#modalejemplo").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $('#modalTematica').modal('toggle');
+
                     $("#btnAtrasVideo").show();
                     let divEjemplo = document.getElementById('divContEjemplo' + id);
                     let ejemploContenido = divEjemplo.innerHTML;
@@ -860,21 +1022,26 @@
                 },
                 atrasListejemplo: function() {
                     $("#verEjemplo").hide();
-                    $("#tableEjemplos").show();
-                    $("#titEjemplo").html("Listado de ejemplos");
-                    $("#btnAtrasVideo").hide();
-                },
-                cerrarMultimedia: function() {
-                    
                     $("#modalTematica").modal({
                         backdrop: 'static',
                         keyboard: false
                     });
-         
+
+                    $('#modalejemplo').modal('toggle');
+                    var miDiv = document.getElementById("modalTematica");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+                },
+                cerrarMultimedia: function() {
+
+                    $("#modalTematica").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
                     $('#modalMultimediaTematica').modal('toggle');
                     var miDiv = document.getElementById("modalTematica");
                     miDiv.style.setProperty("overflow-y", "auto", "important");
-                   
+
                 },
                 eliminar: function(id) {
                     Swal.fire({
@@ -1052,6 +1219,89 @@
                     $("#consEjemplo").val(consEjemplo);
 
                 },
+                editarEjemplo: function(id) {
+                    $("#tituloEjemploModal").html("Editar Ejemplo");
+                    
+                    $("#btnAtrasVideo").hide();
+                    $("#modalejemplo").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $('#modalTematica').modal('toggle');
+
+                    let idejemplo = $("#trejemplo_" + id).data("id");
+                    $("#ejemploSel").val(idejemplo);
+                    $("#EditarEjemplo").show();
+                    $.inicialEditorEjemplosEdit(consEjemplo);
+
+                    var form = $("#forEditarEjemplo");
+
+                    $("#idEjemplo").remove();
+                    form.append("<input type='hidden' id='idejemplo' name='idejemplo'  value='" +
+                        idejemplo +
+                        "'>");
+
+                    var url = form.attr("action");
+                    var datos = form.serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: datos,
+                        async: false,
+                        dataType: "json",
+                        success: function(respuesta) {
+                            $('#tituloEjemploEdit').val(respuesta.ejemplo.nombre);
+                            $('#contEjemploEdit').val(respuesta.ejemplo.contenido);
+
+                            $("#audEjemploEdit").val("");
+
+                            if (respuesta.ejemplo.url_audio != "") {
+                                $("#verAudio").show();
+                                $("#cargAudio").hide();
+                                $("#audDicc").val(respuesta.ejemplo.url_audio)
+                            }
+                        }
+                    });
+                },
+                cambiaAudio: function() {
+                    $("#verAudio").hide();
+                    $("#cargAudio").show();
+                },
+                cerrarMultimediaEjemplo: function() {
+                    $('#modalMultimedia').modal('hide');
+                    $("#modalejemplo").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    var miDiv = document.getElementById("modalejemplo");
+                    miDiv.style.setProperty("overflow-y", "auto", "important");
+                },
+                verCont: function() {
+
+                    $("#modalMultimedia").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    }).show();
+                    $('#modalejemplo').modal('toggle');
+
+
+                    let url = "";
+                    var modalContent = document.getElementById('modalContentEdit');
+
+
+                    url = $('#urlMult').data("ruta") + "/contenidoMultimedia/audios/" + $(
+                        "#audDicc").val();
+                    modalContent.innerHTML = '<audio  id="audioDicc" style="width:100%" controls>' +
+                        '    <source src="" type="audio/mp3" />' +
+                        '    <source src="" type="audio/ogg" />' +
+                        '</audio>';
+
+                    let audio = document.getElementById('audioDicc');
+                    audio.src = url;
+
+
+                },
                 evaluaciones: function(id) {
                     var rurl = $("#Ruta").val();
                     $(location).attr('href', rurl +
@@ -1081,6 +1331,13 @@
                     });
 
                 },
+                inicialEditorEjemplosEdit: function(ejem) {
+                    CKEDITOR.replace('contEjemploEdit', {
+                        width: '100%',
+                        height: 100
+                    });
+
+                },
                 contTitulo: function() {
                     CKEDITOR.replace('titulo', {
                         removePlugins: 'toolbar,dialogui', // Quitar todas las herramientas
@@ -1099,9 +1356,6 @@
                     });
 
                 }
-
-
-
             });
             $.cargar(1);
             $.inicialEditorContenido();

@@ -159,11 +159,12 @@ class Evaluacion extends Model
         return DB::connection('mysql')->table('etno_ped.evaluaciones')
             ->where('estado', 'ACTIVO')
             ->where('tematica', $idTema)
+            ->where('origen','-')
             ->get();
     }
     public static function allEvaluacionEst($idTema)
     {
         return DB::connection('mysql')->select("SELECT eval.*, lib.estado_eval FROM etno_ped.evaluaciones eval
-        LEFT JOIN etno_ped.libro_calificaciones lib ON eval.id=lib.evaluacion AND lib.alumno=" . Auth::user()->id . " WHERE eval.tematica=" . $idTema . " AND eval.estado='ACTIVO'");
+        LEFT JOIN etno_ped.libro_calificaciones lib ON eval.id=lib.evaluacion AND lib.alumno=" . Auth::user()->id . " WHERE eval.tematica=" . $idTema . " AND eval.estado='ACTIVO' and eval.origen='-'");
     }
 }

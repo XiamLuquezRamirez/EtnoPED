@@ -1,5 +1,5 @@
 @extends('Plantilla.Principal')
-@section('title', 'Gestionar Practicas')
+@section('title', 'Gestionar diálogos')
 @section('Contenido')
 <input type="hidden" id="urlPersonajes" data-ruta="{{ asset('/app-assets/images') }}" />
  <div class="content-header row">
@@ -9,13 +9,13 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/Principal') }}">Inicio</a>
                         </li>
-                        <li class="breadcrumb-item"><a href="#">Lista de Practicas</a>
+                        <li class="breadcrumb-item"><a href="#">Lista de diálogos</a>
                         </li>
 
                     </ol>
                 </div>
             </div>
-            <h3 class="content-header-title mb-0">Practicas - {{ $tema }}</h3>
+            <h3 class="content-header-title mb-0">Diálogo - {{ $tema }}</h3>
         </div>
 
     </div>
@@ -24,7 +24,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Lista de Practicas</h4>
+                        <h4 class="card-title">Lista de diálogos</h4>
                         <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
@@ -40,7 +40,7 @@
                                 <div class="form-group">
                                     <!-- basic buttons -->
                                     <button onclick="$.nueva();" id="addRow" class="btn btn-primary mb-2 ml-1"><i
-                                            class="feather icon-plus"></i>&nbsp; Agregar Practica</button>
+                                            class="feather icon-plus"></i>&nbsp; Agregar diálogo</button>
                                     <button type="button" id="btnGuardar" onclick="javascript:history.back();"
                                         class="btn btn-success mb-2 ml-1">
                                         <i class="fa fa-reply"></i> Atras
@@ -103,7 +103,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="tituloEvaluacion">Crear Practica</h4>
+                            <h4 class="modal-title" id="tituloEvaluacion">Crear diálogo</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" style="font-size: 25px;">&times;</span>
                             </button>
@@ -133,7 +133,7 @@
                                     <div class="row">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5 class="card-title">Datos de Practica</h5>
+                                                <h5 class="card-title">Datos de diálogo</h5>
 
                                             </div>
                                             <div class="card-body">
@@ -461,11 +461,11 @@
 
                     $("#Id_Eval").val("");
                     $("#ConsPreguntas").val(1);
-                    $("#tituloEvaluacion").html("Crear Practica");
+                    $("#tituloEvaluacion").html("Crear diálogo");
                     $("#titulo").val("");
-
+                    
                     editorEnun.setData('<p>Ingresa el objetivo Aquí</p>');
-
+                    $("#btn-agregar").show();
                     $("#div-practicas").html("");
 
                 },
@@ -554,7 +554,7 @@
                     });
                     $("#div-practicas").html("");
                     $("#btn-agregar").show();
-                    $("#tituloEvaluacion").html("Editar Practica");
+                    $("#tituloEvaluacion").html("Editar diálogo");
 
                     $("#Id_Eval").val(id);
                     var form = $("#formAuxiliarPractDet");
@@ -962,7 +962,7 @@
                                 Swal.fire({
                                     type: "warning",
                                     title: "Oops...",
-                                    text: "La Practica no pude ser guardada",
+                                    text: "El diálogo no pude ser guardada",
                                     confirmButtonClass: "btn btn-primary",
                                     timer: 1500,
                                     buttonsStyling: false
@@ -1285,7 +1285,7 @@
 
                     var rurl = $("#RutEvalVideo").val();
                     if ($("#ConsPreguntas").val() <= 1) {
-                        mensaje = "No existe Ninguna Pregunta en la Practica";
+                        mensaje = "No existe Ninguna Pregunta en el diálogo";
                         Swal.fire({
                             title: "Warning!",
                             text: mensaje,

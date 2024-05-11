@@ -34,7 +34,7 @@
 
     </div>
     <div class="content-body">
-        <div class="card p-1" style="border-radius:10px;background-color: rgba(0,0,0,0);">
+        <div class="card p-1" style="margin-bottom: 2rem" style="border-radius:10px;background-color: rgba(0,0,0,0);">
             <div class="card-header" style="background-color: rgba(0,0,0,0);">
                 <h4 class="card-title" id="titulo">Medicinas Tradicionales</h4>
                 <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
@@ -48,9 +48,9 @@
                 <div class="row" id="div-detmedicina" style="display: none;">
                     <div class="row match-height" style="width: 100%;">
                         <!-- Description lists horizontal -->
-                        <div class="col-sm-12 col-md-8" style="">
+                        <div id="div-central" class="col-sm-12 col-md-8" style="">
                             <div class="card"
-                                style="height: 432.517px; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
+                                style="height: 100%; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                                 <div class="card-header">
                                     <h4 id="titulo-medicina" class="card-title"></h4>
                                     <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
@@ -62,7 +62,8 @@
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <div id="conte-medicina" class="card-text">
+                                        <div id="conte-medicina"  style="overflow: auto;
+                                        height: 400px;" class="card-text">
 
                                         </div>
                                     </div>
@@ -72,8 +73,8 @@
                         <!--/ Description lists horizontal-->
 
                         <!-- Description lists vertical-->
-                        <div class="col-sm-12 col-md-4" style="">
-                            <div class="card"
+                        <div id="div-lateral" class="col-sm-12 col-md-4" style="">
+                            <div id="card-preparacion" class="card"
                                 style="background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                                 <div class="card-header">
                                     <h4 class="card-title">Preparación</h4>
@@ -86,7 +87,7 @@
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <div id="conte-preparacion" class="card-text">
+                                        <div id="conte-preparacion"  class="card-text">
 
                                         </div>
                                         <div id="cont-vidPre" style="display: none;">
@@ -95,7 +96,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card"
+                            <div id="card-evaluacione"  class="card"
                                 style="; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                                 <div class="card-header">
                                     <h4 class="card-title">Evaluaciones</h4>
@@ -393,40 +394,66 @@
                             $("#conte-medicina").html(response.Medicina.contenido);
                             $("#conte-preparacion").html(response.Medicina.cotenido_prepa);
 
+
+                            let lateral = "si";
+
+                            if (response.Medicina.cotenido_prepa == 'null' || response.Medicina
+                            .cotenido_prepa == '' || response.Medicina.cotenido_prepa == null) {
+                                lateral = "no";
+                                $("#card-preparacion").hide();
+                            }else{
+                                $("#card-preparacion").show();
+                            }
+
+                            if (lateral = "no" && response.evaluaciones.length > 0) {
+                                $("#div-lateral").show();
+                                let divCentral = document.getElementById("div-central");
+                                divCentral.className = "col-sm-8 col-md-8";
+                            } else {
+                                $("#div-lateral").hide();
+                                let divCentral = document.getElementById("div-central");
+                                divCentral.className = "col-sm-12 col-md-12";
+                            }
+
                             var ContentVidPreparacion = document.getElementById(
                                 'cont-vidPre');
-                            let url = $('#urlMult').data("ruta") +
-                                "/contenidoMultimedia/PreparacionMedicinaTradicional/" +
-                                response.Medicina.video_prepa;
-                            if (response.Medicina.video_prepa = !"") {
 
-                             
-                                $("#cont-vidPre").show();
-                                ContentVidPreparacion.innerHTML =
+                                if (response.Medicina.video_prepa == 'null' || response.Medicina
+                                .video_prepa == '' || response.Medicina.video_prepa == null) {
+                                    $("#cont-vidPre").hide();
+                                }else{
+                                    $("#cont-vidPre").show();
+                                    let url = $('#urlMult').data("ruta") +
+                                    "/contenidoMultimedia/PreparacionMedicinaTradicional/" +
+                                    response.Medicina.video_prepa;
+
+                                    ContentVidPreparacion.innerHTML =
                                     '<video id="vidPrepa"  style="width: 100%;"  controls><source  src="' +
                                     url +
                                     '" type="video/mp4"></video>';
 
                                 var video_player = new Plyr("#vidPrepa");
 
-                            } else {
-                                $("#cont-vidPre").hide();
-                            }
+                                }
 
                             //Listar evaluaciones
                             let listEval = "";
-                            $.each(response.evaluaciones, function(i, item) {
-                                listEval += ' <li onclick="$.MostEval(' + item.id +
-                                    ');" class="list-group-item hvr-wobble-horizontal" style="text-transform: capitalize; cursor: pointer;">' +
-                                    '<span class="float-left">' +
-                                    '<i class="fa fa-check-square-o mr-1"></i>' +
-                                    '</span>' +
-                                    item.titulo +
-                                    '</li>';
-                            });
-
-                            $("#listEvalMedicina").html(listEval);
-
+                            if (response.evaluaciones.length > 0) {
+                                $("#card-evaluacione").show();
+                                $.each(response.evaluaciones, function(i, item) {
+                                    listEval += ' <li onclick="$.MostEval(' + item.id +
+                                        ');" class="list-group-item hvr-wobble-horizontal" style="text-transform: capitalize; cursor: pointer;">' +
+                                        '<span class="float-left">' +
+                                        '<i class="fa fa-check-square-o mr-1"></i>' +
+                                        '</span>' +
+                                        item.titulo +
+                                        '</li>';
+                                });
+    
+                                $("#listEvalMedicina").html(listEval);
+                            }else{
+                                $("#card-evaluacione").hide();
+                            }                           
                         }
                     });
 

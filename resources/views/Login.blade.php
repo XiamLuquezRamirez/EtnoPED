@@ -37,14 +37,57 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/style-rtl.css')}}">
     <!-- END: Custom CSS-->
+    
+    <style>
+        .bg-full-screen-image {
+            position: fixed; /* Fijar la imagen de fondo en la ventana */
+            top: 0;
+            left: 0;
+            width: 100%; /* Ocupa el ancho completo de la ventana */
+            height: 100%; /* Ocupa la altura completa de la ventana */
+            z-index: -1; /* Coloca la imagen detrás de otros elementos */
+            background-size: 100% 100%; /* Ajusta la imagen al tamaño de la ventana */
+            background-position: center center; /* Centra la imagen horizontal y verticalmente */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .banner {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Ancho máximo del banner */
+            height: 400px; /* Alto del banner */
+            overflow: hidden;
+        }
+
+        .banner-img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 5s ease-in-out;
+        }
+
+        .banner-img.active {
+            opacity: 1;
+        }
+        
+
+    </style>
 
 </head>
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
 
-<body class="vertical-layout vertical-menu 1-column  bg-full-screen-image blank-page blank-page" style="background-size: 100% 100% !important" data-open="click" data-menu="vertical-menu" data-col="1-column">
+<body class="vertical-layout vertical-menu 1-column  blank-page blank-page" style="background-size: 100% 100% !important" data-open="click" data-menu="vertical-menu" data-col="1-column">
     <!-- BEGIN: Content-->
+
+
+
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
@@ -53,8 +96,8 @@
             <div class="content-body">
                 <section class="row flexbox-container">
                     <div class="col-12 d-flex align-items-center justify-content-right">
-                        <div class="col-lg-4 col-md-8 col-10 box-shadow-2 p-0 ml-4">
-                            <div class="card border-grey border-lighten-3 px-1 py-1 m-0">
+                        <div class="col-lg-4 col-md-8 col-10 box-shadow-2 p-0 ml-4" style="border-radius: 20px;">
+                            <div class="card border-grey border-lighten-3 px-1 py-1 m-0" style="border-radius: 20px;">
                                 <div class="card-header border-0">
                                     <div class="card-title text-center">
                                         <img src="{{asset('app-assets/images/logo/stack-logo-dark.png')}}" width="350" alt="branding logo">
@@ -73,9 +116,6 @@
                                                                 </button>
                                                                 <strong>Alerta!</strong> {!! session('error') !!}
                                                             </div>
-
-                                                      
-
                                                         </div>
                                                     </div>
                                                 @endif
@@ -119,7 +159,15 @@
             </div>
         </div>
     </div>
+
+    <div class="bg-full-screen-image">
+        <img src="{{ asset('app-assets/images/backgrounds/portada1.png') }}" alt="Imagen 2" class="banner-img">
+        <img src="{{ asset('app-assets/images/backgrounds/portada2.png') }}" alt="Imagen 3" class="banner-img">
+        <img src="{{ asset('app-assets/images/backgrounds/portada3.png') }}" alt="Imagen 3" class="banner-img">
+        <img src="{{ asset('app-assets/images/backgrounds/portada4.png') }}" alt="Imagen 3" class="banner-img">
+    </div>
     <!-- END: Content-->
+
 
 
     <!-- BEGIN: Vendor JS-->
@@ -140,7 +188,32 @@
     <script src="{{asset('app-assets/js/scripts/forms/form-login-register.js')}}"></script>
     <!-- END: Page JS-->
 
+    
+    <script>
+        $(document).ready(function() {
+            const images = document.querySelectorAll(".banner-img");
+            let currentImage = 0;
+
+            // Función para mostrar la siguiente imagen
+            function showNextImage() {
+                images[currentImage].classList.remove("active");
+                currentImage = (currentImage + 1) % images.length;
+                images[currentImage].classList.add("active");
+            }
+
+            // Mostrar la primera imagen
+            images[currentImage].classList.add("active");
+
+            // Cambiar de imagen cada 5 segundos
+            setInterval(showNextImage, 6000);
+        });
+        
+        
+    </script>
+
 </body>
 <!-- END: Body-->
+
+
 
 </html>

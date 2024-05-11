@@ -164,7 +164,7 @@ class AdministracionController extends Controller
         }
     }
 
-   
+
 
     public function GuardarPractFin()
     {
@@ -343,6 +343,35 @@ class AdministracionController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => $estado,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function actualizarEjemplo()
+    {
+        if (Auth::check()) {
+            $data = request()->all();
+            if (request()->hasfile('audEjemploEdit')) {
+                foreach (request()->file('audEjemploEdit') as $file) {
+                    $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                    $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                    $file->move(public_path() . '/app-assets/contenidoMultimedia/audios/', $name);
+                    $arch = $name;
+                }
+
+                $data['Audio'] = $arch;
+            } else {
+                $data['Audio'] = $data['audDicc'];
+            }
+
+            $respuestaMult = Tematicas::EditarjemplosTema($data);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => "ok",
                 ]);
             }
         } else {
@@ -646,7 +675,6 @@ class AdministracionController extends Controller
                 unlink($fileToDelete);
             }
 
-
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => "ok",
@@ -664,14 +692,13 @@ class AdministracionController extends Controller
             $rutaEjemplo = request()->get('rutaEjemplo');
             $Multmedia = Tematicas::EliminarEjemplo($idEjemplo);
 
-            $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audios/' . $rutaEjemplo; // Ruta completa al archivo que deseas eliminar
+            if ($rutaEjemplo !== "" && $rutaEjemplo !== null) {
+                $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/audios/' . $rutaEjemplo; // Ruta completa al archivo que deseas eliminar
 
-            if (file_exists($fileToDelete)) {
-                unlink($fileToDelete);
+                if (file_exists($fileToDelete)) {
+                    unlink($fileToDelete);
+                }
             }
-
-
-
 
             if (request()->ajax()) {
                 return response()->json([
@@ -680,6 +707,20 @@ class AdministracionController extends Controller
             }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
+    public function editarEjemplo()
+    {
+        $idEjemplo = request()->get('idejemplo');
+
+        $ejemplo = Tematicas::BuscarEjemplosEdit($idEjemplo);
+
+
+        if (request()->ajax()) {
+            return response()->json([
+                'ejemplo' => $ejemplo,
+            ]);
         }
     }
 
@@ -799,7 +840,7 @@ class AdministracionController extends Controller
             $diccionario = DB::connection('mysql')
                 ->table('etno_ped.diccionario')
                 ->where('estado', 'ACTIVO');
-          
+
             $diccionario->where(function ($query) use ($searchDicc) {
                 $query->where('palabra_espanol', 'LIKE', '%' . $searchDicc . '%')
                     ->orWhere('palabra_wuayuunaiki', 'LIKE', '%' . $searchDicc . '%');
@@ -970,7 +1011,7 @@ class AdministracionController extends Controller
                         '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
                         '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
                         '<button title="Evaluaciones" type="button" onclick="$.evaluaciones(' . $item->id . ');" class="btn btn-icon btn-pure secondary  "><i class="fa fa-check-square-o"></i> </button>' .
-                        '<button title="Practicas" type="button" onclick="$.practicas(' . $item->id . ');" class="btn btn-icon btn-pure warning  "><i class="fa fa-users"></i> </button>' .
+                        '<button title="Diálogo" type="button" onclick="$.practicas(' . $item->id . ');" class="btn btn-icon btn-pure warning  "><i class="fa fa-users"></i> </button>' .
                         '</div>' .
                         '</td>' .
                         '<th style="vertical-align: middle" scope="row">' . $x . '</th>' .
