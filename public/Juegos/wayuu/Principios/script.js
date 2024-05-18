@@ -104,7 +104,7 @@ function abrirModal() {
   Swal.fire({
       title: "<strong>Juego de Gramática</strong>",
       type: "info",
-      html: "En este juego deberás selccionar la respuesta correcta a la pregunta mostrada. cada respuesta incorrecta hara que la locomotora te lleva hacia la derecha.",
+      html: "En este juego deberás seleccionar la respuesta correcta a la pregunta mostrada. cada respuesta incorrecta hara que la locomotora te lleva hacia la derecha.",
       showCloseButton: true,
       showCancelButton: true,
       focusConfirm: false,

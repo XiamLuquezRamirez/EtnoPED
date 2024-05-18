@@ -52,7 +52,7 @@
                             <div class="card"
                                 style="height: 100%; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                                 <div class="card-header">
-                                    <h4 id="titulo-medicina" class="card-title"></h4>
+                                    <h4 id="titulo-medicina" class="card-title">TEORIA CONCEPTUALIZADA.</h4>
                                     <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
@@ -97,9 +97,9 @@
                                 </div>
                             </div>
                             <div id="card-evaluacione"  class="card"
-                                style="; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
+                                style="background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                                 <div class="card-header">
-                                    <h4 class="card-title">Evaluaciones</h4>
+                                    <h4 class="card-title">Evaluaciones.</h4>
                                     <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
                                         <ul class="list-inline mb-0">
@@ -109,7 +109,8 @@
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
-                                        <ul class="list-group" id="listEvalMedicina">
+                                        <ul class="list-group" style="font-size: 13px;
+                                        font-weight: 400;" id="listEvalMedicina">
 
                                         </ul>
                                     </div>
@@ -390,10 +391,9 @@
                         success: function(response) {
                             $("#titulo").html(response.Medicina.nombre);
 
-                            $("#titulo-medicina").html(response.Medicina.nombre);
+                            {{--  $("#titulo-medicina").html(response.Medicina.nombre);  --}}
                             $("#conte-medicina").html(response.Medicina.contenido);
                             $("#conte-preparacion").html(response.Medicina.cotenido_prepa);
-
 
                             let lateral = "si";
 

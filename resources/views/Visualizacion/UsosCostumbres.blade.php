@@ -49,13 +49,12 @@
                             <div id="div-Uso" class="col-sm-12 col-md-12">
 
                             </div>
-
                             <div id="conte-Uso" style="display: none;" class="row match-height" style="width: 100%;">
                                 <div id="div-central" class="col-sm-12 col-md-8" style="">
                                     <div class="card"
                                         style="height: 432.517px; background-image: url({{ asset('/app-assets/images/backgrounds/fondo3.png') }})">
                                         <div class="card-header">
-                                            <h4 id="titulo-medicina" class="card-title"></h4>
+                                            <h4 id="titulo-medicina" class="card-title">TEORIA CONCEPTUALIZADA.</h4>
                                             <a class="heading-elements-toggle"><i
                                                     class="fa fa-ellipsis-v font-medium-3"></i></a>
                                             <div class="heading-elements">
@@ -77,8 +76,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--/ Description lists horizontal-->
-
                                 <!-- Description lists vertical-->
                                 <div id="div-lateral" class="col-sm-12 col-md-4" style="">
                                     <div id="card-costumbres" class="card"
@@ -112,7 +109,8 @@
                                         </div>
                                         <div class="card-content">
                                             <div class="card-body">
-                                                <ul class="list-group" id="listEvalCostumbres">
+                                                <ul class="list-group" style="font-size: 13px; font-weight: 400;"
+                                                    id="listEvalCostumbres">
 
                                                 </ul>
                                             </div>
@@ -395,31 +393,30 @@
 
                             let lateral = "si";
 
-                            if (response.detUsos.url_video == 'null' || response.detUsos
-                            .url_video == '' || response.detUsos.url_video == null) {
+                            if (response.detUsos.url_video !== null && response.detUsos
+                                .url_video !== 'null' && response.detUsos.url_video !== ''
+                            ) {
                                 lateral = "no";
                             }
 
+
+                            let divCentral = document.getElementById("div-central");
                             if (lateral = "no" && response.evaluaciones.length > 0) {
                                 $("#div-lateral").show();
                                 divCentral.className = "col-sm-8 col-md-8";
                             } else {
                                 $("#div-lateral").hide();
-                                let divCentral = document.getElementById("div-central");
+
                                 divCentral.className = "col-sm-12 col-md-12";
                             }
 
                             // Mostrar video
                             var ContentVidCostumbres = document.getElementById(
                                 'cont-vidCost');
-                            
-                               
-                            if (response.detUsos.url_video == 'null' || response.detUsos
-                                .url_video == '' || response.detUsos.url_video == null) {
-                                $("#card-costumbres").hide();
-                         
-                            } else {
-                              
+
+                            if (response.detUsos.url_video !== null && response.detUsos
+                                .url_video !== 'null' && response.detUsos.url_video !== ''
+                            ) {
                                 $("#card-costumbres").show();
                                 let url = $('#urlMult').data("ruta") +
                                     "/contenidoMultimedia/UsosCostumbres/" +
@@ -431,13 +428,15 @@
                                     '" type="video/mp4"></video>';
 
                                 var video_player = new Plyr("#vidCost");
+                            } else {
+                                $("#card-costumbres").hide();
                             }
 
 
 
                             // Mostrar evaluaciones
                             let listEval = "";
-                            console.log(response.evaluaciones);
+
                             if (response.evaluaciones.length > 0) {
 
                                 $("#card-evaluacione").show();

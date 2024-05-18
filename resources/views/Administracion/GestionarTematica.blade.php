@@ -327,6 +327,9 @@
                                                         <button type="button" onclick="$.cambiaAudio();"
                                                             class="btn btn-warning"><i class="fa fa-refresh"></i>
                                                             Cambiar Audio</button>
+                                                        <button type="button" onclick="$.eliminarAudio();"
+                                                            class="btn btn-danger"><i class="fa fa-trash"></i>
+                                                            Eliminar Audio</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -986,6 +989,7 @@
                 VerEjemplo: function(id) {
                     let ejemplo = '';
                     $("#tituloEjemploModal").html("Ver Ejemplo");
+                    $("#verEjemplo").show();
 
                     $("#modalejemplo").modal({
                         backdrop: 'static',
@@ -995,6 +999,7 @@
 
                     $("#btnAtrasVideo").show();
                     let divEjemplo = document.getElementById('divContEjemplo' + id);
+                    console.log(divEjemplo);
                     let ejemploContenido = divEjemplo.innerHTML;
 
                     ejemplo += ejemploContenido;
@@ -1004,7 +1009,9 @@
 
                     $("#titEjemplo").html($("#trejemplo_" + id).data("titulo"));
 
-                    if ($("#trejemplo_" + id).data("url") != "") {
+                    let audioSel = $("#trejemplo_" + id).data("url");
+                    
+                    if (audioSel !== null && audioSel !== 'null' && audioSel !== '') {
                         ejemplo += '<audio  id="audioEjemplo" style="width:100%" controls>' +
                             '    <source src="" type="audio/mp3" />' +
                             '    <source src="" type="audio/ogg" />' +
@@ -1013,10 +1020,12 @@
 
                     $("#contEjemplo").html(ejemplo);
 
-                    let audio = document.getElementById('audioEjemplo');
-                    if (audio) {
-                        audio.src = AudioEjemplo;
-                    }
+                            let audio = document.getElementById('audioEjemplo');
+                            if (audio) {
+                                audio.src = AudioEjemplo;
+                            }
+
+                  
 
 
                 },
@@ -1255,14 +1264,25 @@
                             $('#contEjemploEdit').val(respuesta.ejemplo.contenido);
 
                             $("#audEjemploEdit").val("");
-
-                            if (respuesta.ejemplo.url_audio != "") {
+                           
+                            if (respuesta.ejemplo.url_audio !== null && respuesta.ejemplo.url_audio !== 'null' && respuesta.ejemplo.url_audio !== '') {
                                 $("#verAudio").show();
                                 $("#cargAudio").hide();
                                 $("#audDicc").val(respuesta.ejemplo.url_audio)
+                            }else{
+                              
+                                $("#verAudio").hide();
+                                $("#cargAudio").show();
+                                $("#audDicc").val("")
+                           
                             }
                         }
                     });
+                },
+                eliminarAudio: function(){
+                    $("#audDicc").val("")
+                    $("#verAudio").hide();
+                    $("#cargAudio").show();
                 },
                 cambiaAudio: function() {
                     $("#verAudio").hide();

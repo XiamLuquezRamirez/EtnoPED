@@ -86,8 +86,8 @@
         </div>
 
         {{--  Modal nueva medicina  --}}
-        <div class="modal fade text-left" id="modalMedicina" style="height: 550px;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
-            aria-hidden="true">
+        <div class="modal fade text-left" id="modalMedicina" style="height: 550px;" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel1" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -156,6 +156,9 @@
                                                                 <button type="button" onclick="$.cambiaVodeo();"
                                                                     class="btn btn-warning"><i class="fa fa-refresh"></i>
                                                                     Modificar Video</button>
+                                                                <button type="button" onclick="$.eliminarVideo();"
+                                                                    class="btn btn-danger"><i class="fa fa-trash"></i>
+                                                                    Eliminar Video</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -233,7 +236,7 @@
     </form>
 
 
-  
+
 
 
 @endsection
@@ -420,11 +423,11 @@
                     $("#cargVideo").show();
                     $("#btnNuevo").hide();
                     $("#verVideo").hide();
-                    
+
                     editorTitulo.setData('<p></p>');
                     editorContenido.setData('<p></p>');
                     editorPreparacion.setData('<p></p>');
-                    
+
                 },
                 guardar: function() {
 
@@ -501,9 +504,9 @@
 
                     let url = $('#urlMult').data("ruta") +
                         "/contenidoMultimedia/PreparacionMedicinaTradicional/" + $("#VideoPrepa")
-                    .val();
+                        .val();
 
-                  
+
                     $('#modalMedicina').modal('hide');
                     $("#modalMultimediaTematica").modal({
                         backdrop: 'static',
@@ -554,22 +557,33 @@
                         dataType: "json",
                         success: function(respuesta) {
                             editorTitulo.setData(respuesta.medicina.nombre);
-                            $("#nVideoPrepa").val(respuesta.medicina.nomb_video_prepa);
-                            $("#VideoPrepa").val(respuesta.medicina.video_prepa);
                             editorContenido.setData(respuesta.medicina.contenido);
                             editorPreparacion.setData(respuesta.medicina.cotenido_prepa);
-                            if (respuesta.medicina.video_prepa != "") {
+
+                            if (respuesta.medicina.video_prepa !== null && respuesta
+                                .medicina.video_prepa !== 'null' && respuesta.medicina
+                                .video_prepa !== '') {
                                 $("#verVideo").show();
                                 $("#cargVideo").hide();
+                                $("#nVideoPrepa").val(respuesta.medicina.nomb_video_prepa);
+                                $("#VideoPrepa").val(respuesta.medicina.video_prepa);
+                            } else {
+                                $("#verVideo").hide();
+                                $("#cargVideo").show();
+                                $("#nVideoPrepa").val("");
+                                $("#VideoPrepa").val("");
                             }
-
                         }
                     });
 
                     $("#trMultimedia").html(multimedia);
                     $("#trEjemplos").html(ejemplos);
                 },
-
+                eliminarVideo: function() {
+                    $("#VideoPrepa").val("")
+                    $("#verVideo").hide();
+                    $("#cargVideo").show();
+                },
                 cambiaVodeo: function() {
                     $("#verVideo").hide();
                     $("#cargVideo").show();
@@ -643,7 +657,7 @@
                     });
 
                 },
-            
+
                 inicialEditorContenido: function() {
                     CKEDITOR.replace('contenido', {
                         width: '100%',

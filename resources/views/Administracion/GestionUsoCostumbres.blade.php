@@ -100,7 +100,7 @@
                                 action="{{ url('/') }}/AdminUsoCostumbres/GuardarUso">
                                 <input type="hidden" name="id" id="id" value="" />
                                 <input type="hidden" name="VideoUso" id="VideoUso" value="" />
-                             
+
                                 <div class="form-body">
                                     <div class="form-group">
                                         <label for="userinput5">Título:</label>
@@ -113,17 +113,19 @@
                                     </div>
                                     <div class="form-group" id="cargVideo">
                                         <label for="userinput5">Cargar Video: </label>
-                                        <input type="file" name="vidUso[]" accept=".mp4, .avi, .mov"
-                                            id="vidUso">
+                                        <input type="file" name="vidUso[]" accept=".mp4, .avi, .mov" id="vidUso">
                                     </div>
                                     <div class="form-group" id="verVideo" style="display: none;">
                                         <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" onclick="$.verVideo();"
-                                                class="btn btn-success"><i class="fa fa-search"></i>
+                                            <button type="button" onclick="$.verVideo();" class="btn btn-success"><i
+                                                    class="fa fa-search"></i>
                                                 Ver</button>
-                                            <button type="button" onclick="$.cambiaVodeo();"
-                                                class="btn btn-warning"><i class="fa fa-refresh"></i>
+                                            <button type="button" onclick="$.cambiaVodeo();" class="btn btn-warning"><i
+                                                    class="fa fa-refresh"></i>
                                                 Modificar Video</button>
+                                                <button type="button" onclick="$.eliminarVideo();"
+                                                class="btn btn-danger"><i class="fa fa-trash"></i>
+                                                Eliminar Video</button>
                                         </div>
                                     </div>
                                 </div>
@@ -341,7 +343,8 @@
                         dataType: "json",
                         success: function(response) {
                             $('#tdTable').html(response
-                                .usoCostumbre); // Rellenamos la tabla con las filas generadas
+                                .usoCostumbre
+                            ); // Rellenamos la tabla con las filas generadas
                             $('#pagination-links').html(response
                                 .links); // Colocamos los enlaces de paginación
                         }
@@ -367,7 +370,7 @@
                     editorTitulo.setData('<p></p>');
                     editorContenido.setData('<p></p>');
 
-                     $.limpiar();
+                    $.limpiar();
                 },
                 salir: function() {
                     $.limpiar();
@@ -454,10 +457,8 @@
                 },
                 verVideo: function() {
 
-                    let url = $('#urlMult').data("ruta") +
-                        "/contenidoMultimedia/UsosCostumbres/" + $("#VideoUso")
-                        .val();
-
+                    let url = $('#urlMult').data("ruta") + "/contenidoMultimedia/UsosCostumbres/" + $(
+                        "#VideoUso").val();
 
                     $('#modalUso').modal('hide');
                     $("#modalMultimediaTematica").modal({
@@ -470,8 +471,6 @@
                     modalContent.innerHTML =
                         '<video style="width: 100%; height:360px;"  controls><source  src="' + url +
                         '" type="video/mp4"></video>';
-
-
                 },
                 editar: function(id) {
 
@@ -508,19 +507,26 @@
                         dataType: "json",
                         success: function(respuesta) {
                             editorTitulo.setData(respuesta.usoCostumbre.nombre);
-                            $("#VideoUso").val(respuesta.usoCostumbre.url_video);
-                            console.log(respuesta.usoCostumbre.url_video);
-                            editorContenido.setData(respuesta.usoCostumbre.descripcion);
-                            if (respuesta.usoCostumbre.url_video != "") {
+                                          
+                            editorContenido.setData(respuesta.usoCostumbre.descripcion);                       
+                            if (respuesta.usoCostumbre.url_video !== null && respuesta.usoCostumbre.url_video !== 'null' && respuesta.usoCostumbre.url_video !== '') {
                                 $("#verVideo").show();
                                 $("#cargVideo").hide();
+                                $("#VideoUso").val(respuesta.usoCostumbre.url_video); 
+                            } else {
+                                $("#verVideo").hide();
+                                $("#cargVideo").show();
+                                $("#VideoUso").val(""); 
                             }
-
                         }
                     });
-                  
-                },
 
+                },
+                eliminarVideo: function(){
+                    $("#VideoUso").val("")
+                    $("#verVideo").hide();
+                    $("#cargVideo").show();
+                },
                 cambiaVodeo: function() {
                     $("#verVideo").hide();
                     $("#cargVideo").show();
@@ -586,14 +592,13 @@
                             });
                         }
                     });
-
                 },
                 inicialEditorContenido: function() {
                     CKEDITOR.replace('contenido', {
                         width: '100%',
                         height: 250
                     });
-                },  
+                },
                 contTitulo: function(idPrep) {
                     CKEDITOR.replace('titulo', {
                         removePlugins: 'toolbar,dialogui', // Quitar todas las herramientas

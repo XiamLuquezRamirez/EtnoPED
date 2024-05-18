@@ -56,9 +56,9 @@
                                 <a class="nav-link active" id="homeIcon2-tab1" data-toggle="tab" href="#contenido"
                                     aria-controls="homeIcon21" role="tab" aria-selected="true"><i
                                         class="fa fa-indent"></i>
-                                    Contenido</a>
+                                        Teoria conceptual</a>
                             </li>
-                            <li  id="ejemplos-tab11" class="nav-item">
+                            <li id="ejemplos-tab11" class="nav-item">
                                 <a class="nav-link" id="ejemplos-tab1" data-toggle="tab" href="#ejemplos"
                                     aria-controls="ejemplos" role="tab" aria-selected="false"><i
                                         class="fa fa-file-image-o"></i>
@@ -70,7 +70,7 @@
                                         class="fa fa-file-video-o"></i>
                                     Multimedia</a>
                             </li>
-                         
+
 
                             <li id="practicas-tab11" class="nav-item">
                                 <a class="nav-link" id="practicas-tab1" data-toggle="tab" href="#practicas"
@@ -78,7 +78,7 @@
                                         class="fa fa-comments-o"></i>
                                     Diálogos</a>
                             </li>
-                            <li  id="evaluacion-tab11" class="nav-item">
+                            <li id="evaluacion-tab11" class="nav-item">
                                 <a class="nav-link" id="evaluacion-tab1" data-toggle="tab" href="#evaluacion"
                                     aria-controls="evaluacion" role="tab" aria-selected="false"><i
                                         class="fa fa-check-square-o"></i>
@@ -95,9 +95,9 @@
                                                 <!--search with list-->
                                                 <li class="media">
                                                     <div class="media-body">
-                                                        <p class="lead mb-0"><a href="#"><span id="titu"
+                                                        <p class="lead mb-0" style="font-size: 18px;"><a href="#" ><span style="font-size: 25px;" id="titu"
                                                                     class="text-bold-600"></span> </a></p>
-                                                        <div class="vertical-scroll scroll-example height-400"
+                                                        <div class="vertical-scroll scroll-example height-600"
                                                             id="conte">
 
                                                         </div>
@@ -625,11 +625,11 @@
                                 x++;
                             });
 
-                             if(x == 1){
+                            if (x == 1) {
                                 $("#multimedia-tab11").hide();
-                             }else{
+                            } else {
                                 $("#multimedia-tab11").show();
-                             }
+                            }
 
                             $("#div-multimedia").html(multi);
 
@@ -661,11 +661,11 @@
                                 x++;
                             });
 
-                            if(x == 1){
+                            if (x == 1) {
                                 $("#ejemplos-tab11").hide();
-                             }else{
+                            } else {
                                 $("#ejemplos-tab11").show();
-                             }
+                            }
 
                             $("#div-ejemplos").html(ejemplos);
 
@@ -694,11 +694,11 @@
                                 x++;
                             });
 
-                            if(x == 1){
+                            if (x == 1) {
                                 $("#practicas-tab11").hide();
-                             }else{
+                            } else {
                                 $("#practicas-tab11").show();
-                             }
+                            }
 
 
                             $("#div-practicas").html(practicas);
@@ -736,11 +736,11 @@
                                 x++;
                             });
 
-                            if(x == 1){
+                            if (x == 1) {
                                 $("#evaluacion-tab11").hide();
-                             }else{
+                            } else {
                                 $("#evaluacion-tab11").show();
-                             }
+                            }
 
 
                             $("#div-evaluacion").html(evaluacion);
@@ -798,21 +798,28 @@
 
                     $("#titEjemplo").html($("#div_Ejemplo" + id).data("titulo"));
 
-                    if ($("#div_Ejemplo" + id).data("audio") != "") {
+                    let audioSel = $("#div_Ejemplo" + id).data("audio");
+
+                    console.log(audioSel);
+
+                    if (audioSel !== null && audioSel !== 'null' && audioSel !== '') {
+
                         ejemplo += '<audio  id="audioEjemplo" style="width:100%" controls>' +
                             '    <source src="" type="audio/mp3" />' +
                             '    <source src="" type="audio/ogg" />' +
                             '</audio>'
-                    }
+                    } 
 
                     $("#modalContentEjemplo").html(ejemplo);
 
-                    var audio_player = new Plyr("#audioEjemplo");
+                        var audio_player = new Plyr("#audioEjemplo");
 
-                    let audio = document.getElementById('audioEjemplo');
-                    if (audio) {
-                        audio.src = AudioEjemplo;
-                    }
+                        let audio = document.getElementById('audioEjemplo');
+                        if (audio) {
+                            audio.src = AudioEjemplo;
+                        }
+
+
 
                 },
                 VerPractica: function(id) {
@@ -915,7 +922,7 @@
                         console.log(pregPractica[actual].pregunta);
                         $.maquina("parrafo1", pregPractica[actual].pregunta, 1, 1);
                     } else {
-                        
+
                         $('#dialogo1').fadeToggle(2000);
                         $('#dialogo2').fadeToggle(2000);
                         actual = 0;
@@ -1001,7 +1008,7 @@
                     $("#" + contenedor).html(texto);
 
                     if (ok) {
-                       
+
                         setTimeout(() => {
                             $('#parrafo1').text("");
                             $.dialogo_primario();

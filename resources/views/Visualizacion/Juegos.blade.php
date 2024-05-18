@@ -3,7 +3,7 @@
 @section('Contenido')
 
     <div class="content-body" style="overflow: hidden">
-        <iframe id="myIframe" src="{{ asset('juegos/index.html') }}" frameborder="0" scrolling="yes" height="678"
+        <iframe id="myIframe" src="{{ asset('Juegos/index.html') }}" frameborder="0" scrolling="yes" height="678"
             width="100%" name="demo">
         </iframe>
     </div>

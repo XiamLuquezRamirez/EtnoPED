@@ -1,0 +1,354 @@
+const palabras = [
+    { palabra_wuayuunaiki: "A'katalaa", palabra_espanol: "Aislar - separar"
+    },
+    { palabra_wuayuunaiki: "A>ataa", palabra_espanol: "Poner, colocar."
+    },
+    { palabra_wuayuunaiki: "A>i", palabra_espanol: "Yuca"
+    },
+    { palabra_wuayuunaiki: "A>ii", palabra_espanol: "Diente"
+    },
+    { palabra_wuayuunaiki: "A>iin", palabra_espanol: "Corazón"
+    },
+    { palabra_wuayuunaiki: "A>injaa", palabra_espanol: "Hacer"
+    },
+    { palabra_wuayuunaiki: "A>inmajaa", palabra_espanol: "Cuidar"
+    },
+    { palabra_wuayuunaiki: "A>najaa", palabra_espanol: "Guardar"
+    },
+    { palabra_wuayuunaiki: "A>pulaa", palabra_espanol: "Arma de fuego."
+    },
+    { palabra_wuayuunaiki: "A>ulu", palabra_espanol: "Suegra"
+    },
+    { palabra_wuayuunaiki: "A>yalajaa", palabra_espanol: "Comprar"
+    },
+    { palabra_wuayuunaiki: "A>yapujaa", palabra_espanol: "Coser"
+    },
+    { palabra_wuayuunaiki: "A>yatawaa", palabra_espanol: "Trabajar"
+    },
+    { palabra_wuayuunaiki: "A>yateeraa", palabra_espanol: "Mandar a trabajar"
+    },
+    { palabra_wuayuunaiki: "Aa>inraamaajatü", palabra_espanol: "Adverbio"
+    },
+    { palabra_wuayuunaiki: "Aa>inralaakat", palabra_espanol: "Predicado"
+    },
+    { palabra_wuayuunaiki: "Aajaa", palabra_espanol: "Quemar."
+    },
+    { palabra_wuayuunaiki: "Aamajaa", palabra_espanol: "Hacer dieta."
+    },
+    { palabra_wuayuunaiki: "Aanalaa", palabra_espanol: "Sábana"
+    },
+    { palabra_wuayuunaiki: "Aanawua", palabra_espanol: "Vestirse-arreglarse"
+    },
+    { palabra_wuayuunaiki: "Aanut", palabra_espanol: "Tejedor"
+    },
+    { palabra_wuayuunaiki: "Aapajaa", palabra_espanol: "Escuchar-oír"
+    },
+    { palabra_wuayuunaiki: "Aapiraa", palabra_espanol: "Avisar"
+    },
+    { palabra_wuayuunaiki: "Aapiraawa", palabra_espanol: "Forzajear, lucha libre"
+    },
+    { palabra_wuayuunaiki: "Aashajawaa", palabra_espanol: "Hablar"
+    },
+    { palabra_wuayuunaiki: "Aawalaa", palabra_espanol: "Cabello"
+    },
+    { palabra_wuayuunaiki: "Achajawaa", palabra_espanol: "Buscar"
+    },
+    { palabra_wuayuunaiki: "Achatajaa", palabra_espanol: "Romper"
+    },
+    { palabra_wuayuunaiki: "Ache>e", palabra_espanol: "Oreja"
+    },
+    { palabra_wuayuunaiki: "Ache>ese", palabra_espanol: "Arete"
+    },
+    { palabra_wuayuunaiki: "Achiki", palabra_espanol: "Historia"
+    },
+    { palabra_wuayuunaiki: "Achinkaa-Anülia", palabra_espanol: "Nombre para persona."
+    },
+    { palabra_wuayuunaiki: "Achira", palabra_espanol: "Senos"
+    },
+    { palabra_wuayuunaiki: "Achon", palabra_espanol: "Hijo"
+    },
+    { palabra_wuayuunaiki: "Achujaa", palabra_espanol: "Celar"
+    },
+    { palabra_wuayuunaiki: "Achulaa", palabra_espanol: "Besar"
+    },
+    { palabra_wuayuunaiki: "Achunkajaa", palabra_espanol: "Chupar-masticar"
+    },
+    { palabra_wuayuunaiki: "Achüüin", palabra_espanol: "Riñón"
+    },
+    { palabra_wuayuunaiki: "Aipa>a", palabra_espanol: "Noche"
+    },
+    { palabra_wuayuunaiki: "Aipia", palabra_espanol: "Árbol Trupillo"
+    },
+    { palabra_wuayuunaiki: "Aipirua", palabra_espanol: "Número seis (6)"
+    },
+    { palabra_wuayuunaiki: "Airü", palabra_espanol: "Tía"
+    },
+    { palabra_wuayuunaiki: "Aja>ttiria", palabra_espanol: "Complemento"
+    },
+    { palabra_wuayuunaiki: "Ajapú", palabra_espanol: "Mano"
+    },
+    { palabra_wuayuunaiki: "Ajujaa", palabra_espanol: "Teñir"
+    },
+    { palabra_wuayuunaiki: "Ajülüwaa", palabra_espanol: "Pareja"
+    },
+    { palabra_wuayuunaiki: "Ajutapu>ukana", palabra_espanol: "Electores"
+    },
+    { palabra_wuayuunaiki: "Ajutunaa", palabra_espanol: "Expulsar, votar"
+    },
+    { palabra_wuayuunaiki: "Ajutuu, aaliaa", palabra_espanol: "Derechos."
+    },
+    { palabra_wuayuunaiki: "Akaajasü", palabra_espanol: "Acabar, terminar"
+    },
+    { palabra_wuayuunaiki: "Akounjaa", palabra_espanol: "Fumar."
+    },
+    { palabra_wuayuunaiki: "Ako>umüinjia", palabra_espanol: "Aumentar la cantidad de algo."
+    },
+    { palabra_wuayuunaiki: "Ako>umüinjoa", palabra_espanol: "Sumar."
+    },
+    { palabra_wuayuunaiki: "Akomüinjaa", palabra_espanol: "Aumentar"
+    },
+    { palabra_wuayuunaiki: "Aku>leejaa", palabra_espanol: "Flojear"
+    },
+    { palabra_wuayuunaiki: "Aküjalaa", palabra_espanol: "Texto"
+    },
+    { palabra_wuayuunaiki: "Aküjalaachon", palabra_espanol: "Párrafo"
+    },
+    { palabra_wuayuunaiki: "Aküjiaa", palabra_espanol: "Artículo constitucional"
+    },
+    { palabra_wuayuunaiki: "Akuleemeraa", palabra_espanol: "Sonreír"
+    },
+    { palabra_wuayuunaiki: "Akulejaa", palabra_espanol: "Torcedura"
+    },
+    { palabra_wuayuunaiki: "Akumajaa", palabra_espanol: "Construir, arreglo"
+    },
+    { palabra_wuayuunaiki: "Akumajalaa", palabra_espanol: "Producción"
+    },
+    { palabra_wuayuunaiki: "Ala>ajia", palabra_espanol: "Borrador."
+    },
+    { palabra_wuayuunaiki: "Alaa", palabra_espanol: "Mentiroso"
+    },
+    { palabra_wuayuunaiki: "Alaawa", palabra_espanol: "Mentira"
+    },
+    { palabra_wuayuunaiki: "Alakajaa", palabra_espanol: "Cocinar"
+    },
+    { palabra_wuayuunaiki: "Alamajaa", palabra_espanol: "Gatear"
+    },
+    { palabra_wuayuunaiki: "Alamalo>u", palabra_espanol: "Ceja"
+    },
+    { palabra_wuayuunaiki: "Alaüla", palabra_espanol: "Tío"
+    },
+    { palabra_wuayuunaiki: "Ale>e", palabra_espanol: "Estómago"
+    },
+    { palabra_wuayuunaiki: "Ale>ejaa", palabra_espanol: "Regresar"
+    },
+    { palabra_wuayuunaiki: "Ale>ewasü", palabra_espanol: "Artículo"
+    },
+    { palabra_wuayuunaiki: "Aleepü", palabra_espanol: "Cuchara wayuu"
+    },
+    { palabra_wuayuunaiki: "Aleewa", palabra_espanol: "Amigo"
+    },
+    { palabra_wuayuunaiki: "Alialü", palabra_espanol: "Media noche"
+    },
+    { palabra_wuayuunaiki: "Alii", palabra_espanol: "Querer, cariño."
+    },
+    { palabra_wuayuunaiki: "Aliichajaa", palabra_espanol: "Ordeñar"
+    },
+    { palabra_wuayuunaiki: "Aliika", palabra_espanol: "Tarde de ocaso."
+    },
+    { palabra_wuayuunaiki: "Aliitaa>ulia", palabra_espanol: "Árbol de calabaza."
+    },
+    { palabra_wuayuunaiki: "Alijuna", palabra_espanol: "Perteneciente a la cultura occidental"
+    },
+    { palabra_wuayuunaiki: "Alu>uwajaa", palabra_espanol: "Robar"
+    },
+    { palabra_wuayuunaiki: "Alu>uwanaa", palabra_espanol: "Recolectar iguaraya"
+    },
+    { palabra_wuayuunaiki: "Alu>uwataa", palabra_espanol: "Mandar"
+    },
+    { palabra_wuayuunaiki: "Alüiuyuu", palabra_espanol: "Cuñada"
+    },
+    { palabra_wuayuunaiki: "Alijirawa", palabra_espanol: "Negarse"
+    },
+    { palabra_wuayuunaiki: "Ama", palabra_espanol: "Caballo"
+    },
+    { palabra_wuayuunaiki: "Amarulu>u", palabra_espanol: "Comunidad de Nazareth"
+    },
+    { palabra_wuayuunaiki: "Amostsajirawaa", palabra_espanol: "Restar"
+    },
+    { palabra_wuayuunaiki: "Amotsajia", palabra_espanol: "Minorar o recortar."
+    },
+    { palabra_wuayuunaiki: "Amuchi", palabra_espanol: "Múcura"
+    },
+    { palabra_wuayuunaiki: "Amuyuu", palabra_espanol: "Cementerio wayuu."
+    },
+    { palabra_wuayuunaiki: "Anaa a>yataain", palabra_espanol: "Buena gestión"
+    },
+    { palabra_wuayuunaiki: "Anaa", palabra_espanol: "Bueno"
+    },
+    { palabra_wuayuunaiki: "Anaajiakaa", palabra_espanol: "Organización"
+    },
+    { palabra_wuayuunaiki: "Anakajaa", palabra_espanol: "Chistoso"
+    },
+    { palabra_wuayuunaiki: "Ananajaa", palabra_espanol: "Mirar-ver"
+    },
+    { palabra_wuayuunaiki: "Aniijaa", palabra_espanol: "Reunir"
+    },
+    { palabra_wuayuunaiki: "Anneerü", palabra_espanol: "Ovejo"
+    },
+    { palabra_wuayuunaiki: "Antaa", palabra_espanol: "Llegar"
+    },
+    { palabra_wuayuunaiki: "Antiruushi", palabra_espanol: "Importaciones"
+    },
+    { palabra_wuayuunaiki: "Anua", palabra_espanol: "Barco"
+    },
+    { palabra_wuayuunaiki: "Anülia a>iratia", palabra_espanol: "Pronombre"
+    },
+    { palabra_wuayuunaiki: "Anüliaa", palabra_espanol: "Sustantivo"
+    },
+    { palabra_wuayuunaiki: "Anüliaamaajatü", palabra_espanol: "Adjetivo"
+    },
+    { palabra_wuayuunaiki: "Apaa", palabra_espanol: "Dar, entregar"
+    },
+    { palabra_wuayuunaiki: "Apanaa", palabra_espanol: "Hígado"
+    },
+    { palabra_wuayuunaiki: "Apolajoo", palabra_espanol: "Hervir"
+    },
+    { palabra_wuayuunaiki: "Apu>ujaayaasü", palabra_espanol: "Inclinado"
+    },
+    { palabra_wuayuunaiki: "Apünaa", palabra_espanol: "Camino"
+    },
+    { palabra_wuayuunaiki: "Apúnajaa", palabra_espanol: "Sembrar, cultivar"
+    },
+    { palabra_wuayuunaiki: "Apünüin ko>upunaasü", palabra_espanol: "Triángulo"
+    },
+    { palabra_wuayuunaiki: "Apünüin", palabra_espanol: "Número tres (3)"
+    },
+    { palabra_wuayuunaiki: "Apüsajaa-Atsajaa", palabra_espanol: "Descoser, safar, abrir"
+    },
+    { palabra_wuayuunaiki: "Asa>a", palabra_espanol: "Pierna"
+    },
+    { palabra_wuayuunaiki: "Asaa", palabra_espanol: "Beber, tomar alguna bebida líquida."
+    },
+    { palabra_wuayuunaiki: "Asaca", palabra_espanol: "Saludar"
+    },
+    { palabra_wuayuunaiki: "Asakaalajaa", palabra_espanol: "Recolectar yotojoro"
+    },
+    { palabra_wuayuunaiki: "Asakajaa", palabra_espanol: "Convidar, contratar"
+    },
+    { palabra_wuayuunaiki: "Asakiria", palabra_espanol: "Interrogación"
+    },
+    { palabra_wuayuunaiki: "Asapa>in", palabra_espanol: "Rodilla"
+    },
+    { palabra_wuayuunaiki: "Asapatse", palabra_espanol: "Zapato"
+    },
+    { palabra_wuayuunaiki: "Asasajia", palabra_espanol: "Colador de colar alimento."
+    },
+    { palabra_wuayuunaiki: "Ashaitajaa", palabra_espanol: "Jugar"
+    },
+    { palabra_wuayuunaiki: "Ashajaa", palabra_espanol: "Escribir"
+    },
+    { palabra_wuayuunaiki: "Ashajaaushi", palabra_espanol: "Oralidad"
+    },
+    { palabra_wuayuunaiki: "Ashaje>eraa", palabra_espanol: "Leer"
+    },
+    { palabra_wuayuunaiki: "Ashajia", palabra_espanol: "Lápiz, bolígrafo, tiza, grafo"
+    },
+    { palabra_wuayuunaiki: "Ashajiapülee", palabra_espanol: "Tablero"
+    },
+    { palabra_wuayuunaiki: "Ashajiria", palabra_espanol: "Dictado"
+    },
+    { palabra_wuayuunaiki: "Ashakataa", palabra_espanol: "Bajarse"
+    },
+    { palabra_wuayuunaiki: "Ashanawaa", palabra_espanol: "Tropezar"
+    },
+    { palabra_wuayuunaiki: "Ashapaje>eraa", palabra_espanol: "Apurar"
+    },
+    { palabra_wuayuunaiki: "Ashataa", palabra_espanol: "Copiar, imitar"
+    },
+    { palabra_wuayuunaiki: "Ashataa", palabra_espanol: "Curar"
+    },
+    { palabra_wuayuunaiki: "Ashataa", palabra_espanol: "Imitar, sanar, culminar"
+    },
+    { palabra_wuayuunaiki: "Ashatawaa", palabra_espanol: "Partir, quebrar."
+    },
+    { palabra_wuayuunaiki: "Ashatüsü", palabra_espanol: "Terminar algo"
+    },
+    { palabra_wuayuunaiki: "Ashajawaa", palabra_espanol: "Maquillarse el rostro"
+    },
+    { palabra_wuayuunaiki: "Ashe>in", palabra_espanol: "Vestido"
+    },
+    { palabra_wuayuunaiki: "Ashii", palabra_espanol: "Padre o papá"
+    },
+    { palabra_wuayuunaiki: "Ashiitaa", palabra_espanol: "Orinar"
+    },
+    { palabra_wuayuunaiki: "Ashijaawa", palabra_espanol: "Lavar"
+    },
+    { palabra_wuayuunaiki: "Ashuujaa", palabra_espanol: "Sancochar"
+    },
+    { palabra_wuayuunaiki: "Ashuunajaa", palabra_espanol: "Bañarse"
+    },
+    { palabra_wuayuunaiki: "Asirujaa", palabra_espanol: "Triturar"
+    },
+    { palabra_wuayuunaiki: "Asirujia", palabra_espanol: "Objeto donde se tritura"
+    },
+    { palabra_wuayuunaiki: "Asiruu", palabra_espanol: "Asesinado."
+    },
+    { palabra_wuayuunaiki: "Asukaa", palabra_espanol: "Buscar leña"
+    },
+    { palabra_wuayuunaiki: "Asülajaa", palabra_espanol: "Regalar"
+    },
+    { palabra_wuayuunaiki: "Asütnawaa", palabra_espanol: "Quitarse, retirarse, alejarse."
+    },
+    { palabra_wuayuunaiki: "Atujaa", palabra_espanol: "Eficacia"
+    },
+    { palabra_wuayuunaiki: "Atkawaa", palabra_espanol: "Pelear"
+    },
+    { palabra_wuayuunaiki: "Atpajaa", palabra_espanol: "Recolectar frutos"
+    },
+    { palabra_wuayuunaiki: "Atpana", palabra_espanol: "Conejo"
+    },
+    { palabra_wuayuunaiki: "Atujaa so>u", palabra_espanol: "Matemática"
+    },
+    { palabra_wuayuunaiki: "Atújaa", palabra_espanol: "Saber"
+    },
+    { palabra_wuayuunaiki: "Atunkaa", palabra_espanol: "Dormir"
+    },
+    { palabra_wuayuunaiki: "Atuushi", palabra_espanol: "Abuelo"
+    },
+    { palabra_wuayuunaiki: "A>ui", palabra_espanol: "Suegro"
+    },
+    { palabra_wuayuunaiki: "Aulijanaa", palabra_espanol: "Collar"
+    },
+    { palabra_wuayuunaiki: "Aülü", palabra_espanol: "Suegra"
+    },
+    { palabra_wuayuunaiki: "Attia", palabra_espanol: "Semilla"
+    },
+    { palabra_wuayuunaiki: "Awa>alaa", palabra_espanol: "Rajar"
+    },
+    { palabra_wuayuunaiki: "Awaataa", palabra_espanol: "Gritar"
+    },
+    { palabra_wuayuunaiki: "Awainmajirawaa", palabra_espanol: "Multiplicar"
+    },
+    { palabra_wuayuunaiki: "Awalaa", palabra_espanol: "Hermano"
+    },
+    { palabra_wuayuunaiki: "Awataa", palabra_espanol: "Tocar, aplaudir"
+    },
+    { palabra_wuayuunaiki: "Awataa", palabra_espanol: "Volar"
+    },
+    { palabra_wuayuunaiki: "Awatawaa", palabra_espanol: "Correr"
+    },
+    { palabra_wuayuunaiki: "Awawajia", palabra_espanol: "Abanico"
+    },
+    { palabra_wuayuunaiki: "Awayuusee", palabra_espanol: "Esposa"
+    },
+    { palabra_wuayuunaiki: "Ayalajaa", palabra_espanol: "Llorar"
+    },
+    { palabra_wuayuunaiki: "Ayanamajaa", palabra_espanol: "Trabajar"
+    },
+    { palabra_wuayuunaiki: "Ayataa", palabra_espanol: "Ser idéntico."
+    },
+    { palabra_wuayuunaiki: "Ayonnajaa", palabra_espanol: "Bailar."
+    },
+    { palabra_wuayuunaiki: "Ayüüjawaa", palabra_espanol: "Moler"
+    }
+];

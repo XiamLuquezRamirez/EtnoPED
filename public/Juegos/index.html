@@ -103,7 +103,7 @@
 
 <body>
     <div class="container">
-        <div class="row" style="margin-top: -100px;" id="ListJuegos">
+        <div class="row" style="margin-top: -100px; justify-content: center;" id="ListJuegos">
             <div onclick="ver_juego('wayuu/Adverbios/index.html')" class="col-lg-4 juego pr-5">
                 <div id="suma">
                     <img src="iconos/adverbios.png" width="100%" alt=""><br>
@@ -119,16 +119,16 @@
                     <img src="iconos/conociendonos.png" width="100%" alt=""><br>
                 </div>
             </div>
-            <div onclick="ver_juego('wayuu/Principios/index.html')" class="col-lg-4 juego pr-5">
 
-            </div>
             <div onclick="ver_juego('wayuu/Principios/index.html')" class="col-lg-4 juego pr-5">
                 <div id="suma">
                     <img src="iconos/principios.png" width="100%" alt=""><br>
                 </div>
             </div>
-            <div onclick="ver_juego('wayuu/Principios/index.html')" class="col-lg-4 juego pr-5">
-
+            <div onclick="ver_juego('wayuu/Completa/index.html')" class="col-lg-4 juego pr-5">
+                <div id="suma">
+                    <img src="iconos/completa.png" width="100%" alt=""><br>
+                </div>
             </div>
 
 
@@ -174,11 +174,13 @@
 
 
         function ver_juego(ruta) { // 
-            var host = window.location.protocol + "//" + window.location.host + "/EtnoPED /public/juegos/" + ruta;
-            
+            let ruta_juegos = ruta;
+            location.href = ruta_juegos;
+            // var host = window.location.protocol + "//" + window.location.host + "/EtnoPED /public/juegos/" + ruta;
+
             //var host = window.location.protocol + "//" + window.location.host + "/juegos/" + ruta;
-        
-            location.href = host;
+
+            // location.href = host;
         }
     </script>
 </body>
