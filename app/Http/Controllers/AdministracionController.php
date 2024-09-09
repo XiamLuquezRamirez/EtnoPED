@@ -33,6 +33,7 @@ use App\Models\RespEvalTaller;
 use App\Models\UpdIntEval;
 use App\Models\Retroalimentacion;
 use App\Models\Personajes;
+use App\Models\Multimedia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\DomCrawler\Crawler;
@@ -137,7 +138,15 @@ class AdministracionController extends Controller
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
     }
-
+    public function GestionarMultimedia()
+    {
+        if (Auth::check()) {
+            $bandera = "";
+            return view('Administracion.GestionMultimedia', compact('bandera'));
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
 
 
     public function CargarPractica()
@@ -438,6 +447,60 @@ class AdministracionController extends Controller
         }
     }
 
+    public function GuardarMultimedia()
+    {
+
+        if (Auth::check()) {
+            $data = request()->all();
+            if ($data['accion'] == "agregar") {
+                if (request()->hasfile('vidMult')) {
+                    foreach (request()->file('vidMult') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/modulos/', $name);
+                        $data['Video'] = $name;
+                    }
+                } else {
+                    $data['Video'] = "";
+                }
+
+
+
+                $respuesta = Multimedia::guardar($data);
+            } else if ($data['accion'] == "editar") {
+
+
+                if (request()->hasfile('vidMult')) {
+                    foreach (request()->file('vidMult') as $file) {
+                        $prefijo = substr(md5(uniqid(rand())), 0, 6);
+                        $name = self::sanear_string($prefijo . '_' . $file->getClientOriginalName());
+                        $file->move(public_path() . '/app-assets/contenidoMultimedia/modulos/', $name);
+                        $data['Video'] = $name;
+                    }
+                } else {
+                    $data['Video'] = $data['VideoMulti'];
+                }
+
+                $respuesta = Multimedia::modificar($data);
+            }
+
+
+            if ($respuesta) {
+                $estado = "ok";
+            } else {
+                $estado = "fail";
+            }
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $estado,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function GuardarUso()
     {
         if (Auth::check()) {
@@ -570,15 +633,29 @@ class AdministracionController extends Controller
 
     public function EliminarUnidad()
     {
-        $idUndad = request()->get('idUnidad');
-        $unidades = UnidadesTematicas::EliminarUnidad($idUndad);
+        if (Auth::check()) {
+            $idUndad = request()->get('idUnidad');
+            $unidades = UnidadesTematicas::EliminarUnidad($idUndad);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $unidades,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
     }
 
     public function EliminarTema()
     {
         if (Auth::check()) {
             $idTema = request()->get('idTema');
-            $unidades = Tematicas::EliminarTematica($idTema);
+            $tematicas = Tematicas::EliminarTematica($idTema);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $tematicas,
+                ]);
+            }
         } else {
             return redirect("/")->with("error", "Su Sesión ha Terminado");
         }
@@ -603,10 +680,10 @@ class AdministracionController extends Controller
     {
         if (Auth::check()) {
             $idMedicina = request()->get('idMedicina');
-            $unidades = MedicinaTradicional::Eliminar($idMedicina);
+            $medicina = MedicinaTradicional::Eliminar($idMedicina);
             if (request()->ajax()) {
                 return response()->json([
-                    'estado' => "ok",
+                    'estado' => $medicina
                 ]);
             }
         } else {
@@ -618,10 +695,10 @@ class AdministracionController extends Controller
     {
         if (Auth::check()) {
             $idUso = request()->get('idUso');
-            $unidades = UsosCostumbres::Eliminar($idUso);
+            $usos = UsosCostumbres::Eliminar($idUso);
             if (request()->ajax()) {
                 return response()->json([
-                    'estado' => "ok",
+                    'estado' => $usos,
                 ]);
             }
         } else {
@@ -652,6 +729,29 @@ class AdministracionController extends Controller
             }
 
             $diccionario = Diccionario::Eliminar($idDicc);
+            if (request()->ajax()) {
+                return response()->json([
+                    'estado' => $diccionario,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function EliminarMultimediaVideo()
+    {
+        if (Auth::check()) {
+            $idMult = request()->get('idMult');
+            $multimedia = Multimedia::BuscarMult($idMult);
+
+            $video = $multimedia->url;
+            if ($video != "") {
+                $fileToDelete = public_path() . '/app-assets/contenidoMultimedia/modulos/' . $video; // Ruta completa al archivo que deseas eliminar
+                if (file_exists($fileToDelete)) {
+                    unlink($fileToDelete);
+                }
+            }
+            $diccionario = Multimedia::Eliminar($idMult);
             if (request()->ajax()) {
                 return response()->json([
                     'estado' => "ok",
@@ -881,6 +981,60 @@ class AdministracionController extends Controller
         }
     }
 
+    public function CargarMultimedia()
+    {
+        if (Auth::check()) {
+            $perPage = 5; // Número de posts por página
+            $page = request()->get('page', 1);
+            $searchDicc = request()->get('search');
+            if (!is_numeric($page)) {
+                $page = 1; // Establecer un valor predeterminado si no es numérico
+            }
+
+            $searchDicc = self::convertirCaracteresEspeciales($searchDicc);
+
+            $multimedia = DB::connection('mysql')
+                ->table('etno_ped.contenido_multimedia');
+
+            $multimedia->where(function ($query) use ($searchDicc) {
+                $query->where('modulo', 'LIKE', '%' . $searchDicc . '%')
+                    ->orWhere('titulo', 'LIKE', '%' . $searchDicc . '%');
+            });
+
+            $ListMultimedia = $multimedia->paginate($perPage, ['*'], 'page', $page);
+
+            $tdTable = '';
+            $x = ($page - 1) * $perPage + 1;
+
+            foreach ($ListMultimedia as $i => $item) {
+                if (!is_null($item)) {
+                    $tdTable .= '<tr>' .
+                        '<td><div class="btn-group" role="group" aria-label="First Group">' .
+                        '    <button type="button" title="Editar" onclick="$.editar(' . $item->id . ');" class="btn btn-icon btn-pure primary "><i class="fa fa-edit"></i></button>' .
+                        '    <button type="button" title="Eliminar" onclick="$.eliminar(' . $item->id . ');" class="btn btn-icon btn-pure danger "><i class="fa fa-trash-o"></i></button>' .
+                        '    <button type="button" title="Ver multimedia" id="urlVideo-'.$item->id.'" data-video="'.$item->url.'" onclick="$.verMultimedia('.$item->id.');" class="btn btn-icon btn-pure info "><i class="fa fa-video-camera"></i></button>' .
+                        '    </div>' .
+                        '</td>' .
+                        '<th scope="row">' . $x . '</th>' .
+                        '<td>' . $item->titulo . '</td>' .
+                        '<td>' . $item->modulo . '</td>' .
+                        '</tr>';
+
+                    $x++;
+                }
+            }
+
+            $pagination = $ListMultimedia->links('Administracion.Paginacion')->render();
+
+            return response()->json([
+                'multimedia' => $tdTable,
+                'links' => $pagination,
+            ]);
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+
     public function BuscarUnidad()
     {
         if (Auth::check()) {
@@ -906,6 +1060,21 @@ class AdministracionController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'diccionario' => $diccionario,
+                ]);
+            }
+        } else {
+            return redirect("/")->with("error", "Su Sesión ha Terminado");
+        }
+    }
+    public function BuscarMultimedia()
+    {
+        if (Auth::check()) {
+            $idMultimedia = request()->get('idMultimedia');
+            $multimedia = Multimedia::BuscarMult($idMultimedia);
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'multimedia' => $multimedia,
                 ]);
             }
         } else {

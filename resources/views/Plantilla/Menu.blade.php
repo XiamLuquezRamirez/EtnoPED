@@ -24,10 +24,12 @@
                         Costumbres</span></a>
 
             </li>
+            @if (Auth::user()->tipo_usuario == 'Estudiante')
             <li id="Calificaciones" class="nav-item"><a href="{{ url('/Visualizacion/Calificaciones/') }}"><i
                         class="fa fa-check-square-o"></i><span class="menu-title" data-i18n="Starter kit">Calificaciones</span></a>
 
             </li>
+            @endif
             <li id="Diccionario" class=" nav-item"><a href="{{ url('/Visualizacion/Modulos/Diccionario') }}"><i
                         class="fa fa-book"></i><span class="menu-title"
                         data-i18n="Starter kit">Diccionario</span></a>
@@ -72,6 +74,11 @@
                 <li id="GestionDiccionario" class="nav-item"><a
                         href="{{ url('/AdminDiccionario/GestionarDiccionario/') }}"><i class="fa fa-cogs"></i><span
                             class="menu-title" data-i18n="Starter kit">Diccionario</span></a>
+
+                </li>
+                <li id="GestionMultimedia" class="nav-item"><a
+                        href="{{ url('/AdminMultimedia/GestionarMultimedia/') }}"><i class="fa fa-cogs"></i><span
+                            class="menu-title" data-i18n="Starter kit">Multimedia</span></a>
 
                 </li>
             @endif

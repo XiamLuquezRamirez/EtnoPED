@@ -446,3 +446,7 @@ body{
   display: flex;
   top: 62%;
 }
+
+.bloquearObjetivo{
+  pointer-events: none;
+}

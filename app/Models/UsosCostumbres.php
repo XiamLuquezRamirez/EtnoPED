@@ -47,8 +47,16 @@ class UsosCostumbres extends Model
 
     public static function Eliminar($id)
     {
+
+        $VerfDel = DB::connection('mysql')->table('etno_ped.usos_costumbres')->where('id', $id)
+        ->where('id', '<=', 27)
+        ->get();
+        if($VerfDel->count() == 0){
         return DB::connection('mysql')->table('etno_ped.usos_costumbres')->where('id', $id)->update([
             'estado' => 'ELIMINADO',
         ]);
+    }else{
+        return "no";
+    }
     }
 }

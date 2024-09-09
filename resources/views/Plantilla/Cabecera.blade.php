@@ -39,6 +39,10 @@
                                 <div class="dropdown-divider"></div>
                             @endif
 
+                            <a class="dropdown-item" href="{{ asset('/app-assets/Documentos/MANUAL_USUARIO.pdf') }}"
+                            target="_blank"><i class="feather icon-book"></i>
+                                Manual de usuario</a>
+                                <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url('/Logout') }}"><i class="feather icon-power"></i>
                                 Cerrar Sesión</a>
                         </div>

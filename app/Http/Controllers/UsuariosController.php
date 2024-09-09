@@ -16,11 +16,9 @@ class UsuariosController extends Controller
     public function Login()
     {
         $respuesta = Usuarios::login(request()->all());
+       
         if ($respuesta) {
-
-
             $UrlReal = Usuarios::ConsulUrl("PED");
-           
             $rutaUrl = $UrlReal->url;
 
             $rutaUrl =  $UrlReal->url.'/app-assets/images/';

@@ -718,12 +718,21 @@
                         async: false,
                         dataType: "json",
                         success: function(respuesta) {
-                            Swal.fire({
-                                type: "success",
-                                title: "Eliminado!",
-                                text: "El Registro fue eliminado correctamente.",
-                                confirmButtonClass: "btn btn-success"
-                            });
+                            if(respuesta.estado == "no"){
+                                Swal.fire({
+                                    type: "warning",
+                                    title: "Cancelado!",
+                                    text: "Este Registro es propio de la plataforma y no puede ser eleminado",
+                                    confirmButtonClass: "btn btn-warning"
+                                });
+                            }else{
+                                Swal.fire({
+                                    type: "success",
+                                    title: "Eliminado!",
+                                    text: "El Registro fue eliminado correctamente.",
+                                    confirmButtonClass: "btn btn-success"
+                                });
+                            }
                         }
                     });
 

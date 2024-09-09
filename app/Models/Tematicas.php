@@ -108,9 +108,16 @@ class Tematicas extends Model
 
     public static function EliminarTematica($id)
     {
+        $VerfDel = DB::connection('mysql')->table('etno_ped.tematicas')->where('id', $id)
+        ->where('id', '<=', 41)
+        ->get();
+        if($VerfDel->count() == 0){
         return DB::connection('mysql')->table('etno_ped.tematicas')->where('id', $id)->update([
             'estado' => 'ELIMINADO',
         ]);
+    }else{
+        return 'no';
+    }
     }
 
     public static function editar($request)

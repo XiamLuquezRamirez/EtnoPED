@@ -11,7 +11,6 @@ class Alumnos extends Model
 
     public static function guardar($request)
     {
-      
         $respuesta = DB::connection('mysql')->table('pedigital.alumnos')->where('usuario_alumno', Auth::user()->id)->update([
             'ident_alumno' => $request['identificacion'],
             'nombre_alumno' => $request['nombre'],

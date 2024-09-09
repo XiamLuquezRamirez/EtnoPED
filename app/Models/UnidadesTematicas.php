@@ -58,8 +58,17 @@ class UnidadesTematicas extends Model
 
     public static function EliminarUnidad($id)
     {
-        return DB::connection('mysql')->table('etno_ped.unidades_tematicas')->where('id', $id)->update([
-            'estado' => 'ELIMINADO',
-        ]);
+
+        $VerfDel = DB::connection('mysql')->table('etno_ped.unidades_tematicas')->where('id', $id)
+        ->where('id', '<=', 14)
+        ->get();
+        
+         if($VerfDel->count() == 0){
+            return DB::connection('mysql')->table('etno_ped.unidades_tematicas')->where('id', $id)->update([
+                'estado' => 'ELIMINADO',
+            ]);
+         }else{
+            return "no";
+         }
     }
 }

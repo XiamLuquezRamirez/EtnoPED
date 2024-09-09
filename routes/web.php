@@ -113,13 +113,21 @@ Route::get('/Visualizacion/Calificaciones/', [VisualizacionController::class,'Ca
 Route::post('/Visualizacion/CargarCalificaciones', [VisualizacionController::class,'CargarCalificaciones']);
 
 
-
 ///ADMINISTRAR DICCIONARIO
 Route::get('/AdminDiccionario/GestionarDiccionario/', [AdministracionController::class,'GestionarDiccionario']);
 Route::post('/AdminDiccionario/CargarDiccionario', [AdministracionController::class,'CargarDiccionario']);
 Route::post('/AdminDiccionario/GuardarDiccionario', [AdministracionController::class,'GuardarDiccionario']);
 Route::post('/AdminDiccionario/BuscarDiccionario', [AdministracionController::class,'BuscarDiccionario']);
 Route::post('/AdminDiccionario/EliminarDiccionario', [AdministracionController::class,'EliminarDiccionario']);
+
+///ADMINISTRAR MULTIMEDIA
+Route::get('/AdminMultimedia/GestionarMultimedia/', [AdministracionController::class,'GestionarMultimedia']);
+Route::post('/AdminMultimedia/CargarMultimedia', [AdministracionController::class,'CargarMultimedia']);
+Route::post('/AdminMultimedia/GuardarMultimedia', [AdministracionController::class,'GuardarMultimedia']);
+Route::post('/AdminMultimedia/BuscarMultimedia', [AdministracionController::class,'BuscarMultimedia']);
+Route::post('/AdminMultimedia/EliminarMultimediaVideo', [AdministracionController::class,'EliminarMultimediaVideo']);
+
+
 
 ////VISUALIZACION DICCIONARIO
 Route::post('/Diccionario/CargarPalabraDicc', [VisualizacionController::class,'CargarPalabraDicc']);
@@ -133,3 +141,4 @@ Route::get('/Visualizacion/Juegos/{alu}', [VisualizacionController::class,'Juego
 Route::post('/Usuarios/ValidarUsuario', [UsuariosController::class,'ValidarUsuario']);
 Route::post('/Usuarios/ValidarIdentificacion', [UsuariosController::class,'ValidarIdentificacion']);
 Route::post('/Perfil/GuardarPerfil', [UsuariosController::class,'GuardarPerfil']);
+

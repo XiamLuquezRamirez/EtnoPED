@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class MedicinaTradicional extends Model
 {
-    use HasFactory;
+   
     public static function guardar($request)
     {
         $respuesta = DB::connection('mysql')->table('etno_ped.medicina_tradicional')->insertGetId([
@@ -44,9 +43,17 @@ class MedicinaTradicional extends Model
 
     public static function Eliminar($id)
     {
-        return DB::connection('mysql')->table('etno_ped.medicina_tradicional')->where('id', $id)->update([
-            'estado' => 'ELIMINADO',
-        ]);
+        $VerfDel = DB::connection('mysql')->table('etno_ped.medicina_tradicional')->where('id', $id)
+        ->where('id', '<=', 20)
+        ->get();
+        if($VerfDel->count() == 0){
+            return DB::connection('mysql')->table('etno_ped.medicina_tradicional')->where('id', $id)->update([
+                'estado' => 'ELIMINADO',
+            ]);
+        }else{
+            return "no";
+        }
+      
     }
 
     public static function BuscarMedi($id){

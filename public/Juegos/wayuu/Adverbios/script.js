@@ -175,6 +175,13 @@ function romper(elemento, opcion, letra) {
     var pos = elemento.getBoundingClientRect();
     var flecha1 = document.getElementById("flecha1");
     var flecha2 = document.getElementById("flecha2");
+    var div_glob1 = document.getElementById("div-glob1");
+    var div_glob2 = document.getElementById("div-glob2");
+
+    div_glob1.classList.add("bloquearObjetivo");
+    div_glob2.classList.add("bloquearObjetivo");
+
+
 
     var posicionActualLeft = flecha1.offsetLeft;
     var posicionActualTop = flecha1.offsetTop;
@@ -231,6 +238,10 @@ function romper(elemento, opcion, letra) {
         flecha2.style.transitionProperty = "left";
         flecha2.style.left = posicionActualLeft2 + "px";
         flecha2.style.top = posicionActualTop2 + "px";
+
+
+        div_glob1.classList.remove("bloquearObjetivo");
+        div_glob2.classList.remove("bloquearObjetivo");
 
         setTimeout(() => {
             flecha1.style.transitionProperty = "top, left";

@@ -48,9 +48,17 @@ class Diccionario extends Model
  
     public static function Eliminar($id)
     {
+        $VerfDel = DB::connection('mysql')->table('etno_ped.diccionario')->where('id', $id)
+        ->where('id', '<=', 901)
+        ->get();
+        if($VerfDel->count() == 0){
         return DB::connection('mysql')->table('etno_ped.diccionario')->where('id', $id)->update([
             'estado' => 'ELIMINADO',
         ]);
+    }else{
+        return "no";
+    }
+
     }
 
     public static function BuscarPalabra($id){

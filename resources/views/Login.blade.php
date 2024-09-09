@@ -85,9 +85,6 @@
 
 <body class="vertical-layout vertical-menu 1-column  blank-page blank-page" style="background-size: 100% 100% !important" data-open="click" data-menu="vertical-menu" data-col="1-column">
     <!-- BEGIN: Content-->
-
-
-
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="content-wrapper">
