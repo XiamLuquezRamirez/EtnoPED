@@ -156,4 +156,60 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 }
 
 
+/* Estilos para el modal */
+.modalVideo {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8); /* Fondo oscuro semi-transparente */
+    overflow: hidden; /* Asegura que no haya scroll dentro del modal */
+    z-index: 2001;
+}
+
+.modalVideo-content {
+    position: relative;
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+video {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+}
+
+.video-options {
+    margin-top: 20px;
+}
+
+.video-options button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: red;
+}
 
